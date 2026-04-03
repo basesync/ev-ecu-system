@@ -72,7 +72,7 @@ jobs:
 
       # Step 7: Create the GitHub Release with all files attached
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: "EV ECU System ${{ steps.get_version.outputs.version }}"
           generate_release_notes: true    # Auto-generate from commit messages
