@@ -1,0 +1,102 @@
+name: Firmware Build Check
+
+# --- Triggers ---------------------------------------------------------------------
+# Runs on every push to develop/main AND every Pull Request targeting those branches
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# --- Concurrency ---------------------------------------------------------------------
+# Cancel any in-progress run on the same branch/PR when a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# --- Jobs ---------------------------------------------------------------------
+jobs:
+  build-check:
+    name: Build Firmware
+    runs-on: ubuntu-22.04          # Use a specific Ubuntu version for reproducibility
+
+    steps:
+      # Step 1: Check out the repository code (including submodules if any)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive    # Fetch any git submodules
+
+      # Step 2: Cache the ARM toolchain to speed up future runs
+      - name: Cache ARM GCC toolchain
+        uses: actions/cache@v4
+        id: cache-arm-gcc
+        with:
+          path: /usr/share/arm-toolchain
+          key: arm-gcc-12.2.1-ubuntu22
+
+      # Step 3: Install the ARM GCC cross-compiler
+      - name: Install ARM GCC toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            gcc-arm-none-eabi \
+            binutils-arm-none-eabi \
+            libnewlib-arm-none-eabi \
+            libstdc++-arm-none-eabi-newlib
+          echo "ARM GCC version:"
+          arm-none-eabi-gcc --version
+
+      # Step 4: Install CMake (ensure we have a recent enough version)
+      - name: Install CMake
+        run: |
+          sudo apt-get install -y cmake
+          echo "CMake version:"
+          cmake --version
+
+      # Step 5: Configure the build with CMake
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+                -S . \
+                -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DCMAKE_VERBOSE_MAKEFILE=ON
+
+      # Step 6: Compile the firmware
+      - name: Build firmware
+        run: |
+          cmake --build build --parallel $(nproc)
+
+      # Step 7: Display the firmware binary size breakdown
+      - name: Display binary size
+        run: |
+          echo "------------------------------------"
+          echo "Firmware size breakdown:"
+          echo "------------------------------------"
+          arm-none-eabi-size --format=berkeley build/ev-ecu-system.elf
+          echo "------------------------------------"
+
+      # Step 8: Verify the .elf and generate .bin and .hex outputs
+      - name: Generate output files
+        run: |
+          arm-none-eabi-objcopy -O binary build/ev-ecu-system.elf build/ev-ecu-system.bin
+          arm-none-eabi-objcopy -O ihex   build/ev-ecu-system.elf build/ev-ecu-system.hex
+          echo "Output files generated:"
+          ls -lh build/ev-ecu-system.*
+
+      # Step 9: Upload the firmware as a CI artifact (keeps for 30 days)
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ github.sha }}
+          path: |
+            build/ev-ecu-system.elf
+            build/ev-ecu-system.bin
+            build/ev-ecu-system.hex
+          retention-days: 30
+          if-no-files-found: error   # Fail if no .elf was produced

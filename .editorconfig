@@ -1,0 +1,86 @@
+# .editorconfig - Editor Configuration
+#
+# EditorConfig helps maintain consistent coding styles between different
+# editors and IDEs. VS Code, CLion, Vim, Emacs, and most editors support it.
+#
+# When you open this project, your editor reads this file and automatically
+# applies the correct settings (indentation, line endings, etc.)
+#
+# This prevents the most common team collaboration problems:
+#   - Mixed tabs and spaces (causes diff noise)
+#   - Wrong line endings (Windows CRLF vs Linux LF)
+#   - Missing newlines at end of file
+#
+# Documentation: https://editorconfig.org/
+
+# --- Root declaration --------------------------------------------------------
+# This tells editors to stop looking for .editorconfig in parent directories
+root = true
+
+# --- All files (global defaults) ----------------------------------------------
+[*]
+# Always use Unix line endings (LF), even on Windows
+# This prevents CRLF from ending up in git history
+end_of_line    = lf
+
+# Use UTF-8 encoding for all files
+charset        = utf-8
+
+# Trim trailing whitespace on save
+# Prevents invisible diff noise
+trim_trailing_whitespace = true
+
+# Always end files with a newline character
+# POSIX standard; prevents "No newline at end of file" warnings
+insert_final_newline = true
+
+# --- C and H source files -------------------------------------------------------
+[*.{c,h}]
+indent_style   = space    # Use spaces, NOT tabs
+indent_size    = 4        # 4 spaces per indent level
+max_line_length = 100     # Soft limit (EditorConfig won't enforce, but shows warning)
+
+# --- CMake files -----------------------------------------------------------------
+[CMakeLists.txt]
+indent_style   = space
+indent_size    = 2        # CMake convention is 2-space indent
+
+[*.cmake]
+indent_style   = space
+indent_size    = 2
+
+# --- YAML files (GitHub Actions workflows) ------------------------------------
+[*.{yml,yaml}]
+indent_style   = space
+indent_size    = 2        # YAML standard: 2-space indent
+
+# --- JSON files (Wokwi diagram, VS Code settings) -----------------------------
+[*.json]
+indent_style   = space
+indent_size    = 2
+
+# --- Markdown documentation --------------------------------------------------
+[*.md]
+trim_trailing_whitespace = false   # Trailing spaces in Markdown = line break
+indent_style   = space
+indent_size    = 2
+
+# --- Makefile (must use tabs) -----------------------------------------------
+[Makefile]
+indent_style   = tab      # Make REQUIRES tabs — do not change this
+
+# --- Linker scripts -----------------------------------------------------------
+[*.ld]
+indent_style   = space
+indent_size    = 4
+
+# --- Assembly files -----------------------------------------------------------
+[*.{s,S,asm}]
+indent_style   = space
+indent_size    = 4
+
+# --- Shell scripts ------------------------------------------------------------
+[*.sh]
+indent_style   = space
+indent_size    = 2
+end_of_line    = lf       # Shell scripts must use LF even on Windows

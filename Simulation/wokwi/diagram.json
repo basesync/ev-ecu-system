@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "author": "BaseSync Team",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-st-nucleo-f103rb",
+      "id": "cpu",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "throttle_pot",
+      "top": 80,
+      "left": 380,
+      "attrs": {
+        "label": "Throttle (PA4)"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "batt_temp_pot",
+      "top": 180,
+      "left": 380,
+      "attrs": {
+        "label": "Battery Temp (PA0)"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "motor_temp_pot",
+      "top": 280,
+      "left": 380,
+      "attrs": {
+        "label": "Motor Temp (PA1)"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "current_pot",
+      "top": 380,
+      "left": 380,
+      "attrs": {
+        "label": "Current Sense (PA2)"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "voltage_pot",
+      "top": 480,
+      "left": 380,
+      "attrs": {
+        "label": "Voltage Sense (PA3)"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "brake_btn",
+      "top": 80,
+      "left": 570,
+      "attrs": {
+        "label": "Brake (PB0)",
+        "color": "blue"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "fault_btn",
+      "top": 160,
+      "left": 570,
+      "attrs": {
+        "label": "Fault Trigger (PB1)",
+        "color": "red"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "motor_led",
+      "top": 80,
+      "left": 680,
+      "attrs": {
+        "color": "green",
+        "label": "Motor PWM (PA8)"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "fault_led",
+      "top": 160,
+      "left": 680,
+      "attrs": {
+        "color": "red",
+        "label": "Fault State (PC13)"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "status_led",
+      "top": 240,
+      "left": 680,
+      "attrs": {
+        "color": "yellow",
+        "label": "Status / Heartbeat"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_motor",
+      "top": 95,
+      "left": 640,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_fault",
+      "top": 175,
+      "left": 640,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_status",
+      "top": 255,
+      "left": 640,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    ["cpu:PA0",  "batt_temp_pot:SIG",  "orange",  []],
+    ["cpu:PA1",  "motor_temp_pot:SIG", "orange",  []],
+    ["cpu:PA2",  "current_pot:SIG",    "orange",  []],
+    ["cpu:PA3",  "voltage_pot:SIG",    "orange",  []],
+    ["cpu:PA4",  "throttle_pot:SIG",   "green",   []],
+
+    ["cpu:GND",  "throttle_pot:GND",   "black",   []],
+    ["cpu:3.3V", "throttle_pot:VCC",   "red",     []],
+    ["cpu:GND",  "batt_temp_pot:GND",  "black",   []],
+    ["cpu:3.3V", "batt_temp_pot:VCC",  "red",     []],
+    ["cpu:GND",  "motor_temp_pot:GND", "black",   []],
+    ["cpu:3.3V", "motor_temp_pot:VCC", "red",     []],
+    ["cpu:GND",  "current_pot:GND",    "black",   []],
+    ["cpu:3.3V", "current_pot:VCC",    "red",     []],
+    ["cpu:GND",  "voltage_pot:GND",    "black",   []],
+    ["cpu:3.3V", "voltage_pot:VCC",    "red",     []],
+
+    ["cpu:PB0",  "brake_btn:1.l",      "blue",    []],
+    ["cpu:GND",  "brake_btn:2.l",      "black",   []],
+    ["cpu:PB1",  "fault_btn:1.l",      "red",     []],
+    ["cpu:GND",  "fault_btn:2.l",      "black",   []],
+
+    ["cpu:PA8",  "r_motor:1",          "green",   []],
+    ["r_motor:2","motor_led:A",        "green",   []],
+    ["cpu:GND",  "motor_led:C",        "black",   []],
+
+    ["cpu:PC13", "r_fault:1",          "red",     []],
+    ["r_fault:2","fault_led:A",        "red",     []],
+    ["cpu:GND",  "fault_led:C",        "black",   []],
+
+    ["cpu:PA5",  "r_status:1",         "yellow",  []],
+    ["r_status:2","status_led:A",      "yellow",  []],
+    ["cpu:GND",  "status_led:C",       "black",   []]
+  ]
+}
