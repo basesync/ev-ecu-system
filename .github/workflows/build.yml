@@ -27,7 +27,7 @@ jobs:
     steps:
       # Step 1: Check out the repository code (including submodules if any)
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive    # Fetch any git submodules
 

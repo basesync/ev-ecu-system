@@ -20,7 +20,7 @@ jobs:
     steps:
       # Step 1: Checkout the tagged version
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
           fetch-depth: 0    # Fetch full history for changelog generation

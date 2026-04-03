@@ -25,7 +25,7 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Step 2: Install native GCC (for host-side test compilation, NOT ARM)
       # Unit tests run on the CI server (x86), not on the STM32

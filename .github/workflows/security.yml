@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Snyk scans for known CVEs in dependencies and code patterns
       - name: Run Snyk security scan
@@ -50,7 +50,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Initialise CodeQL - tells it we're scanning C/C++ code
       - name: Initialize CodeQL
