@@ -1,0 +1,62 @@
+# .cppcheck — Cppcheck Static Analysis Configuration
+#
+# This file configures Cppcheck for the EV ECU project.
+# Cppcheck reads this file automatically when run from the project root.
+#
+# Usage:
+#   cppcheck --project=.cppcheck               (uses this config)
+#   cppcheck --error-exitcode=1 -I Core/Inc Core/Src/   (manual, CI style)
+#
+# Documentation: https://cppcheck.sourceforge.io/manual.html
+
+# --- Source files to analyse -------------------------------------------------
+# List the directories containing source code
+# Cppcheck will recursively scan all .c files in these paths
+<builddir>build/cppcheck</builddir>
+
+# --- Project file format -----------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+
+  <!-- Directories to analyse -->
+  <root name="."/>
+
+  <!-- Source directories -->
+  <builddir>build/cppcheck-cache</builddir>
+
+  <!-- Include paths — where your .h header files live -->
+  <includedir>
+    <dir name="Core/Inc"/>
+    <dir name="Drivers/STM32_HAL"/>
+  </includedir>
+
+  <!-- Source files to check (Cppcheck will find all .c files here) -->
+  <dir name="Core/Src"/>
+
+  <!-- Platform: ARM 32-bit, 4-byte wchar_t -->
+  <platform>arm32-wchar_t4</platform>
+
+  <!-- C standard -->
+  <cppcheck-build-dir>build/cppcheck</cppcheck-build-dir>
+
+  <!-- Checks to enable -->
+  <!-- warning    = potential bugs                                         -->
+  <!-- style      = code style issues (unused vars, etc.)                 -->
+  <!-- performance = performance suggestions                               -->
+  <!-- portability = code that may break on different platforms            -->
+  <!-- information = informational messages                                -->
+  <check-library>false</check-library>
+
+  <!-- Suppressions — known false positives we deliberately ignore -->
+  <suppress>
+    <!-- STM32 HAL headers use system includes we don't control -->
+    <id>missingIncludeSystem</id>
+  </suppress>
+
+  <suppress>
+    <!-- Unity test framework uses macros that look like unmatched suppressions -->
+    <id>unmatchedSuppression</id>
+    <filename>Tests/*</filename>
+  </suppress>
+
+</project>

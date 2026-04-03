@@ -1,0 +1,85 @@
+name: Static Analysis
+
+# --- Triggers ---------------------------------------------------------------------
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# --- Concurrency -----------------------------------------------------------------
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# --- Jobs ---------------------------------------------------------------------
+jobs:
+  cppcheck:
+    name: Cppcheck Static Analysis
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install Cppcheck
+      - name: Install Cppcheck
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y cppcheck
+          echo "Cppcheck version:"
+          cppcheck --version
+
+      # Step 3: Run Cppcheck on the source code
+      # --error-exitcode=1   - Exit with error if any issues found (blocks PR)
+      # --enable=all         - Enable all checks
+      # --suppress=...       - Suppress false positives we cannot fix
+      # --inline-suppr       - Allow /* cppcheck-suppress ... */ in code
+      # -I Core/Inc          - Tell Cppcheck where our headers are
+      - name: Run Cppcheck analysis
+        run: |
+          echo "-------------------------------------"
+          echo "Running Cppcheck static analysis..."
+          echo "-------------------------------------"
+          cppcheck \
+            --error-exitcode=1 \
+            --enable=warning,style,performance,portability \
+            --suppress=missingIncludeSystem \
+            --suppress=unmatchedSuppression \
+            --inline-suppr \
+            --std=c11 \
+            --platform=arm32-wchar_t2 \
+            --xml \
+            --xml-version=2 \
+            -I Core/Inc \
+            -I Drivers/STM32_HAL \
+            --force \
+            Core/Src/ \
+            2> cppcheck-report.xml
+          echo "Cppcheck completed."
+
+      # Step 4: Show a human-readable summary in the CI log
+      - name: Show analysis summary
+        if: always()
+        run: |
+          echo "------------------------------------"
+          echo "Cppcheck XML report summary:"
+          echo "------------------------------------"
+          # Show the XML in readable form
+          if [ -f cppcheck-report.xml ]; then
+            cat cppcheck-report.xml
+          fi
+
+      # Step 5: Upload the XML report as an artifact
+      - name: Upload Cppcheck report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppcheck-report-${{ github.sha }}
+          path: cppcheck-report.xml
+          retention-days: 14

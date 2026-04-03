@@ -1,0 +1,92 @@
+name: Unit Tests
+
+# --- Triggers ---------------------------------------------------------------------
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# --- Concurrency ----------------------------------------------------------------
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# --- Jobs ---------------------------------------------------------------------
+jobs:
+  unit-tests:
+    name: Unity Unit Tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install native GCC (for host-side test compilation, NOT ARM)
+      # Unit tests run on the CI server (x86), not on the STM32
+      - name: Install native GCC and build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            gcc \
+            cmake \
+            make
+          echo "Native GCC version:"
+          gcc --version
+
+      # Step 3: Configure the test build
+      # Note: We use a SEPARATE CMakeLists.txt in Tests/ that uses native GCC
+      - name: Configure test build
+        run: |
+          cmake -B Tests/build \
+                -S Tests \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DENABLE_COVERAGE=ON
+
+      # Step 4: Build the test runner binary
+      - name: Build test suite
+        run: |
+          cmake --build Tests/build --parallel $(nproc)
+
+      # Step 5: Run all unit tests
+      # The test runner exits with code 1 if any test fails -> CI job fails -> PR blocked
+      - name: Run unit tests
+        run: |
+          echo "------------------------------------"
+          echo "Running Unity unit tests..."
+          echo "------------------------------------"
+          cd Tests/build
+          ./test_runner
+          echo "------------------------------------"
+
+      # Step 6: Generate test report in JUnit XML format for GitHub to display
+      - name: Generate test report
+        if: always()    # Run even if tests fail (so we can see the report)
+        run: |
+          cd Tests/build
+          # Run again with verbose output captured
+          ./test_runner | tee test_output.txt || true
+          echo "Test output saved."
+
+      # Step 7: Generate code coverage report
+      - name: Generate coverage report
+        run: |
+          cd Tests/build
+          # Generate .gcov files from gcda/gcno files
+          gcov --all-blocks $(find . -name "*.gcno" | head -20) 2>/dev/null || true
+          echo "Coverage files generated."
+
+      # Step 8: Upload test results as artifact
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.sha }}
+          path: |
+            Tests/build/test_output.txt
+          retention-days: 14

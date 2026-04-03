@@ -1,0 +1,23 @@
+# Dependabot Configuration
+# Automatically opens Pull Requests when GitHub Actions dependencies are outdated
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+
+updates:
+  # --- Keep GitHub Actions up to date ------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"            # Check the root of the repo
+    schedule:
+      interval: "weekly"      # Check every Monday
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/London"
+    labels:
+      - "ci-cd"
+      - "dependencies"
+    reviewers:
+      - "basesync/ev-ecu-leads"
+    commit-message:
+      prefix: "ci"            # Commit messages: "ci: bump actions/checkout from 3 to 4"
+    open-pull-requests-limit: 5
