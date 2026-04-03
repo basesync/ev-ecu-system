@@ -18,6 +18,8 @@ project(ev-ecu-system
     LANGUAGES   C ASM
 )
 
+set(CMAKE_EXECUTABLE_SUFFIX ".elf")
+
 # --- C Standard --------------------------------------------------------------
 set(CMAKE_C_STANDARD          11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
