@@ -1,0 +1,80 @@
+# .clang-format — Code Formatting Configuration
+#
+# This file enforces consistent code formatting across all team members.
+# VS Code applies this automatically when you save a file (with the
+# "Format On Save" setting enabled).
+#
+# To format manually:
+#   clang-format -i Core/Src/sensor_hal.c      (format one file)
+#   find Core/ -name "*.c" -o -name "*.h" | xargs clang-format -i  (all files)
+#
+# To check formatting without changing files (used in CI):
+#   clang-format --dry-run --Werror Core/Src/main.c
+#
+# Documentation: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+---
+# Base style: GNU is closest to embedded C conventions
+BasedOnStyle: GNU
+
+# --- Indentation -----------------------------------------------------------------
+IndentWidth:            4       # 4 spaces per indent level
+TabWidth:               4       # Tab display width (we use spaces, not tabs)
+UseTab:                 Never   # NEVER use actual tab characters
+
+# --- Line Length ----------------------------------------------------------------
+ColumnLimit:            100     # Wrap lines longer than 100 characters
+
+# --- Braces --------------------------------------------------------------------
+# Allman style: opening brace on its own line
+# This matches our coding standards (MISRA-S3)
+BreakBeforeBraces:      Allman
+
+# --- Spaces ----------------------------------------------------------------------
+SpaceBeforeParens:      ControlStatements   # Space before ( in if/for/while
+SpaceInEmptyParentheses: false
+SpacesInParentheses:    false
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast:   true    # Space after (type) cast
+
+# --- Alignment ------------------------------------------------------------------
+# Align consecutive assignments for readability
+AlignConsecutiveAssignments:
+  Enabled:         true
+  AcrossEmptyLines: false
+  AcrossComments:  false
+
+# Align consecutive declarations
+AlignConsecutiveDeclarations:
+  Enabled:         true
+  AcrossEmptyLines: false
+  AcrossComments:  false
+
+# Align backslashes in multi-line macros
+AlignEscapedNewlines:   Left
+
+# --- Comments ---------------------------------------------------------------
+AlignTrailingComments:
+  Kind:            Always    # Align // comments on consecutive lines
+
+# --- Pointers ---------------------------------------------------------------
+# Pointer alignment: "uint8_t *ptr" not "uint8_t* ptr"
+PointerAlignment:       Right
+
+# --- Includes ---------------------------------------------------------------
+SortIncludes:           false   # Do NOT re-sort includes (order is intentional)
+IncludeBlocks:          Preserve
+
+# --- Functions ---------------------------------------------------------------
+# Allow short functions on one line? No — always expand
+AllowShortFunctionsOnASingleLine:  None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine:      false
+
+# --- Line Breaks ---------------------------------------------------------------
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep:    2       # Allow max 2 consecutive blank lines
+
+# --- Other ---------------------------------------------------------------
+Cpp11BracedListStyle:   false
+...

@@ -1,0 +1,85 @@
+name: Release Build
+
+# --- Triggers ---------------------------------------------------------------------
+# Only triggers when a version tag is pushed (e.g., v1.0.0, v1.2.3)
+# To create a release: git tag v1.0.0 && git push origin v1.0.0
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'    # Matches v1.0.0, v2.3.1, etc.
+
+# --- Jobs ---------------------------------------------------------------------
+jobs:
+  release:
+    name: Build and Publish Release
+    runs-on: ubuntu-22.04
+    # Needs permission to create GitHub Releases
+    permissions:
+      contents: write
+
+    steps:
+      # Step 1: Checkout the tagged version
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0    # Fetch full history for changelog generation
+
+      # Step 2: Install the ARM GCC toolchain
+      - name: Install ARM GCC toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi cmake
+          arm-none-eabi-gcc --version
+
+      # Step 3: Extract version from the git tag
+      - name: Extract version
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building release: $VERSION"
+
+      # Step 4: Build RELEASE firmware (optimised, debug info stripped)
+      - name: Build release firmware
+        run: |
+          cmake -B build -S . \
+                -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake \
+                -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel $(nproc)
+
+      # Step 5: Generate all output formats
+      - name: Generate release outputs
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          # Create named release files
+          arm-none-eabi-objcopy -O binary build/ev-ecu-system.elf \
+                build/ev-ecu-system_${VERSION}.bin
+          arm-none-eabi-objcopy -O ihex build/ev-ecu-system.elf \
+                build/ev-ecu-system_${VERSION}.hex
+          # Show size info
+          echo "Release firmware sizes:"
+          arm-none-eabi-size --format=berkeley build/ev-ecu-system.elf
+
+      # Step 6: Create checksums for integrity verification
+      - name: Generate SHA256 checksums
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          cd build
+          sha256sum ev-ecu-system_${VERSION}.bin ev-ecu-system_${VERSION}.hex \
+                    ev-ecu-system.elf > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      # Step 7: Create the GitHub Release with all files attached
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "EV ECU System ${{ steps.get_version.outputs.version }}"
+          generate_release_notes: true    # Auto-generate from commit messages
+          draft: false
+          prerelease: false
+          files: |
+            build/ev-ecu-system_${{ steps.get_version.outputs.version }}.bin
+            build/ev-ecu-system_${{ steps.get_version.outputs.version }}.hex
+            build/ev-ecu-system.elf
+            build/SHA256SUMS.txt
