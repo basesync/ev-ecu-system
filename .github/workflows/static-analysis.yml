@@ -11,6 +11,11 @@ on:
       - main
       - develop
 
+# --- Permissions ---------------------------------------------------------------------
+# Allows the bot to check out and read your source code
+permissions:
+  contents: read
+
 # --- Concurrency -----------------------------------------------------------------
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
