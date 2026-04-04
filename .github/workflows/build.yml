@@ -12,6 +12,12 @@ on:
       - main
       - develop
 
+
+# --- Permissions ---------------------------------------------------------------------
+# Allows the bot to check out and read your source code
+permissions:
+  contents: read
+
 # --- Concurrency ---------------------------------------------------------------------
 # Cancel any in-progress run on the same branch/PR when a new commit is pushed
 concurrency:
