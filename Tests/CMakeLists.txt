@@ -55,19 +55,20 @@ set(UNITY_SOURCES
 # These are fake versions of STM32 HAL functions.
 # They let unit tests run on a PC without real hardware.
 set(MOCK_SOURCES
-    # mocks/mock_stm32_hal_adc.c   - Add in Sprint 2
-    # mocks/mock_stm32_hal_gpio.c  - Add in Sprint 2
-    # mocks/mock_stm32_hal_tim.c   - Add in Sprint 2
-    # mocks/mock_stm32_hal_uart.c  - Add in Sprint 2
+    mocks/mock_stm32_hal_adc.c
+    mocks/mock_stm32_hal_gpio.c
+    mocks/mock_stm32_hal_tim.c
+    mocks/mock_stm32_hal_spi.c
+    mocks/mock_stm32_hal_i2c.c
 )
 
 # --- Firmware Sources Under Test --------------------------------------------
 # Add the actual firmware .c files you want to test.
 # Do NOT add main.c here — it has the main() function which conflicts.
 set(FIRMWARE_SOURCES_UNDER_TEST
-    # ../Core/Src/sensor_hal.c     - Add in Sprint 2
-    # ../Core/Src/motor_ctrl.c     - Add in Sprint 3
-    # ../Core/Src/fault_manager.c  - Add in Sprint 3
+    ../Core/Src/sensor_hal.c
+    ../Core/Src/motor_ctrl.c
+    ../Core/Src/fault_logger.c
     # ../Core/Src/can_driver.c     - Add in Sprint 3
     # ../Core/Src/logger.c         - Add in Sprint 4
     # ../Core/Src/ev_state_machine.c - Add in Sprint 4
@@ -76,9 +77,9 @@ set(FIRMWARE_SOURCES_UNDER_TEST
 # --- Test Files --------------------------------------------------------------
 set(TEST_SOURCES
     test_placeholder.c
-    # test_sensor_hal.c     - Add in Sprint 2
-    # test_motor_ctrl.c     - Add in Sprint 3
-    # test_fault_manager.c  - Add in Sprint 3
+    test_sensor_hal.c
+    test_motor_ctrl.c
+    test_protocol_prep.c
     # test_can_driver.c     - Add in Sprint 3
     # test_ev_state_machine.c - Add in Sprint 4
     test_runner.c
@@ -88,6 +89,7 @@ set(TEST_SOURCES
 set(TEST_INCLUDES
     Unity/                  # Unity headers
     ../Core/Inc             # Firmware headers
+    ../Drivers/STM32_HAL
     mocks/                  # Mock/stub headers
 )
 
@@ -108,4 +110,8 @@ endif()
 
 # --- Enable CTest integration --------------------------------------------
 enable_testing()
-add_test(NAME UnitTests COMMAND test_runner)
+add_test(NAME AllUnitTests COMMAND test_runner)
+set_tests_properties(AllUnitTests PROPERTIES
+    PASS_REGULAR_EXPRESSION "OK"
+    FAIL_REGULAR_EXPRESSION "FAIL"
+)

@@ -20,6 +20,10 @@ project(ev-ecu-system
 
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 
+# Added for checking
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=cortex-m3 -mthumb -mfloat-abi=soft")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mcpu=cortex-m3 -mthumb")
+
 # --- C Standard --------------------------------------------------------------
 set(CMAKE_C_STANDARD          11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -39,12 +43,13 @@ message(STATUS "Toolchain:  ${CMAKE_C_COMPILER}")
 set(FIRMWARE_SOURCES
     Core/Src/main.c
     # --- Sprint 2 onwards: add module source files here ---
-    # Core/Src/sensor_hal.c
-    # Core/Src/motor_ctrl.c
-    # Core/Src/fault_manager.c
+    Core/Src/sensor_hal.c
+    Core/Src/motor_ctrl.c
+    Core/Src/fault_logger.c
     # Core/Src/can_driver.c
     # Core/Src/logger.c
     # Core/Src/ev_state_machine.c
+    Drivers/STM32_HAL/stm32_stubs.c
 )
 
 # --- Header Include Directories -------------------------------------------

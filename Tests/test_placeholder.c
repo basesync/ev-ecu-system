@@ -18,20 +18,6 @@
 /* --- Includes ---------------------------------------------------------------*/
 #include "Unity/unity.h"
 
-/* ---Setup and Teardown -----------------------------------------------------
- * setUp()    - Called automatically before EVERY test function
- * tearDown() - Called automatically after  EVERY test function
- */
-void setUp(void)
-{
-    /* Nothing to set up for placeholder tests */
-}
-
-void tearDown(void)
-{
-    /* Nothing to tear down for placeholder tests */
-}
-
 /* --- Test Functions ----------------------------------------------------
  * Naming convention: test_<module>_<condition>_<expected_result>
  * Every test function MUST start with "test_"
