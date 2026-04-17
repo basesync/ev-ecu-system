@@ -1,20 +1,22 @@
 # ADR-001 — UART for Sensor Logging
 
-**Status:** Decided  
-**Date:** Sprint 2  
-**Decision makers:** Full team  
+**Status:** Decided
+**Date:** Sprint 2
+**Decision makers:** Full team
 **Document ID:** BASESYNC-ADR-001
 
 ---
 
 ## Context
 
+![State Machine](images/State_Machine.png)
+
 The system needs to output sensor data for real-time monitoring during development, simulation testing, and hardware bring-up. During Sprint 1–4 (simulation), `printf()` stubs are used in `main.c`. In Sprint 5, real UART output is needed on physical hardware.
 
 ## Decision
 
-Use **USART1** at **115200 baud, 8N1** for all sensor logging.  
-Pins: TX = PA9, RX = PA10.  
+Use **USART1** at **115200 baud, 8N1** for all sensor logging.
+Pins: TX = PA9, RX = PA10.
 Output format: **Teleplot-compatible** strings (`>label:value\n`) — readable by the VS Code Teleplot extension and any serial terminal.
 
 ## Rationale
