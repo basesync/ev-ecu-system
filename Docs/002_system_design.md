@@ -69,11 +69,11 @@ graph TD
                         ┌──────────────────────────────────────────────┐
                         │                  Smart EV ECU                │
                         │                                              │
-  Sensors ─────────────►│  Sensor HAL  ──►  State Machine             │
+  Sensors ─────────────►│  Sensor HAL  ──►  State Machine              │
                         │                       │                      │
-  Throttle/Brake ──────►│  GPIO / ADC   ──►  Fault Manager            │
+  Throttle/Brake ──────►│  GPIO / ADC   ──►  Fault Manager             │
                         │                       │                      │
-  CAN Bus  ◄───────────►│  CAN Driver   ◄──►  Motor Control  ──► PWM  │
+  CAN Bus  ◄───────────►│  CAN Driver   ◄──►  Motor Control  ──► PWM   │
                         │                       │                      │
   UART / PC ◄───────────│  Logger       ◄───────┘                      │
                         └──────────────────────────────────────────────┘
@@ -301,26 +301,33 @@ typedef enum {
 
 ## State Machine Design
 
-```
-      Power On
-          │
-          ▼
-    ┌───────────┐
-    │   INIT    │  Hardware init, self-test
-    └─────┬─────┘
-          │ Init OK
-          ▼
-    ┌───────────┐
-    │   IDLE    │◄────────────────────────────────────────┐
-    └─────┬─────┘                                         │
-          │ throttle > 0                                  │ fault_clear()
-          │ && no fault                                   │ (explicit cmd)
-          ▼                                               │
-    ┌───────────┐      fault detected                ┌────┴──────────┐
-    │  RUNNING  │ ──────────────────────────────────►│  SAFE_STATE   │
-    └───────────┘                                    │  Motor OFF    │
-                                                     │  CAN fault tx │
-                                                     └───────────────┘
+```mermaid
+stateDiagram-v2
+    [*] --> INIT
+    INIT: INIT <br/> Hardware initialisation
+    IDLE: IDLE <br/> Sensor Active. Motor OFF
+    RUNNING: RUNNING <br/> Motor Active. All monitored.
+    FAULT: FAULT <br/> Motor OFF. CAN Alert
+    SAFE_STATE: SAFE STATE <br/> All inputs OFF. Wait Reset.
+
+    INIT --> IDLE : Init OK. No Faults.
+
+    IDLE --> RUNNING : Throttle > 5%. No faults.
+    RUNNING --> IDLE : Throttle = 0. Brake ON
+
+    IDLE --> FAULT : Fault in IDLE
+    RUNNING --> FAULT : Critical Fault Detected.
+
+    FAULT --> SAFE_STATE : Automatic. Immediate.
+
+    SAFE_STATE --> INIT : Manual Fault Switch
+    FAULT --> IDLE : Manual Reset Command
+
+    style INIT fill:#4C5C68,color:white
+    style IDLE fill:#6F00FF,color:white
+    style RUNNING fill:#00FF00,color:white
+    style FAULT fill:#FF6600,color:white
+    style SAFE_STATE fill:#664D80,color:white
 ```
 
 ### Transition Table

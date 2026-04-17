@@ -45,58 +45,90 @@ Automatically deploys/releases when code reaches `main`. For firmware, this mean
 
 ## Pipeline Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│           On: Pull Request → develop or main            │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  Job 1: build-check                                     │
-│    → arm-none-eabi-gcc compiles firmware                │
-│    → Must produce .elf with 0 errors                    │
-│                                                         │
-│  Job 2: unit-tests                                      │
-│    → Compiles test suite with native GCC (not ARM)      │
-│    → Runs Unity test runner                             │
-│    → Must have 0 failures                               │
-│                                                         │
-│  Job 3: static-analysis                                 │
-│    → Cppcheck scans all .c files                        │
-│    → Must have 0 errors, 0 critical warnings            │
-│                                                         │
-│  Job 4: security-scan                                   │
-│    → Snyk scans dependencies                            │
-│    → Reports vulnerabilities                            │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
 
-┌─────────────────────────────────────────────────────────┐
-│                  On: Push to main                       │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  Job 5: release-build                                   │
-│    → Full firmware build                                │
-│    → Uploads .bin / .elf as artifacts                   │
-│    → Creates GitHub Release (on version tags)           │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
+    %% Trigger 2: Push to main
+    subgraph Main_Trigger [On: Push to main]
+        direction TD
+        Job5[<b>Job 5: release-build</b><br/>• Full firmware build<br/>• Uploads .bin / .elf as artifacts<br/>• Creates GitHub Release on version tags]
+    end
+
+    %% Trigger 1: Pull Request
+    subgraph PR_Trigger [On: Pull Request -> develop or main]
+        direction TD
+        Job1[<b>Job 1: build-check</b><br/>• arm-none-eabi-gcc compiles firmware<br/>• Must produce .elf with 0 errors]
+
+        Job2[<b>Job 2: unit-tests</b><br/>• Compiles test suite with native GCC<br/>• Runs Unity test runner<br/>• Must have 0 failures]
+
+        Job3[<b>Job 3: static-analysis</b><br/>• Cppcheck scans all .c files<br/>• Must have 0 errors, 0 critical warnings]
+
+        Job4[<b>Job 4: security-scan</b><br/>• Snyk scans dependencies<br/>• Reports vulnerabilities]
+    end
+
+    %% Styling
+    style PR_Trigger fill:#f4f4f4,stroke:#333,stroke-width:2px
+    style Main_Trigger fill:#f4f4f4,stroke:#333,stroke-width:2px
+
+    %% Individual Node Colors
+    style Job1 fill:#2980B9,color:white
+    style Job2 fill:#27AE60,color:white
+    style Job3 fill:#8E44AD,color:white
+    style Job4 fill:#D35400,color:white
+    style Job5 fill:#2C3E50,color:white
 ```
 
 ### Job Dependency Graph
 
-```
-PR opened / push
-       │
-       ├──► [1] build-check ─────────┐
-       │                             │
-       ├──► [2] unit-tests ──────────┤──► All pass → merge allowed
-       │                             │
-       ├──► [3] static-analysis ─────┤
-       │                             │
-       └──► [4] security-scan ───────┘
+```mermaid
+%%{init: {'themeVariables': {'edgeLabelBackground':'#ffffff'}, 'flowchart': {'curve': 'stepAfter'}}}%%
+flowchart LR
+    %% PR Flow
+    subgraph PR_Flow [On: Pull Request / Push]
+        direction LR
+        StartPR((PR opened / push))
 
-Push to main
-       │
-       └──► [5] release-build ──► GitHub Release artifact
+        Job1["[1] build-check"]
+        Job2["[2] unit-tests"]
+        Job3["[3] static-analysis"]
+        Job4["[4] security-scan"]
+
+        MergeCheck{All pass?}
+        Merge[Merge Allowed]
+
+        %% Straight line connections
+        StartPR --> Job1
+        StartPR --> Job2
+        StartPR --> Job3
+        StartPR --> Job4
+
+        Job1 --> MergeCheck
+        Job2 --> MergeCheck
+        Job3 --> MergeCheck
+        Job4 --> MergeCheck
+
+        MergeCheck -->|YES| Merge
+    end
+
+    %% Main Flow
+    subgraph Main_Flow [On: Push to main]
+        direction LR
+        StartMain((Push to main)) --> Job5["[5] release-build"]
+        Job5 --> Artifact[GitHub Release artifact]
+    end
+
+    %% Styling
+    style PR_Flow fill:#f9f9f9,stroke:#333,stroke-dasharray: 5 5
+    style Main_Flow fill:#f0f4f8,stroke:#333
+
+    style Job1 fill:#2980B9,color:white
+    style Job2 fill:#27AE60,color:white
+    style Job3 fill:#8E44AD,color:white
+    style Job4 fill:#D35400,color:white
+    style Job5 fill:#2C3E50,color:white
+
+    style MergeCheck fill:#F39C12,color:white
+    style Merge fill:#27AE60,color:white
 ```
 
 ---
