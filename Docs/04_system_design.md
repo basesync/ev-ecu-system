@@ -1,28 +1,28 @@
 # System Design — Smart EV ECU
 
-| Field | Value |
-|---|---|
+| Field           | Value            |
+| --------------- | ---------------- |
 | **Document ID** | BASESYNC-DES-001 |
-| **Version** | 1.0 |
-| **Status** | ✅ Approved |
+| **Version**     | 1.0              |
+| **Status**      | ✅ Approved       |
 
----
+***
 
 ## Table of Contents
 
-1. [Design Philosophy](#design-philosophy)
-2. [High-Level Architecture](#high-level-architecture)
-3. [Module Breakdown](#module-breakdown)
-4. [File & Folder Structure](#file--folder-structure)
-5. [Module Interface Definitions](#module-interface-definitions)
-6. [Hardware Pin Mapping](#hardware-pin-mapping)
-7. [Data Flow Diagram](#data-flow-diagram)
-8. [State Machine Design](#state-machine-design)
-9. [Memory Map](#memory-map)
-10. [Peripheral Configuration](#peripheral-configuration)
-11. [Timing Configuration](#timing-configuration)
+1. [Design Philosophy](002_system_design.md#design-philosophy)
+2. [High-Level Architecture](002_system_design.md#high-level-architecture)
+3. [Module Breakdown](002_system_design.md#module-breakdown)
+4. [File & Folder Structure](002_system_design.md#file--folder-structure)
+5. [Module Interface Definitions](002_system_design.md#module-interface-definitions)
+6. [Hardware Pin Mapping](002_system_design.md#hardware-pin-mapping)
+7. [Data Flow Diagram](002_system_design.md#data-flow-diagram)
+8. [State Machine Design](002_system_design.md#state-machine-design)
+9. [Memory Map](002_system_design.md#memory-map)
+10. [Peripheral Configuration](002_system_design.md#peripheral-configuration)
+11. [Timing Configuration](002_system_design.md#timing-configuration)
 
----
+***
 
 ## Design Philosophy
 
@@ -58,10 +58,10 @@ graph TD
 
 **Why layers?**
 
-- You can swap the STM32 for a different MCU by only changing the HAL layer.
-- You can test the application layer without real hardware (unit tests use stubs).
+* You can swap the STM32 for a different MCU by only changing the HAL layer.
+* You can test the application layer without real hardware (unit tests use stubs).
 
----
+***
 
 ## High-Level Architecture
 
@@ -79,7 +79,7 @@ graph TD
                         └──────────────────────────────────────────────┘
 ```
 
----
+***
 
 ## Module Breakdown
 
@@ -99,7 +99,7 @@ sensor_hal.h / sensor_hal.c
 └── read_fault_switch()     → bool
 ```
 
----
+***
 
 ### Module 2 — Motor Control
 
@@ -113,7 +113,7 @@ motor_control.h / motor_control.c
 └── motor_soft_start(float target_pct, uint32_t ramp_ms)
 ```
 
----
+***
 
 ### Module 3 — Fault Manager
 
@@ -133,7 +133,7 @@ fault_manager.h / fault_manager.c
     └── FAULT_OVER_VOLTAGE     = 0x04
 ```
 
----
+***
 
 ### Module 4 — CAN Driver
 
@@ -149,7 +149,7 @@ can_driver.h / can_driver.c
 └── can_rx_handler()           ← parses incoming commands
 ```
 
----
+***
 
 ### Module 5 — Logger
 
@@ -163,7 +163,7 @@ logger.h / logger.c
 └── logger_log_state_change(SystemState_t old, SystemState_t new)
 ```
 
----
+***
 
 ### Module 6 — State Machine
 
@@ -181,7 +181,7 @@ state_machine.h / state_machine.c
     └── STATE_SAFE
 ```
 
----
+***
 
 ## File & Folder Structure
 
@@ -216,7 +216,7 @@ smart-ev-ecu/
 └── CMakeLists.txt / Makefile
 ```
 
----
+***
 
 ## Module Interface Definitions
 
@@ -250,31 +250,15 @@ typedef enum {
 } FaultCode_t;
 ```
 
----
+***
 
 ## Hardware Pin Mapping
 
 > ⚠️ Pin assignments to be completed during hardware bring-up phase.
 
-| Signal | STM32 Pin | Peripheral | Notes |
-|---|---|---|---|
-| Battery Temp | — | ADC1_IN0 | NTC Thermistor / LM35 |
-| Motor Temp | — | ADC1_IN1 | NTC Thermistor |
-| Current Sense | — | ADC1_IN2 | ACS712 output |
-| Voltage Sense | — | ADC1_IN3 | Resistor divider |
-| Throttle POT | — | ADC1_IN4 | 0–3.3V pot |
-| Speed Encoder A | — | TIM3_CH1 | Encoder mode |
-| Speed Encoder B | — | TIM3_CH2 | Encoder mode |
-| Motor PWM | — | TIM1_CH1 | PWM output |
-| Brake Switch | — | GPIO_IN | Pull-up, active low |
-| Fault Switch | — | GPIO_IN | Pull-up, active low |
-| CAN Tx | — | CAN1_TX | To TJA1050 |
-| CAN Rx | — | CAN1_RX | From TJA1050 |
-| UART Tx | — | UART1_TX | To USB-Serial |
-| UART Rx | — | UART1_RX | From USB-Serial |
-| Status LED | — | GPIO_OUT | Onboard LED |
+<table><thead><tr><th>Signal</th><th width="104.199951171875">STM32 Pin</th><th width="155">Peripheral</th><th>Notes</th></tr></thead><tbody><tr><td>Battery Temp</td><td>—</td><td>ADC1_IN0</td><td>NTC Thermistor / LM35</td></tr><tr><td>Motor Temp</td><td>—</td><td>ADC1_IN1</td><td>NTC Thermistor</td></tr><tr><td>Current Sense</td><td>—</td><td>ADC1_IN2</td><td>ACS712 output</td></tr><tr><td>Voltage Sense</td><td>—</td><td>ADC1_IN3</td><td>Resistor divider</td></tr><tr><td>Throttle POT</td><td>—</td><td>ADC1_IN4</td><td>0–3.3V pot</td></tr><tr><td>Speed Encoder A</td><td>—</td><td>TIM3_CH1</td><td>Encoder mode</td></tr><tr><td>Speed Encoder B</td><td>—</td><td>TIM3_CH2</td><td>Encoder mode</td></tr><tr><td>Motor PWM</td><td>—</td><td>TIM1_CH1</td><td>PWM output</td></tr><tr><td>Brake Switch</td><td>—</td><td>GPIO_IN</td><td>Pull-up, active low</td></tr><tr><td>Fault Switch</td><td>—</td><td>GPIO_IN</td><td>Pull-up, active low</td></tr><tr><td>CAN Tx</td><td>—</td><td>CAN1_TX</td><td>To TJA1050</td></tr><tr><td>CAN Rx</td><td>—</td><td>CAN1_RX</td><td>From TJA1050</td></tr><tr><td>UART Tx</td><td>—</td><td>UART1_TX</td><td>To USB-Serial</td></tr><tr><td>UART Rx</td><td>—</td><td>UART1_RX</td><td>From USB-Serial</td></tr><tr><td>Status LED</td><td>—</td><td>GPIO_OUT</td><td>Onboard LED</td></tr></tbody></table>
 
----
+***
 
 ## Data Flow Diagram
 
@@ -297,7 +281,7 @@ typedef enum {
              └───────────────┘         └──────────────────┘       └───────────────┘
 ```
 
----
+***
 
 ## State Machine Design
 
@@ -332,58 +316,39 @@ stateDiagram-v2
 
 ### Transition Table
 
-| From | To | Condition |
-|---|---|---|
-| `INIT` | `IDLE` | Hardware init complete, no faults |
-| `IDLE` | `RUNNING` | `throttle > 0` and no active fault |
-| `RUNNING` | `IDLE` | `throttle == 0` and no active fault |
-| `RUNNING` | `SAFE_STATE` | Any fault detected |
-| `IDLE` | `SAFE_STATE` | Any fault detected |
-| `SAFE_STATE` | `IDLE` | Explicit `fault_clear()` command received |
+<table><thead><tr><th width="138.60003662109375">From</th><th width="147.20001220703125">To</th><th>Condition</th></tr></thead><tbody><tr><td><code>INIT</code></td><td><code>IDLE</code></td><td>Hardware init complete, no faults</td></tr><tr><td><code>IDLE</code></td><td><code>RUNNING</code></td><td><code>throttle > 0</code> and no active fault</td></tr><tr><td><code>RUNNING</code></td><td><code>IDLE</code></td><td><code>throttle == 0</code> and no active fault</td></tr><tr><td><code>RUNNING</code></td><td><code>SAFE_STATE</code></td><td>Any fault detected</td></tr><tr><td><code>IDLE</code></td><td><code>SAFE_STATE</code></td><td>Any fault detected</td></tr><tr><td><code>SAFE_STATE</code></td><td><code>IDLE</code></td><td>Explicit <code>fault_clear()</code> command received</td></tr></tbody></table>
 
----
+***
 
 ## Memory Map
 
 > ⚠️ Exact addresses to be confirmed from STM32 linker script.
 
-| Region | Start | End | Size | Contents |
-|---|---|---|---|---|
-| Flash | `0x0800 0000` | `0x0800 FFFF` | 64 KB | Firmware code + const data |
-| SRAM | `0x2000 0000` | `0x2000 4FFF` | 20 KB | Stack, heap, globals |
-| Fault Log | `0x0800 F000` | `0x0800 FFFF` | 4 KB | Last N fault codes (Flash) |
+<table><thead><tr><th width="95.39996337890625">Region</th><th width="129.4000244140625">Start</th><th width="130.800048828125">End</th><th width="92.7999267578125">Size</th><th>Contents</th></tr></thead><tbody><tr><td>Flash</td><td><code>0x0800 0000</code></td><td><code>0x0800 FFFF</code></td><td>64 KB</td><td>Firmware code + const data</td></tr><tr><td>SRAM</td><td><code>0x2000 0000</code></td><td><code>0x2000 4FFF</code></td><td>20 KB</td><td>Stack, heap, globals</td></tr><tr><td>Fault Log</td><td><code>0x0800 F000</code></td><td><code>0x0800 FFFF</code></td><td>4 KB</td><td>Last N fault codes (Flash)</td></tr></tbody></table>
 
----
+***
 
 ## Peripheral Configuration
 
-| Peripheral | Config | Notes |
-|---|---|---|
-| **ADC1** | 12-bit, DMA circular, 5-channel scan | All sensors on single ADC with DMA |
-| **TIM1 CH1** | PWM mode, 20kHz, 0–100% duty cycle | Motor control |
-| **TIM3** | Encoder interface mode | Speed measurement |
-| **TIM4** | 1ms tick interrupt | Main loop tick |
-| **CAN1** | 500 kbps, 11-bit IDs, normal mode | Vehicle network |
-| **UART1** | 115200 baud, 8N1, TX-only (RX optional) | UART logging |
-| **IWDG** | 500ms timeout, LSI clock | Independent watchdog |
+<table><thead><tr><th width="107.4000244140625">Peripheral</th><th>Config</th><th>Notes</th></tr></thead><tbody><tr><td><strong>ADC1</strong></td><td>12-bit, DMA circular, 5-channel scan</td><td>All sensors on single ADC with DMA</td></tr><tr><td><strong>TIM1 CH1</strong></td><td>PWM mode, 20kHz, 0–100% duty cycle</td><td>Motor control</td></tr><tr><td><strong>TIM3</strong></td><td>Encoder interface mode</td><td>Speed measurement</td></tr><tr><td><strong>TIM4</strong></td><td>1ms tick interrupt</td><td>Main loop tick</td></tr><tr><td><strong>CAN1</strong></td><td>500 kbps, 11-bit IDs, normal mode</td><td>Vehicle network</td></tr><tr><td><strong>UART1</strong></td><td>115200 baud, 8N1, TX-only (RX optional)</td><td>UART logging</td></tr><tr><td><strong>IWDG</strong></td><td>500ms timeout, LSI clock</td><td>Independent watchdog</td></tr></tbody></table>
 
----
+***
 
 ## Timing Configuration
 
-| Task | Period | Mechanism | Priority |
-|---|---|---|---|
-| Speed encoder read | 10ms | TIM4 interrupt | High |
-| Throttle / brake read | 10ms | TIM4 interrupt | High |
-| Battery current read | 50ms | TIM4 tick counter | High |
-| Battery voltage read | 50ms | TIM4 tick counter | High |
-| Battery temp read | 100ms | TIM4 tick counter | Medium |
-| Motor temp read | 100ms | TIM4 tick counter | Medium |
-| CAN status frame TX | 100ms | TIM4 tick counter | Medium |
-| UART sensor log | 100ms | TIM4 tick counter | Low |
-| Fault check | Every main loop | Synchronous call | High |
-| Watchdog feed | <500ms | Every main loop | Critical |
+| Task                  | Period          | Mechanism         | Priority |
+| --------------------- | --------------- | ----------------- | -------- |
+| Speed encoder read    | 10ms            | TIM4 interrupt    | High     |
+| Throttle / brake read | 10ms            | TIM4 interrupt    | High     |
+| Battery current read  | 50ms            | TIM4 tick counter | High     |
+| Battery voltage read  | 50ms            | TIM4 tick counter | High     |
+| Battery temp read     | 100ms           | TIM4 tick counter | Medium   |
+| Motor temp read       | 100ms           | TIM4 tick counter | Medium   |
+| CAN status frame TX   | 100ms           | TIM4 tick counter | Medium   |
+| UART sensor log       | 100ms           | TIM4 tick counter | Low      |
+| Fault check           | Every main loop | Synchronous call  | High     |
+| Watchdog feed         | <500ms          | Every main loop   | Critical |
 
----
+***
 
-*BASESYNC-DES-001 · v1.0 · Approved*
+_BASESYNC-DES-001 · v1.0 · Approved_

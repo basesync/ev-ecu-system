@@ -1,28 +1,28 @@
 # CI/CD Pipeline — GitHub Actions
 
-| Field | Value |
-|---|---|
+| Field           | Value             |
+| --------------- | ----------------- |
 | **Document ID** | BASESYNC-CICD-001 |
-| **Version** | 1.0 |
-| **Status** | ✅ Approved |
+| **Version**     | 1.0               |
+| **Status**      | ✅ Approved        |
 
----
+***
 
 ## Table of Contents
 
-1. [What Is CI/CD and Why Does It Matter?](#what-is-cicd-and-why-does-it-matter)
-2. [Pipeline Architecture](#pipeline-architecture)
-3. [GitHub Actions Workflow Files](#github-actions-workflow-files)
-   - [Workflow 1 — Firmware Build Check](#workflow-1--firmware-build-check)
-   - [Workflow 2 — Unit Tests](#workflow-2--unit-tests)
-   - [Workflow 3 — Static Analysis](#workflow-3--static-analysis)
-   - [Workflow 4 — Security Scan](#workflow-4--security-scan)
-   - [Workflow 5 — Release Build](#workflow-5--release-build)
-4. [Dependabot Configuration](#dependabot-configuration)
-5. [CMake Toolchain File](#cmake-toolchain-file)
-6. [Reading CI Results](#reading-ci-results)
+1. [What Is CI/CD and Why Does It Matter?](003_cicd_pipelines.md#what-is-cicd-and-why-does-it-matter)
+2. [Pipeline Architecture](003_cicd_pipelines.md#pipeline-architecture)
+3. [GitHub Actions Workflow Files](003_cicd_pipelines.md#github-actions-workflow-files)
+   * [Workflow 1 — Firmware Build Check](003_cicd_pipelines.md#workflow-1--firmware-build-check)
+   * [Workflow 2 — Unit Tests](003_cicd_pipelines.md#workflow-2--unit-tests)
+   * [Workflow 3 — Static Analysis](003_cicd_pipelines.md#workflow-3--static-analysis)
+   * [Workflow 4 — Security Scan](003_cicd_pipelines.md#workflow-4--security-scan)
+   * [Workflow 5 — Release Build](003_cicd_pipelines.md#workflow-5--release-build)
+4. [Dependabot Configuration](003_cicd_pipelines.md#dependabot-configuration)
+5. [CMake Toolchain File](003_cicd_pipelines.md#cmake-toolchain-file)
+6. [Reading CI Results](003_cicd_pipelines.md#reading-ci-results)
 
----
+***
 
 ## What Is CI/CD and Why Does It Matter?
 
@@ -41,7 +41,7 @@ Every time someone pushes code or opens a PR, a robot automatically:
 
 Automatically deploys/releases when code reaches `main`. For firmware, this means: building a release binary and attaching it to a **GitHub Release**.
 
----
+***
 
 ## Pipeline Architecture
 
@@ -131,7 +131,7 @@ flowchart LR
     style Merge fill:#27AE60,color:white
 ```
 
----
+***
 
 ## GitHub Actions Workflow Files
 
@@ -174,7 +174,7 @@ jobs:
           path: build/*.elf
 ```
 
----
+***
 
 ### Workflow 2 — Unit Tests
 
@@ -219,7 +219,7 @@ jobs:
           path: build-tests/tests/results/
 ```
 
----
+***
 
 ### Workflow 3 — Static Analysis
 
@@ -264,7 +264,7 @@ jobs:
           path: cppcheck-report.xml
 ```
 
----
+***
 
 ### Workflow 4 — Security Scan
 
@@ -304,7 +304,7 @@ jobs:
           path: snyk-report.json
 ```
 
----
+***
 
 ### Workflow 5 — Release Build
 
@@ -357,7 +357,7 @@ jobs:
           generate_release_notes: true
 ```
 
----
+***
 
 ## Dependabot Configuration
 
@@ -381,7 +381,7 @@ updates:
       - "ci"
 ```
 
----
+***
 
 ## CMake Toolchain File
 
@@ -412,7 +412,7 @@ set(CMAKE_C_FLAGS   "${CPU_FLAGS} -fdata-sections -ffunction-sections" CACHE STR
 set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -specs=nano.specs" CACHE STRING "" FORCE)
 ```
 
----
+***
 
 ## Reading CI Results
 
@@ -425,13 +425,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -specs=nano.specs" CACHE STRING ""
 
 ### Common Failures & Fixes
 
-| Failure | Likely Cause | Fix |
-|---|---|---|
-| `build-check` fails | Compilation error in `.c` / `.h` | Fix the compiler error shown in the log |
-| `unit-tests` fails | A test assertion failed | Check which `TEST_ASSERT` failed and fix the logic |
-| `static-analysis` fails | Cppcheck found an error | Fix the flagged line; or add `// cppcheck-suppress` with justification |
-| `security-scan` fails | Snyk found a high-severity CVE | Update the affected dependency version |
-| `release-build` fails | Linker error or memory overflow | Check `.map` file; ensure firmware fits within Flash/RAM limits |
+<table><thead><tr><th width="197">Failure</th><th width="273.4000244140625">Likely Cause</th><th>Fix</th></tr></thead><tbody><tr><td><code>build-check</code> fails</td><td>Compilation error in <code>.c</code> / <code>.h</code></td><td>Fix the compiler error shown in the log</td></tr><tr><td><code>unit-tests</code> fails</td><td>A test assertion failed</td><td>Check which <code>TEST_ASSERT</code> failed and fix the logic</td></tr><tr><td><code>static-analysis</code> fails</td><td>Cppcheck found an error</td><td>Fix the flagged line; or add <code>// cppcheck-suppress</code> with justification</td></tr><tr><td><code>security-scan</code> fails</td><td>Snyk found a high-severity CVE</td><td>Update the affected dependency version</td></tr><tr><td><code>release-build</code> fails</td><td>Linker error or memory overflow</td><td>Check <code>.map</code> file; ensure firmware fits within Flash/RAM limits</td></tr></tbody></table>
 
 ### Branch Protection Rules
 
@@ -447,6 +441,6 @@ Configure these in **GitHub → Settings → Branches → Branch protection rule
 ☑ Do not allow bypassing the above settings
 ```
 
----
+***
 
-*BASESYNC-CICD-001 · v1.0*
+_BASESYNC-CICD-001 · v1.0_
