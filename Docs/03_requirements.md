@@ -1,11 +1,12 @@
-# Requirements Specification — Smart EV ECU
+# Requirements Specification - EV ECU System
 
-| Field | Value |
-|---|---|
-| **Document ID** | BASESYNC-REQ-001 |
-| **Version** | 1.0 |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
+| **Project Version** | v1.0.0 |
+| **Last Updated** | 2026 |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
 | **Status** | ✅ Approved |
-| **Owner** | Full Team |
 
 ---
 
@@ -31,12 +32,12 @@
 
 Before any engineer writes code, the team must agree on what the system needs to do. This document captures:
 
-- **Functional Requirements (FR)** — The specific things the system **MUST** do.
-- **Non-Functional Requirements (NFR)** — How well it must do them (speed, safety, reliability).
+- **Functional Requirements (FR)** - The specific things the system **MUST** do.
+- **Non-Functional Requirements (NFR)** - How well it must do them (speed, safety, reliability).
 
 ### Scope
 
-This document covers the firmware for the **Smart EV ECU** running on an **STM32 microcontroller**, including simulation (SIL), hardware bring-up, and HIL phases.
+This document covers the firmware for the **EV ECU System** running on an **STM32 microcontroller**, including simulation (SIL), hardware bring-up, and HIL phases.
 
 ---
 
@@ -221,4 +222,4 @@ stateDiagram-v2
 
 ---
 
-*BASESYNC-REQ-001 · v1.0 · Approved*
+*basesync · Requirements · 03*

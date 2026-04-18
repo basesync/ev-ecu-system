@@ -1,9 +1,12 @@
-# Testing Strategy — EV ECU
+# Testing Strategy — EV ECU System
 
-| Field | Value |
-|---|---|
-| **Document ID** | BASESYNC-TEST-001 |
-| **Version** | 1.0 |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
+| **Project Version** | v1.0.0 |
+| **Last Updated** | 2026 |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
+| **Status** | ✅ Approved  |
 
 ---
 
@@ -32,17 +35,33 @@
 
 > *"Test early, test often, test automatically."*
 
-```
-                    ┌─────────────────┐
-                    │   HIL Tests     │  ← Few tests, expensive, real hardware
-                    │                 │    (Sprint 6)
-                  ┌─┴─────────────────┴─┐
-                  │  SIL / Integ Tests  │  ← Wokwi simulation tests
-                  │                     │    (Sprint 4)
-                ┌─┴─────────────────────┴─┐
-                │      Unit Tests         │  ← Many tests, fast, no hardware
-                │   (Unity Framework)     │    (Every sprint)
-                └─────────────────────────┘
+```mermaid
+block-beta
+    columns 3
+
+    %% Top Layer
+    HIL["HIL Tests<br/>Real Hardware + BusMaster"]
+    HIL_D["~6 automated tests<br/>Slow. Expensive<br/>Catches hw bugs"]
+
+    %% Middle Layer
+    space
+    SIL["SIL Tests (Wokwi)<br/>Software-In-The-Loop simulation<br/>Full system integration"]
+    SIL_D["~6 Scenario tests<br/>Medium speed<br/>Catches Integration bugs"]
+
+    %% Base Layer
+    space
+    Unit["Unit Tests (Unity Framework)<br/>Mock HAL Functions. Run on Host PC.<br/>Per-function verification"]
+    Unit_D["67+ Unit Tests<br/>Fast (<1 second)<br/>Very Cheap to run<br/>Catches logic bugs"]
+
+    %% Styling blocks
+    style HIL fill:#FF0000,color:#ffffff,stroke:#000
+    style SIL fill:#FF9900,color:#ffffff,stroke:#000
+    style Unit fill:#008000,color:#ffffff,stroke:#000
+
+    %% Styling text labels
+    style HIL_D fill:none,color:#000000,stroke:none
+    style SIL_D fill:none,color:#000000,stroke:none
+    style Unit_D fill:none,color:#000000,stroke:none
 ```
 
 ---
@@ -399,4 +418,4 @@ Add to `unit-tests.yml`:
 
 ---
 
-*BASESYNC-TEST-001 · v1.0*
+*basesync · Testing Strategy · 07*

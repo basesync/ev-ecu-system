@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-* [Project Overview](00_project_oOverview.md)
+* [Project Overview](00_project_overview.md)
 * [Environment Setup](01_environment_setup.md)
 * [GitHub Setup](02_github_setup.md)
 
@@ -18,7 +18,7 @@
 
 ## DevOps
 
-* [CI/CD Pipelines](B05_cicd_pipelines.md)
+* [CI/CD Pipelines](05_cicd_pipelines.md)
 
 ## Reference
 

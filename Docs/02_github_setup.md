@@ -1,9 +1,12 @@
 # GitHub Setup Guide
 
-| Field | Value |
-|---|---|
-| **Owner** | @Rohith K R |
-| **Status** | 🟡 In Progress |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
+| **Project Version** | v1.0.0 |
+| **Last Updated** | 2026 |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
+| **Status** | ✅ Approved  |
 
 ---
 
@@ -326,12 +329,12 @@ Closes #<!-- issue number here -->
 
 | Milestone | Due | Description |
 |---|---|---|
-| **Sprint 1 — Foundation** | Week 2 | Repo setup, sensor HAL, basic build |
-| **Sprint 2 — Core Modules** | Week 4 | Motor control, fault manager, logger |
-| **Sprint 3 — Communication** | Week 6 | CAN driver, state machine |
-| **Sprint 4 — SIL Testing** | Week 8 | Full Wokwi simulation, Unity tests |
-| **Sprint 5 — Hardware Bring-Up** | Week 10 | Flash to STM32 hardware |
-| **Sprint 6 — HIL Testing** | Week 12 | BusMaster integration, HIL suite |
+| **Sprint 1 - Foundation** | Week 2 | Repo setup, sensor HAL, basic build |
+| **Sprint 2 - Core Modules** | Week 4 | Motor control, fault manager, logger |
+| **Sprint 3 - Communication** | Week 6 | CAN driver, state machine |
+| **Sprint 4 - SIL Testing** | Week 8 | Full Wokwi simulation, Unity tests |
+| **Sprint 5 - Hardware Bring-Up** | Week 10 | Flash to STM32 hardware |
+| **Sprint 6 - HIL Testing** | Week 12 | BusMaster integration, HIL suite |
 
 ---
 
@@ -344,7 +347,7 @@ Closes #<!-- issue number here -->
 | `feature/*` branches | Each member | Full write |
 | GitHub Actions | All members | Read (view logs) |
 | GitHub Secrets | Lead only | Admin |
-| Confluence Space | All members | Edit |
+| Gitbook | Each members | Full write |
 
 ---
 
@@ -352,14 +355,14 @@ Closes #<!-- issue number here -->
 
 Follow these steps **every time** you start a new task.
 
-### Step 1 — Sync Your Local Machine
+### Step 1 - Sync Your Local Machine
 
 ```bash
 git checkout develop
 git pull origin develop
 ```
 
-### Step 2 — Start a New Task
+### Step 2 - Start a New Task
 
 > ⚠️ Never work directly on `develop`. Always create a feature branch.
 
@@ -367,20 +370,20 @@ git pull origin develop
 git checkout -b feature/your-task-name
 ```
 
-### Step 3 — Write Code, Commit Often
+### Step 3 - Write Code, Commit Often
 
 ```bash
 git add .
 git commit -m "feat(sensor): add battery voltage ADC read function"
 ```
 
-### Step 4 — Push Your Branch
+### Step 4 - Push Your Branch
 
 ```bash
 git push origin feature/your-task-name
 ```
 
-### Step 5 — Open a Pull Request on GitHub
+### Step 5 - Open a Pull Request on GitHub
 
 - **Base:** `develop`
 - **Compare:** `feature/your-task-name`

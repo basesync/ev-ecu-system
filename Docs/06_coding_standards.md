@@ -1,9 +1,12 @@
-# Coding Standards — EV ECU
+# Coding Standards — EV ECU System
 
-| Field | Value |
-|---|---|
-| **Document ID** | BASESYNC-STD-001 |
-| **Version** | 1.0 |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
+| **Project Version** | v1.0.0 |
+| **Last Updated** | 2026 |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
+| **Status** | ✅ Approved  |
 
 > ⚠️ **These rules are not optional. CI will enforce many of them automatically.**
 
@@ -392,15 +395,15 @@ static uint8_t s_uart_buffer[256];
 
 ## MISRA-C Inspired Rules
 
-Simplified from MISRA-C — the gold standard in automotive software.
+Simplified from MISRA-C - the gold standard in automotive software.
 
 | Rule | Description |
 |---|---|
 | **MISRA-S1** | Never use `goto` |
 | **MISRA-S2** | All `switch` statements must have a `default` case |
 | **MISRA-S3** | Always use braces `{}` even for single-line `if` / `for` / `while` |
-| **MISRA-S4** | Never use `//` comments — use `/* */` only (MISRA C90) |
-| **MISRA-S5** | No implicit type conversions — always cast explicitly |
+| **MISRA-S4** | Never use `//` comments - use `/* */` only (MISRA C90) |
+| **MISRA-S5** | No implicit type conversions - always cast explicitly |
 | **MISRA-S6** | Boolean expressions must be truly boolean (not `int` `0`/`1`) |
 
 ```c
@@ -497,4 +500,4 @@ uint8_t fault_check_all(const sensor_data_t *data)
 
 ---
 
-*BASESYNC-STD-001 · v1.0*
+*basesync · Coding Standards · 06*

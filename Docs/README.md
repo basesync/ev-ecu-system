@@ -26,24 +26,6 @@ The system reads sensors, controls motor output, detects faults, communicates ov
 
 ---
 
-## What This System Does
-
-```
-┌──────────────────────────────────────────────────────┐
-│                    EV ECU System                     │
-│                                                      │
-│  Sensors ──► Fault Manager ──► State Machine         │
-│                                    │                 │
-│                              Motor Control ──► PWM   │
-│                                    │                 │
-│                              CAN Driver  ──► CAN Bus │
-│                                    │                 │
-│                              Logger     ──► UART     │
-└──────────────────────────────────────────────────────┘
-```
-
----
-
 ## Project Stages
 
 | Stage | Description | Sprint |

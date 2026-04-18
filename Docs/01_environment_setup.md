@@ -1,12 +1,12 @@
 # Environment Setup Guide
 
-| Field | Value |
-|---|---|
-| **Document ID** | BASESYNC-ENV-001 |
-| **Version** | 1.0.0 |
-| **Owner** | @Rohith K R |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
+| **Project Version** | v1.0.0 |
+| **Last Updated** | 2026 |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
 | **Status** | 🟡 In Progress |
-| **Audience** | All Team Members |
 
 > ✅ **When done, you should be able to:** clone the repo, compile the firmware, run unit tests, and open the simulation.
 
@@ -63,7 +63,7 @@ This is the **compiler** — it converts your C code into binary that runs on th
 2. Download: `arm-gnu-toolchain-[version]-mingw-w64-i686-arm-none-eabi.zip`
 3. Right-click the `.zip` and select **Extract All...**
 4. Move the extracted folder to a clean path, e.g. `C:\arm-gnu-toolchain`
-5. Open the folder and navigate into the `bin` subfolder — you'll see many `.exe` files inside
+5. Open the folder and navigate into the `bin` subfolder - you'll see many `.exe` files inside
 6. While inside the `bin` folder, click the **Address Bar** at the top of File Explorer and **copy the path** (e.g. `C:\arm-gnu-toolchain\bin`)
 7. Press the **Windows Key** and type `"env"`
 8. Select **"Edit the system environment variables"** → click the **Environment Variables** button
@@ -95,7 +95,7 @@ make --version
 
 ---
 
-## Step 4 — Install STM32CubeIDE
+## Step 4 - Install STM32CubeIDE
 
 STM32CubeIDE is ST Microelectronics' official IDE. We use it for:
 
@@ -106,7 +106,6 @@ STM32CubeIDE is ST Microelectronics' official IDE. We use it for:
 1. Go to: [STM32CubeIDE | Software – STMicroelectronics](https://www.st.com/en/development-tools/stm32cubeide.html)
 2. Create a free **MySTM32** account (required to download)
 3. Download and install
-4. Launch → set workspace to: `~/basesync-workspace`
 
 > 💡 No need to fully understand CubeIDE yet. We will use its HAL generation feature, then move to VS Code for editing.
 
@@ -157,7 +156,7 @@ cppcheck --version
 
 ---
 
-## Step 7 — Install Git & Configure GitHub
+## Step 7 - Install Git & Configure GitHub
 
 ### Install Git
 
@@ -215,7 +214,7 @@ Hi <Username>! You've successfully authenticated.
 
 ---
 
-## Step 8 — Clone and Build the Project
+## Step 8 - Clone and Build the Project
 
 ```bash
 # Clone the repository
@@ -261,13 +260,13 @@ A virtual STM32 board with virtual LEDs, potentiometers, and buttons connected. 
 
 ---
 
-## Step 10 — Set Up BusMaster CAN Simulation
+## Step 10 - Set Up BusMaster CAN Simulation
 
 BusMaster simulates a CAN bus on your PC.
 
 1. Download: [BUSMASTER](https://rbei-etas.github.io/busmaster/)
 2. Install with default settings
-   > ⚠️ Windows only — use a VM on Mac/Linux
+   > ⚠️ Windows only - use a VM on Mac/Linux
 3. Open BusMaster
 4. **File → Open →** `Simulation/busmaster/ev_ecu.bsm`
 5. For the Virtual CAN driver, choose one of:
@@ -282,7 +281,7 @@ sudo ip link set up vcan0
 
 ---
 
-## Step 11 — Run Unit Tests Locally
+## Step 11 - Run Unit Tests Locally
 
 ```bash
 # From project root
@@ -305,17 +304,17 @@ OK
 
 | Check | Command / Action | Expected Result |
 |---|---|---|
-| ☐ ARM GCC installed | `arm-none-eabi-gcc --version` | Shows version number |
-| ☐ CMake installed | `cmake --version` | Shows `3.x.x` |
-| ☐ Git installed | `git --version` | Shows version number |
-| ☐ Cppcheck installed | `cppcheck --version` | Shows version number |
-| ☐ SSH auth to GitHub | `ssh -T git@github.com` | `"Hi username! You've successfully authenticated"` |
-| ☐ Repo clones OK | `git clone git@github.com:basesync/ev-ecu-system.git` | Clones without error |
-| ☐ Firmware builds | `cmake .. && cmake --build .` | Compiles without errors |
-| ☐ Tests pass | `./test_runner` | All tests pass |
-| ☐ Wokwi opens | Press `F1` → Wokwi: Start Simulator | Virtual STM32 visible |
-| ☐ VS Code extensions | Check Extensions panel | All 8 extensions listed as installed |
+| ARM GCC installed | `arm-none-eabi-gcc --version` | Shows version number |
+| CMake installed | `cmake --version` | Shows `3.x.x` |
+| Git installed | `git --version` | Shows version number |
+| Cppcheck installed | `cppcheck --version` | Shows version number |
+| SSH auth to GitHub | `ssh -T git@github.com` | `"Hi username! You've successfully authenticated"` |
+| Repo clones OK | `git clone git@github.com:basesync/ev-ecu-system.git` | Clones without error |
+| Firmware builds | `cmake .. && cmake --build .` | Compiles without errors |
+| Tests pass | `./test_runner` | All tests pass |
+| Wokwi opens | Press `F1` → Wokwi: Start Simulator | Virtual STM32 visible |
+| VS Code extensions | Check Extensions panel | All 8 extensions listed as installed |
 
 ---
 
-*BASESYNC-ENV-001 · v1.0.0*
+*basesync · Environmental Setup · 01*

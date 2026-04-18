@@ -1,12 +1,12 @@
-# Smart EV Control & Diagnostics System — Project Overview
+# EV Control & Diagnostics System — Project Overview
 
-| Field | Value |
-|---|---|
-| **Organisation** | basesync |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
 | **Project Version** | v1.0.0 |
 | **Last Updated** | 2026 |
-| **Owner** | @Rohith K R |
-| **Status** | 🟡 In Progress |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
+| **Status** | ✅ Approved  |
 
 ---
 
@@ -21,14 +21,13 @@
 7. [Team Structure](#team-structure)
 8. [Technology Stack](#technology-stack)
 9. [Before Writing the Code](#before-writing-the-code)
-10. [Confluence Space Structure](#confluence-space-structure)
-11. [GitHub Organisation Structure](#github-organisation-structure)
+10. [GitHub Organisation Structure](#github-organisation-structure)
 
 ---
 
 ## What Is This Project?
 
-We are building a **Smart EV (Electric Vehicle) Control & Diagnostics System** — a software + firmware system that mimics what a real EV's **ECU (Electronic Control Unit)** does.
+We are building a **EV (Electric Vehicle) Control & Diagnostics System** + a software + firmware system that mimics what a real EV's **ECU (Electronic Control Unit)** does.
 
 It:
 
@@ -60,23 +59,7 @@ This project is designed to demonstrate a broad set of industry-relevant enginee
 
 ## What Does an ECU Actually Do?
 
-```
-                    ┌──────────────────────────────────────────────┐
-                    │               Smart EV ECU                   │
-                    │                                              │
-  Sensors ─────────►  Read: temp, speed, voltage, current         │
-                    │            │                                 │
-                    │            ▼                                 │
-                    │  Decide: fault? over-temp? cut power?        │
-                    │            │                                 │
-                    │            ▼                                 │
-  Motor/Outputs ◄───  Act: set PWM, trigger braking, send alert   │
-                    │            │                                 │
-  CAN Bus      ◄───►  Communicate: broadcast status, faults       │
-                    │            │                                 │
-  UART / Logs  ◄───  Log: fault codes, state changes, telemetry  │
-                    └──────────────────────────────────────────────┘
-```
+![What ECU Actually Do?](assets/images/what_ECU_does.png)
 
 ---
 
@@ -104,25 +87,37 @@ This project is designed to demonstrate a broad set of industry-relevant enginee
 
 ## System Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        APPLICATION LAYER                        │
-│           State Machine · Fault Manager · Logger                │
-├─────────────────────────────────────────────────────────────────┤
-│                         SERVICE LAYER                           │
-│         Motor Control · CAN Driver · Sensor HAL                 │
-├─────────────────────────────────────────────────────────────────┤
-│                    HARDWARE ABSTRACTION (HAL)                   │
-│          ADC · PWM · GPIO · CAN · UART · Timers                 │
-└─────────────────────────────────────────────────────────────────┘
-                       STM32 Hardware
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f3f4f6', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    %% Define the Layers (Nodes) %%
+    APP["<b>APPLICATION LAYER</b><br/>State Machine • Fault Manager • Logger"]
+    SERV["<b>SERVICE LAYER</b><br/>Motor Control • CAN Driver • Sensors"]
+    HAL["<b>HARDWARE ABSTRACTION (HAL)</b><br/>ADC • PWM • GPIO • CAN • UART • Timer"]
+    HW["STM32 Hardware"]
+
+    %% Connect the Layers (Invisible or very short links to show flow) %%
+    APP --- SERV
+    SERV --- HAL
+    HAL -.-> HW
+
+    %% Apply MNC Styling to make it look clean and professional %%
+    classDef layerFill fill:#fbfbfb,stroke:#333,stroke-width:1px,rx:2,ry:2,font-family:monospace,font-size:13px;
+    classDef hwFill fill:none,stroke:none,font-family:sans-serif,font-size:14px,color:#666;
+
+    %% Assign Classes %%
+    class APP,SERV,HAL layerFill;
+    class HW hwFill;
+
+    %% Adjust link styling (optional but looks cleaner) %%
+    linkStyle 0,1,2 stroke:#eee,stroke-width:1px;
 ```
 
 ---
 
 ## Stages of the Project
 
-### Stage 1 — Code & Simulation (SIL)
+### Stage 1 - Code & Simulation (SIL)
 
 All code runs entirely in simulation. No physical hardware needed.
 
@@ -130,7 +125,7 @@ All code runs entirely in simulation. No physical hardware needed.
 [Write C Code] → [Simulate on Wokwi/Renode] → [Test with Unity] → [CI/CD checks pass]
 ```
 
-### Stage 2 — Hardware Bring-Up
+### Stage 2 - Hardware Bring-Up
 
 Flash the same code onto a real STM32 board. Fix any hardware-specific bugs.
 
@@ -138,7 +133,7 @@ Flash the same code onto a real STM32 board. Fix any hardware-specific bugs.
 [Stage 1 Code] → [Flash to STM32] → [Oscilloscope / Logic Analyser checks] → [Fix HW bugs]
 ```
 
-### Stage 3 — HIL Testing
+### Stage 3 - HIL Testing
 
 Real hardware, but sensors and motor are simulated by external equipment.
 
@@ -146,7 +141,7 @@ Real hardware, but sensors and motor are simulated by external equipment.
 [STM32 Hardware] ↔ [HIL Simulator / BusMaster CAN] → [Automated Test Suite]
 ```
 
-### Stage 4 — RTOS + Bootloader *(Advanced)*
+### Stage 4 - RTOS + Bootloader *(Advanced)*
 
 Port the system to FreeRTOS, add a bootloader, and build a GUI.
 
@@ -195,44 +190,44 @@ Port the system to FreeRTOS, add a bootloader, and build a GUI.
 
 Follow these steps in order. **Do not skip ahead to Step 8.**
 
-### Step 1 — Requirements Gathering
+### Step 1 - Requirements Gathering
 
 Define what the system must do and how well it must do it.
 
-- **Functional Requirements** — *What* it does (e.g., "The system shall read battery temperature every 100ms")
-- **Non-Functional Requirements** — *How well* it does it (e.g., "Fault detection shall trigger within 10ms of threshold breach")
+- **Functional Requirements** - *What* it does (e.g., "The system shall read battery temperature every 100ms")
+- **Non-Functional Requirements** - *How well* it does it (e.g., "Fault detection shall trigger within 10ms of threshold breach")
 
-→ See: `BASESYNC-REQ-001`
+→ See: `03_requirements`
 
-### Step 2 — System Design
+### Step 2 - System Design
 
 Draw the architecture. Define all modules. Decide interfaces between modules. No code — just boxes and arrows.
 
-→ See: `BASESYNC-DES-001`
+→ See: `04_system_design`
 
-### Step 3 — Set Up Your Environment
+### Step 3 - Set Up Your Environment
 
 Install all tools. Make sure every team member has the same setup. Write it down so a new joiner can replicate it in 30 minutes.
 
-→ See: `01 Environment Setup`
+→ See: `01_environment_setup`
 
 ### Step 4 — Set Up GitHub
 
 Create branch protection rules, PR templates, and issue templates.
 
-→ See: `02 GitHub Setup`
+→ See: `02_gitHub_setup`
 
 ### Step 5 — Set Up CI/CD Pipeline
 
 GitHub Actions must run on every Pull Request. Nothing merges without passing.
 
-→ See: `BASESYNC-CICD-001`
+→ See: `05_cicd_pipelines`
 
 ### Step 6 — Define Coding Standards
 
 Agree on naming conventions, file structure, and comment style **before anyone writes code**.
 
-→ See: `BASESYNC-STD-001`
+→ See: `06_coding_standards`
 
 ### Step 7 — Sprint Planning
 
@@ -243,23 +238,6 @@ Break requirements into User Stories. Estimate effort. Assign to Sprint 1.
 ### Step 8 — Start Coding
 
 **Now, and only now, do you write code.**
-
----
-
-## Confluence Space Structure
-
-```
-basesync/
-├── 00 Project Overview          ← This document
-├── 01 Environment Setup
-├── 02 GitHub Setup
-├── 03 Requirements              ← BASESYNC-REQ-001
-├── 04 System Design             ← BASESYNC-DES-001
-├── 05 CI/CD Pipelines           ← BASESYNC-CICD-001
-├── 06 Coding Standards          ← BASESYNC-STD-001
-├── 07 Testing Strategy          ← BASESYNC-TEST-001
-└── Sprint Planning
-```
 
 ---
 
@@ -283,4 +261,4 @@ basesync/
 
 ---
 
-*basesync · Smart EV ECU · v1.0.0 · 2026*
+*basesync · EV ECU System · v1.0.0 · 2026*

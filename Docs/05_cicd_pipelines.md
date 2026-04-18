@@ -1,32 +1,34 @@
-# CI/CD Pipeline — GitHub Actions
+# CI/CD Pipeline - GitHub Actions
 
-| Field           | Value             |
-| --------------- | ----------------- |
-| **Document ID** | BASESYNC-CICD-001 |
-| **Version**     | 1.0               |
-| **Status**      | ✅ Approved        |
+| |  |
+|:---|:---|
+| **Organisation** | [basesync](https://github.com/basesync) |
+| **Project Version** | v1.0.0 |
+| **Last Updated** | 2026 |
+| **Owner** | [@Rohith-Kalarikkal](https://github.com/Rohith-Kalarikkal) |
+| **Status** | ✅ Approved  |
 
-***
+---
 
 ## Table of Contents
 
 1. [What Is CI/CD and Why Does It Matter?](003_cicd_pipelines.md#what-is-cicd-and-why-does-it-matter)
 2. [Pipeline Architecture](003_cicd_pipelines.md#pipeline-architecture)
 3. [GitHub Actions Workflow Files](003_cicd_pipelines.md#github-actions-workflow-files)
-   * [Workflow 1 — Firmware Build Check](003_cicd_pipelines.md#workflow-1--firmware-build-check)
-   * [Workflow 2 — Unit Tests](003_cicd_pipelines.md#workflow-2--unit-tests)
-   * [Workflow 3 — Static Analysis](003_cicd_pipelines.md#workflow-3--static-analysis)
-   * [Workflow 4 — Security Scan](003_cicd_pipelines.md#workflow-4--security-scan)
-   * [Workflow 5 — Release Build](003_cicd_pipelines.md#workflow-5--release-build)
+   * [Workflow 1 - Firmware Build Check](003_cicd_pipelines.md#workflow-1--firmware-build-check)
+   * [Workflow 2 - Unit Tests](003_cicd_pipelines.md#workflow-2--unit-tests)
+   * [Workflow 3 - Static Analysis](003_cicd_pipelines.md#workflow-3--static-analysis)
+   * [Workflow 4 - Security Scan](003_cicd_pipelines.md#workflow-4--security-scan)
+   * [Workflow 5 - Release Build](003_cicd_pipelines.md#workflow-5--release-build)
 4. [Dependabot Configuration](003_cicd_pipelines.md#dependabot-configuration)
 5. [CMake Toolchain File](003_cicd_pipelines.md#cmake-toolchain-file)
 6. [Reading CI Results](003_cicd_pipelines.md#reading-ci-results)
 
-***
+---
 
 ## What Is CI/CD and Why Does It Matter?
 
-### CI — Continuous Integration
+### CI - Continuous Integration
 
 Every time someone pushes code or opens a PR, a robot automatically:
 
@@ -41,7 +43,7 @@ Every time someone pushes code or opens a PR, a robot automatically:
 
 Automatically deploys/releases when code reaches `main`. For firmware, this means: building a release binary and attaching it to a **GitHub Release**.
 
-***
+---
 
 ## Pipeline Architecture
 
@@ -50,13 +52,11 @@ flowchart LR
 
     %% Trigger 2: Push to main
     subgraph Main_Trigger [On: Push to main]
-        direction TD
-        Job5[<b>Job 5: release-build</b><br/>• Full firmware build<br/>• Uploads .bin / .elf as artifacts<br/>• Creates GitHub Release on version tags]
+        Job5["<b>Job 5: release-build</b><br/>• Full firmware build<br/>• Uploads .bin / .elf as artifacts<br/>• Creates GitHub Release on version tags"]
     end
 
     %% Trigger 1: Pull Request
     subgraph PR_Trigger [On: Pull Request -> develop or main]
-        direction TD
         Job1[<b>Job 1: build-check</b><br/>• arm-none-eabi-gcc compiles firmware<br/>• Must produce .elf with 0 errors]
 
         Job2[<b>Job 2: unit-tests</b><br/>• Compiles test suite with native GCC<br/>• Runs Unity test runner<br/>• Must have 0 failures]
@@ -77,6 +77,7 @@ flowchart LR
     style Job4 fill:#D35400,color:white
     style Job5 fill:#2C3E50,color:white
 ```
+---
 
 ### Job Dependency Graph
 
@@ -131,7 +132,7 @@ flowchart LR
     style Merge fill:#27AE60,color:white
 ```
 
-***
+---
 
 ## GitHub Actions Workflow Files
 
@@ -405,7 +406,7 @@ set(CMAKE_SIZE         ${TOOLCHAIN_PREFIX}size)
 # Prevent CMake from testing the compiler against the host
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-# Target CPU flags — adjust for your STM32 variant
+# Target CPU flags - adjust for your STM32 variant
 set(CPU_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
 
 set(CMAKE_C_FLAGS   "${CPU_FLAGS} -fdata-sections -ffunction-sections" CACHE STRING "" FORCE)
@@ -421,11 +422,17 @@ set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -specs=nano.specs" CACHE STRING ""
 1. Go to your PR on GitHub.
 2. Scroll down to the **Checks** section.
 3. Click on the failing check name.
-4. Read the red output — it tells you exactly what failed.
+4. Read the red output - it tells you exactly what failed.
 
 ### Common Failures & Fixes
 
-<table><thead><tr><th width="197">Failure</th><th width="273.4000244140625">Likely Cause</th><th>Fix</th></tr></thead><tbody><tr><td><code>build-check</code> fails</td><td>Compilation error in <code>.c</code> / <code>.h</code></td><td>Fix the compiler error shown in the log</td></tr><tr><td><code>unit-tests</code> fails</td><td>A test assertion failed</td><td>Check which <code>TEST_ASSERT</code> failed and fix the logic</td></tr><tr><td><code>static-analysis</code> fails</td><td>Cppcheck found an error</td><td>Fix the flagged line; or add <code>// cppcheck-suppress</code> with justification</td></tr><tr><td><code>security-scan</code> fails</td><td>Snyk found a high-severity CVE</td><td>Update the affected dependency version</td></tr><tr><td><code>release-build</code> fails</td><td>Linker error or memory overflow</td><td>Check <code>.map</code> file; ensure firmware fits within Flash/RAM limits</td></tr></tbody></table>
+| Failure | Likely Cause | Fix |
+| :--- | :--- | :--- |
+| **build-check** fails | Compilation error in `.c` / `.h` | Fix the compiler error shown in the log |
+| **unit-tests** fails | A test assertion failed | Check which `TEST_ASSERT` failed and fix the logic |
+| **static-analysis** fails | Cppcheck found an error | Fix flagged line; or add `// cppcheck-suppress` with justification |
+| **security-scan** fails | Snyk found a high-severity CVE | Update the affected dependency version |
+| **release-build** fails | Linker error or memory overflow | Check `.map` file; ensure firmware fits within Flash/RAM limits |
 
 ### Branch Protection Rules
 
@@ -443,4 +450,4 @@ Configure these in **GitHub → Settings → Branches → Branch protection rule
 
 ***
 
-_BASESYNC-CICD-001 · v1.0_
+*basesync · CI/CD Pipelines · 05*
