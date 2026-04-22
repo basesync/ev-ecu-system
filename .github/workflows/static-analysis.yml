@@ -61,10 +61,10 @@ jobs:
             --platform=arm32-wchar_t2 \
             --xml \
             --xml-version=2 \
-            -I Core/Inc \
-            -I Drivers/STM32_HAL \
+            -I core/inc \
+            -I drivers/STM32_HAL \
             --force \
-            Core/Src/ \
+            core/src/ \
             2> cppcheck-report.xml
           echo "Cppcheck completed."
 
