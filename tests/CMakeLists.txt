@@ -65,12 +65,12 @@ set(MOCK_SOURCES
 # Add the actual firmware .c files you want to test.
 # Do NOT add main.c here — it has the main() function which conflicts.
 set(FIRMWARE_SOURCES_UNDER_TEST
-    # ../Core/Src/sensor_hal.c     - Add in Sprint 2
-    # ../Core/Src/motor_ctrl.c     - Add in Sprint 3
-    # ../Core/Src/fault_manager.c  - Add in Sprint 3
-    # ../Core/Src/can_driver.c     - Add in Sprint 3
-    # ../Core/Src/logger.c         - Add in Sprint 4
-    # ../Core/Src/ev_state_machine.c - Add in Sprint 4
+    # ../core/src/sensor_hal.c     - Add in Sprint 2
+    # ../core/src/motor_ctrl.c     - Add in Sprint 3
+    # ../core/src/fault_manager.c  - Add in Sprint 3
+    # ../core/src/can_driver.c     - Add in Sprint 3
+    # ../core/src/logger.c         - Add in Sprint 4
+    # ../core/src/ev_state_machine.c - Add in Sprint 4
 )
 
 # --- Test Files --------------------------------------------------------------
@@ -87,7 +87,7 @@ set(TEST_SOURCES
 # --- Include Directories -----------------------------------------------------
 set(TEST_INCLUDES
     Unity/                  # Unity headers
-    ../Core/Inc             # Firmware headers
+    ../core/inc             # Firmware headers
     mocks/                  # Mock/stub headers
 )
 
