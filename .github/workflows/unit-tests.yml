@@ -48,15 +48,15 @@ jobs:
       # Note: We use a SEPARATE CMakeLists.txt in Tests/ that uses native GCC
       - name: Configure test build
         run: |
-          cmake -B Tests/build \
-                -S Tests \
+          cmake -B tests/build \
+                -S tests \
                 -DCMAKE_BUILD_TYPE=Debug \
                 -DENABLE_COVERAGE=ON
 
       # Step 4: Build the test runner binary
       - name: Build test suite
         run: |
-          cmake --build Tests/build --parallel $(nproc)
+          cmake --build tests/build --parallel $(nproc)
 
       # Step 5: Run all unit tests
       # The test runner exits with code 1 if any test fails -> CI job fails -> PR blocked
@@ -65,7 +65,7 @@ jobs:
           echo "------------------------------------"
           echo "Running Unity unit tests..."
           echo "------------------------------------"
-          cd Tests/build
+          cd tests/build
           ./test_runner
           echo "------------------------------------"
 
@@ -73,7 +73,7 @@ jobs:
       - name: Generate test report
         if: always()    # Run even if tests fail (so we can see the report)
         run: |
-          cd Tests/build
+          cd tests/build
           # Run again with verbose output captured
           ./test_runner | tee test_output.txt || true
           echo "Test output saved."
@@ -81,7 +81,7 @@ jobs:
       # Step 7: Generate code coverage report
       - name: Generate coverage report
         run: |
-          cd Tests/build
+          cd tests/build
           # Generate .gcov files from gcda/gcno files
           gcov --all-blocks $(find . -name "*.gcno" | head -20) 2>/dev/null || true
           echo "Coverage files generated."
@@ -93,5 +93,5 @@ jobs:
         with:
           name: test-results-${{ github.sha }}
           path: |
-            Tests/build/test_output.txt
+            tests/build/test_output.txt
           retention-days: 14

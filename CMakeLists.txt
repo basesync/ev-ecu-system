@@ -37,20 +37,20 @@ message(STATUS "Toolchain:  ${CMAKE_C_COMPILER}")
 # List every .c file in the project
 # Note: We list them explicitly (not glob) so CMake detects new files properly
 set(FIRMWARE_SOURCES
-    Core/Src/main.c
+    core/src/main.c
     # --- Sprint 2 onwards: add module source files here ---
-    # Core/Src/sensor_hal.c
-    # Core/Src/motor_ctrl.c
-    # Core/Src/fault_manager.c
-    # Core/Src/can_driver.c
-    # Core/Src/logger.c
-    # Core/Src/ev_state_machine.c
+    # core/src/sensor_hal.c
+    # core/src/motor_ctrl.c
+    # core/src/fault_manager.c
+    # core/src/can_driver.c
+    # core/src/logger.c
+    # core/src/ev_state_machine.c
 )
 
 # --- Header Include Directories -------------------------------------------
 set(FIRMWARE_INCLUDES
-    Core/Inc
-    Drivers/STM32_HAL
+    core/inc
+    drivers/STM32_HAL
 )
 
 # --- Linker Script ------------------------------------------------------------
