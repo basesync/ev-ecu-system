@@ -242,7 +242,7 @@ test_can_fault_frame_has_correct_id()
 Unit tests must run on a **PC**, not on STM32 hardware. This means we need stubs — fake versions of the HAL functions.
 
 ```
-Tests/
+tests/
 └── mocks/
     ├── mock_stm32_hal_adc.c    ← Fake ADC that returns test values
     ├── mock_stm32_hal_gpio.c   ← Fake GPIO
@@ -404,11 +404,11 @@ Add to `unit-tests.yml`:
 ```yaml
 - name: Run tests with coverage
   run: |
-    cd Tests/build
+    cd tests/build
     cmake .. -DCOVERAGE=ON
     make
     ./test_runner
-    gcov --all-blocks ../Core/Src/*.c
+    gcov --all-blocks ../core/src/*.c
 
 - name: Upload to Codecov
   uses: codecov/codecov-action@v3

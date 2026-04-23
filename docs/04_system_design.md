@@ -170,15 +170,15 @@ state_machine.h / state_machine.c
 
 ```
 smart-ev-ecu/
-├── Core/
-│   ├── Inc/
+├── core/
+│   ├── inc/
 │   │   ├── sensor_hal.h
 │   │   ├── motor_control.h
 │   │   ├── fault_manager.h
 │   │   ├── can_driver.h
 │   │   ├── logger.h
 │   │   └── state_machine.h
-│   └── Src/
+│   └── src/
 │       ├── main.c
 │       ├── sensor_hal.c
 │       ├── motor_control.c
@@ -186,14 +186,14 @@ smart-ev-ecu/
 │       ├── can_driver.c
 │       ├── logger.c
 │       └── state_machine.c
-├── Drivers/
+├── drivers/
 │   └── STM32xx_HAL_Driver/    ← STM32 auto-generated HAL
-├── Tests/
+├── tests/
 │   ├── test_sensor_hal.c
 │   ├── test_motor_control.c
 │   ├── test_fault_manager.c
 │   └── test_state_machine.c
-├── Docs/
+├── docs/
 │   ├── BASESYNC-REQ-001.md
 │   └── BASESYNC-DES-001.md
 └── CMakeLists.txt / Makefile

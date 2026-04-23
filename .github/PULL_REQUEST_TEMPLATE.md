@@ -1,7 +1,7 @@
 ## Summary
 <!-- What does this PR do? Write 2–3 sentences. Be specific. -->
 <!-- Example: "Implements the battery temperature ADC read function in sensor_hal.c.
-              Adds unit tests for all boundary conditions. Updates the pin mapping table in Confluence." -->
+              Adds unit tests for all boundary conditions." -->
 
 
 ## Type of Change
@@ -19,21 +19,21 @@ Closes #<!-- issue number here -->
 
 ## Changes Made
 <!-- List every significant change. Be specific so the reviewer knows what to look at. -->
-- 
-- 
-- 
+-
+-
+-
 
 ## How to Test This PR
 <!-- Step-by-step instructions for the reviewer to verify this works -->
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Testing Done by Author
 <!-- Check all that apply -->
 - [ ] Unit tests written for new/changed code
-- [ ] All existing tests pass locally (`cd Tests/build && ./test_runner` → 0 Failures)
-- [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I Core/Inc Core/Src/`)
+- [ ] All existing tests pass locally (`cd tests/build && ./test_runner` → 0 Failures)
+- [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I core/inc core/src/`)
 - [ ] Code compiled successfully (`cmake --build build`)
 - [ ] Tested in Wokwi simulation (if applicable)
 - [ ] UART output verified (if applicable)
@@ -50,7 +50,7 @@ Closes #<!-- issue number here -->
 - [ ] All `if/for/while` blocks use `{` braces even for single lines
 
 ## Documentation
-- [ ] Confluence updated if module interface or design changed
+- [ ] Docs folder updated if module interface or design changed
 - [ ] `README.md` updated if new setup steps are needed
 - [ ] Inline `/* TODO: */` comments added for any deferred work
 

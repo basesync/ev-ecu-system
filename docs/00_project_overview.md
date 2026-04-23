@@ -180,7 +180,7 @@ Port the system to FreeRTOS, add a bootloader, and build a GUI.
 | **CI/CD** | GitHub Actions | Free for public repos |
 | **Security** | Snyk + Dependabot | Free tier, automated scanning |
 | **Visualisation** | Teleplot (VS Code) | Real-time serial plotter |
-| **Documentation** | Confluence | Industry-standard wiki |
+| **Documentation** | Gitbook | Github wiki |
 | **Project Mgmt** | GitHub Projects | Kanban + sprint planning |
 | **Version Control** | Git + GitHub | Industry standard |
 

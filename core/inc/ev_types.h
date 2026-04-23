@@ -147,4 +147,59 @@ typedef struct
     uint32_t     uptime_ms;       /* System uptime in milliseconds          */
 } ev_can_status_t;
 
+<<<<<<< HEAD
+/* ═══════════════════════════════════════════════════════════════════════════
+ * SECTION 6 — FAULT LOG ENTRY  (Sprint 6 — SPI Flash storage)
+ *
+ * Each fault event written to W25Q32 SPI flash uses this structure.
+ * Size: exactly 8 bytes — packs into one SPI flash page efficiently.
+ * CRC16 covers fault_code and timestamp_ms for integrity checking.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * @brief One fault log entry written to SPI NOR Flash (Sprint 6).
+ *
+ * @details Layout (8 bytes total):
+ *   Byte 0:   fault_code    — bitmask of all faults active at event time
+ *   Byte 1:   reserved      — set to 0x00 for future use
+ *   Bytes 2-3: crc16        — CRC-16/CCITT over bytes 0 and 4-7
+ *   Bytes 4-7: timestamp_ms — HAL_GetTick() value at time of fault event
+ */
+typedef struct
+{
+    fault_code_t fault_code;    /**< Active fault bitmask at event time   */
+    uint8_t      reserved;      /**< Alignment padding — always 0x00      */
+    uint16_t     crc16;         /**< CRC-16 integrity check               */
+    uint32_t     timestamp_ms;  /**< System uptime in ms when fault fired */
+} fault_log_entry_t;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * SECTION 7 — PROTOCOL STATUS ENUM  (Sprint 5/6 — UART, I2C, SPI)
+ *
+ * Tracks whether each hardware protocol is running on real hardware
+ * or using a stub. Allows graceful degradation and diagnostic logging.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * @brief Status of a communication protocol peripheral.
+ *
+ * @details Used by sensor_get_temp_backend() and logger_get_uart_status()
+ *          so that diagnostic messages can report hardware availability.
+ *
+ * Example usage:
+ * @code
+ *   if (sensor_get_temp_backend() == EV_PROTO_STATUS_STUB) {
+ *       // Still using ADC simulation — log a warning
+ *   }
+ * @endcode
+ */
+typedef enum
+{
+    EV_PROTO_STATUS_NOT_USED = 0U,  /**< Protocol not connected in this HW rev */
+    EV_PROTO_STATUS_STUB     = 1U,  /**< Using simulation stub (Sprint 1-4)    */
+    EV_PROTO_STATUS_ACTIVE   = 2U   /**< Real HAL configured and running        */
+} ev_proto_status_t;
+
+=======
+>>>>>>> main
 #endif /* EV_TYPES_H */

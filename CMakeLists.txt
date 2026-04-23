@@ -2,11 +2,6 @@
 # -----------------------------------------------------------------------------
 # This is the MAIN build file. CMake reads this first.
 # It describes: what to compile, how to compile it, and what to link together.
-#
-# Usage:
-#   mkdir build && cd build
-#   cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/arm-gcc-toolchain.cmake
-#   cmake --build .
 # -----------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
@@ -38,13 +33,13 @@ message(STATUS "Toolchain:  ${CMAKE_C_COMPILER}")
 # Note: We list them explicitly (not glob) so CMake detects new files properly
 set(FIRMWARE_SOURCES
     core/src/main.c
-    # --- Sprint 2 onwards: add module source files here ---
-    # core/src/sensor_hal.c
-    # core/src/motor_ctrl.c
-    # core/src/fault_manager.c
+    core/src/sensor_hal.c
+    core/src/motor_ctrl.c
+    core/src/fault_logger.c
     # core/src/can_driver.c
     # core/src/logger.c
     # core/src/ev_state_machine.c
+    drivers/STM32_HAL/stm32_stubs.c
 )
 
 # --- Header Include Directories -------------------------------------------

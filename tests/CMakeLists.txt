@@ -1,4 +1,4 @@
-# Tests/CMakeLists.txt — Unit Test Build Configuration
+# tests/CMakeLists.txt - Unit Test Build Configuration
 # ---------------------------------------------------------------------------
 # IMPORTANT: This builds with NATIVE GCC (your host machine's compiler),
 # NOT with the ARM cross-compiler.
@@ -6,12 +6,6 @@
 # Why? Unit tests run on the CI server (x86 Linux), not on the STM32.
 # We use stub/mock functions to replace the STM32 HAL calls.
 #
-# Usage:
-#   cd Tests
-#   mkdir build && cd build
-#   cmake ..         <- No toolchain file needed! Uses native GCC.
-#   make
-#   ./test_runner
 # ---------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
@@ -55,19 +49,20 @@ set(UNITY_SOURCES
 # These are fake versions of STM32 HAL functions.
 # They let unit tests run on a PC without real hardware.
 set(MOCK_SOURCES
-    # mocks/mock_stm32_hal_adc.c   - Add in Sprint 2
-    # mocks/mock_stm32_hal_gpio.c  - Add in Sprint 2
-    # mocks/mock_stm32_hal_tim.c   - Add in Sprint 2
-    # mocks/mock_stm32_hal_uart.c  - Add in Sprint 2
+    mocks/mock_stm32_hal_adc.c
+    mocks/mock_stm32_hal_gpio.c
+    mocks/mock_stm32_hal_tim.c
+    mocks/mock_stm32_hal_spi.c
+    mocks/mock_stm32_hal_i2c.c
 )
 
 # --- Firmware Sources Under Test --------------------------------------------
 # Add the actual firmware .c files you want to test.
 # Do NOT add main.c here — it has the main() function which conflicts.
 set(FIRMWARE_SOURCES_UNDER_TEST
-    # ../core/src/sensor_hal.c     - Add in Sprint 2
-    # ../core/src/motor_ctrl.c     - Add in Sprint 3
-    # ../core/src/fault_manager.c  - Add in Sprint 3
+    ../core/src/sensor_hal.c
+    ../core/src/motor_ctrl.c
+    ../core/src/fault_logger.c
     # ../core/src/can_driver.c     - Add in Sprint 3
     # ../core/src/logger.c         - Add in Sprint 4
     # ../core/src/ev_state_machine.c - Add in Sprint 4
@@ -76,9 +71,9 @@ set(FIRMWARE_SOURCES_UNDER_TEST
 # --- Test Files --------------------------------------------------------------
 set(TEST_SOURCES
     test_placeholder.c
-    # test_sensor_hal.c     - Add in Sprint 2
-    # test_motor_ctrl.c     - Add in Sprint 3
-    # test_fault_manager.c  - Add in Sprint 3
+    test_sensor_hal.c
+    test_motor_ctrl.c
+    test_protocol_prep.c
     # test_can_driver.c     - Add in Sprint 3
     # test_ev_state_machine.c - Add in Sprint 4
     test_runner.c
@@ -88,6 +83,7 @@ set(TEST_SOURCES
 set(TEST_INCLUDES
     Unity/                  # Unity headers
     ../core/inc             # Firmware headers
+    ../drivers/STM32_HAL
     mocks/                  # Mock/stub headers
 )
 
@@ -108,4 +104,8 @@ endif()
 
 # --- Enable CTest integration --------------------------------------------
 enable_testing()
-add_test(NAME UnitTests COMMAND test_runner)
+add_test(NAME AllUnitTests COMMAND test_runner)
+set_tests_properties(AllUnitTests PROPERTIES
+    PASS_REGULAR_EXPRESSION "OK"
+    FAIL_REGULAR_EXPRESSION "FAIL"
+)

@@ -255,7 +255,7 @@ jobs:
             --error-exitcode=1 \
             --suppress=missingIncludeSystem \
             --inline-suppr \
-            Core/Src/ Core/Inc/
+            core/src/ core/inc/
 
       - name: Upload Cppcheck report
         if: always()

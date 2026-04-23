@@ -64,21 +64,9 @@ The project follows industry-standard development practices:
 
 ## System Architecture
 
-```
-                            EV ECU
-          -----------------------------------------
-         │           APPLICATION LAYER             │
-         │  EV State Machine │ Fault Manager       │
-          -----------------------------------------
-         │            SERVICE LAYER                │
-         │  Sensor HAL │ Motor Ctrl │ CAN │ Logger │
-          -----------------------------------------
-         │           STM32 HAL / BSP               │
-         │  ADC │ GPIO │ TIM(PWM) │ CAN │ UART     │
-          -----------------------------------------
-              │           │          │         │
-         [Sensors]    [Motor]    [CAN Bus]  [UART/PC]
-```
+![System Architecture](docs/assets/images/system_architecture.png)
+
+---
 
 ### Sensors
 
@@ -109,36 +97,53 @@ ev-ecu-system/
 │   ├── ISSUE_TEMPLATE/        - Bug report, feature request templates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── dependabot.yml         - Automated dependency updates
-├── Core/
-│   ├── Inc/                   - Header files (.h)
+├── core/
+│   ├── inc/                   - Header files (.h)
 │   │   ├── ev_types.h         - Shared type definitions
 │   │   ├── ev_config.h        - All constants and thresholds
-│   │   ├── sensor_hal.h       - (Sprint 2)
-│   │   ├── motor_ctrl.h       - (Sprint 2)
-│   │   ├── fault_manager.h    - (Sprint 3)
-│   │   ├── can_driver.h       - (Sprint 3)
-│   │   ├── logger.h           - (Sprint 4)
-│   │   └── ev_state_machine.h - (Sprint 4)
-│   └── Src/                   - Source files (.c)
+│   │   ├── sensor_hal.h       - Sensor_hal header_
+│   │   ├── motor_ctrl.h       - Motor header
+│   │   └── fault_logger.h
+│   └── src/                   - Source files (.c)
+│       ├── sensor_hal.c       - Sensor_hal header_
+│       ├── motor_ctrl.c       - Motor header
+│       ├── fault_logger.c
 │       └── main.c             - Firmware entry point
-├── Drivers/
-│   └── STM32_HAL/             - STM32 HAL library (added Sprint 2)
-├── Tests/
+├── drivers/
+│   └── STM32_HAL/             - STM32 HAL library
+│       ├── stm32_stubs.c
+│       ├── stm32f1xx_hal_adc.h
+│       ├── stm32f1xx_hal_gpio.h
+│       ├── stm32f1xx_hal_i2c.h
+│       ├── stm32f1xx_hal_spi.h
+│       ├── stm32f1xx_hal_tim.h
+│       ├── stm32f1xx_hal_uart.h
+│       └── stm32f1xx_hal.h
+├── tests/
 │   ├── Unity/                 - Unity test framework source
+│   │   ├── unity.c
+│   │   ├── unity.h
+│   │   └── unity_internals.h
 │   ├── mocks/                 - STM32 HAL stub functions
 │   ├── CMakeLists.txt         - Test build configuration
 │   ├── test_runner.c          - Test entry point
+│   ├── test_protocol_prep.c
+│   ├── test_sensor_hal.c
 │   └── test_placeholder.c     - Sprint 1 framework verification
-├── Simulation/
+├── simulation/
+│   └── busmaster/
 │   └── wokwi/
 │       ├── diagram.json       - Virtual circuit definition
 │       └── wokwi.toml         - Wokwi project config
 ├── cmake/
 │   └── arm-gcc-toolchain.cmake- Cross-compilation configuration
+├── README.md
+├── LICENSE
 ├── .vscode/                   - Shared VS Code configuration
 ├── CMakeLists.txt             - Root build configuration
 ├── .cppcheck                  - Static analysis configuration
 ├── .clang-format              - Code formatting rules
+├── .gitignore
 └── .editorconfig              - Editor consistency settings
 ```
 
@@ -165,15 +170,15 @@ git clone git@github.com:basesync/ev-ecu-system.git
 cd ev-ecu-system
 
 # Build firmware
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake
+cmake -B build -G "Unix Makefiles" -S . -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake
 cmake --build build
 
 # Run unit tests (no hardware needed)
-cmake -B Tests/build -S Tests && cmake --build Tests/build
-./Tests/build/test_runner
+cmake -B tests/build -G "Unix Makefiles" -S tests && cmake --build tests/build
+./tests/build/test_runner
 
 # Run static analysis
-cppcheck --enable=warning --error-exitcode=1 -I Core/Inc Core/Src/
+cppcheck --enable=warning --error-exitcode=1 -I core/inc core/src/
 ```
 
 ### Run in Simulation (No Hardware Required)
@@ -181,7 +186,7 @@ cppcheck --enable=warning --error-exitcode=1 -I Core/Inc Core/Src/
 1. Install [Wokwi VS Code extension](https://marketplace.visualstudio.com/items?itemName=wokwi.wokwi-vscode)
 2. Get your [free Wokwi license](https://wokwi.com/license)
 3. Build firmware (step above)
-4. Open `Simulation/wokwi/wokwi.toml` in VS Code
+4. Open `simulation/wokwi/wokwi.toml` in VS Code
 5. Press `F1` -> `Wokwi: Start Simulator`
 
 You'll see a virtual STM32 with potentiometers and buttons — turn the throttle, press the brake, trigger faults.
@@ -205,8 +210,8 @@ You'll see a virtual STM32 with potentiometers and buttons — turn the throttle
 1. Pick a story from GitHub Projects board
 2. Create branch: git checkout -b feature/your-feature
 3. Write code following 06_CODING_STANDARDS.md
-4. Write unit tests in Tests/
-5. Run: cppcheck Core/ && cd Tests/build && ./test_runner
+4. Write unit tests in tests/
+5. Run: cppcheck core/ && cd tests/build && ./test_runner
 6. Open Pull Request -> fill in template
 7. CI must be green before merge
 8. At least 1 reviewer must approve
@@ -215,7 +220,7 @@ You'll see a virtual STM32 with potentiometers and buttons — turn the throttle
 
 ## Documentation
 
-Full documentation is maintained in Confluence under the [BaseSync Confluence Space](https://basesync.atlassian.net/wiki/spaces/BSYNC/overview).
+Full documentation is maintained in `docs` folder and updated in [Gitbook](https://app.gitbook.com/invite/xTvRhak8pnX1JfOuNw5K/1cNc5qV7q4HnadObVKQl).
 
 
 ---
@@ -239,8 +244,8 @@ Full documentation is maintained in Confluence under the [BaseSync Confluence Sp
 
 ## Project Status
 
-**Current Sprint:** Sprint 1 - Foundation & Setup
-**Sprint Goal:** Working development environment + full CI/CD pipeline on every PR
+**Current Sprint:** Sprint 1 - Core sensor & Motor
+**Sprint Goal:** Sensor HAL reads all sensor inputs and motor control generates correct PWM. Both are unit-tested and run in Wokwi simulation.
 
 ---
 

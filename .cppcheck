@@ -5,7 +5,7 @@
 #
 # Usage:
 #   cppcheck --project=.cppcheck               (uses this config)
-#   cppcheck --error-exitcode=1 -I Core/Inc Core/Src/   (manual, CI style)
+#   cppcheck --error-exitcode=1 -I core/inc core/src/   (manual, CI style)
 #
 # Documentation: https://cppcheck.sourceforge.io/manual.html
 

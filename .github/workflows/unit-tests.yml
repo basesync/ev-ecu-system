@@ -45,7 +45,7 @@ jobs:
           gcc --version
 
       # Step 3: Configure the test build
-      # Note: We use a SEPARATE CMakeLists.txt in Tests/ that uses native GCC
+      # Note: We use a SEPARATE CMakeLists.txt in tests/ that uses native GCC
       - name: Configure test build
         run: |
           cmake -B tests/build \

@@ -45,7 +45,7 @@ jobs:
       # --enable=all         - Enable all checks
       # --suppress=...       - Suppress false positives we cannot fix
       # --inline-suppr       - Allow /* cppcheck-suppress ... */ in code
-      # -I Core/Inc          - Tell Cppcheck where our headers are
+      # -I core/inc          - Tell Cppcheck where our headers are
       - name: Run Cppcheck analysis
         run: |
           echo "-------------------------------------"
