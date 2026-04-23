@@ -100,31 +100,17 @@
 #define EV_CAN_DLC_FAULT                (4U)
 
 /* ===========================================================================
-<<<<<<< HEAD
-=======
- * UART / LOGGER CONFIGURATION
- * =========================================================================== */
-
-#define EV_UART_BAUD_RATE               (115200U) /* UART baud rate          */
-#define EV_UART_TX_BUFFER_SIZE          (256U)    /* TX buffer size in bytes */
-
-/* ===========================================================================
->>>>>>> main
  * MOTOR / PWM CONFIGURATION
  * =========================================================================== */
 
 #define EV_MOTOR_PWM_FREQUENCY_HZ       (20000U)  /* 20kHz PWM frequency     */
 #define EV_MOTOR_MIN_DUTY_PCT           (0U)      /* 0% = fully stopped      */
 #define EV_MOTOR_MAX_DUTY_PCT           (100U)    /* 100% = full speed       */
-<<<<<<< HEAD
 /**
  * Throttle deadband: throttle values below this percentage are treated as
  * zero. Prevents motor creep when the throttle pot is not perfectly at 0.
  */
 #define EV_THROTTLE_DEADBAND_PCT        (5U)
-=======
-#define EV_THROTTLE_DEADBAND_PCT        (5U)      /* Below 5% = no movement  */
->>>>>>> main
 
 /* ===========================================================================
  * ADC CONFIGURATION
@@ -145,7 +131,6 @@
 /** Using R1=100kΩ, R2=10kΩ -> ratio = 10/(100+10) = 0.0909 */
 #define EV_VOLTAGE_DIVIDER_RATIO        (0.0909f)
 
-<<<<<<< HEAD
 /* ═══════════════════════════════════════════════════════════════════════════
  * SECTION 7 — ENCODER CONFIGURATION  (Sprint 2 addition)
  * ═══════════════════════════════════════════════════════════════════════════ */
@@ -160,8 +145,6 @@
  */
 #define EV_ENCODER_PPR                  (2400U)
 
-=======
->>>>>>> main
 /* ===========================================================================
  * STM32 PIN ASSIGNMENTS
  * Logical names for hardware pins. Change here if hardware changes.
@@ -182,11 +165,7 @@
  * =========================================================================== */
 
 #define EV_FIRMWARE_VERSION_MAJOR       (0U)
-<<<<<<< HEAD
 #define EV_FIRMWARE_VERSION_MINOR       (2U)
-=======
-#define EV_FIRMWARE_VERSION_MINOR       (1U)
->>>>>>> main
 #define EV_FIRMWARE_VERSION_PATCH       (0U)
 
 /** Magic number written to backup RAM to request DFU mode (bootloader use) */
@@ -195,7 +174,6 @@
 /** Fault log size in Flash (number of fault entries to store) */
 #define EV_FAULT_LOG_MAX_ENTRIES        (32U)
 
-<<<<<<< HEAD
 /* ═══════════════════════════════════════════════════════════════════════════
  * SECTION 9 — UART CONFIGURATION
  * Active: Sprint 5 (replaces printf() stubs with HAL_UART_Transmit())
@@ -325,6 +303,4 @@
 /** Status register bit mask: WIP = Write In Progress */
 #define EV_SPI_FLASH_STATUS_WIP_MASK    (0x01U)
 
-=======
->>>>>>> main
 #endif /* EV_CONFIG_H */

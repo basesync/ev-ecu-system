@@ -147,7 +147,6 @@ typedef struct
     uint32_t     uptime_ms;       /* System uptime in milliseconds          */
 } ev_can_status_t;
 
-<<<<<<< HEAD
 /* ═══════════════════════════════════════════════════════════════════════════
  * SECTION 6 — FAULT LOG ENTRY  (Sprint 6 — SPI Flash storage)
  *
@@ -200,6 +199,4 @@ typedef enum
     EV_PROTO_STATUS_ACTIVE   = 2U   /**< Real HAL configured and running        */
 } ev_proto_status_t;
 
-=======
->>>>>>> main
 #endif /* EV_TYPES_H */
