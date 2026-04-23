@@ -249,7 +249,7 @@ Closes #<!-- issue number here -->
 <!-- Check all that apply -->
 - [ ] Unit tests written for new/changed code
 - [ ] All existing tests pass locally (`cd Tests/build && ./test_runner` → 0 Failures)
-- [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I Core/Inc Core/Src/`)
+- [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I core/Inc core/src/`)
 - [ ] Code compiled successfully (`cmake --build build`)
 - [ ] Tested in Wokwi simulation (if applicable)
 - [ ] UART output verified (if applicable)

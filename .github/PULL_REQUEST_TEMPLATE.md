@@ -19,21 +19,21 @@ Closes #<!-- issue number here -->
 
 ## Changes Made
 <!-- List every significant change. Be specific so the reviewer knows what to look at. -->
-- 
-- 
-- 
+-
+-
+-
 
 ## How to Test This PR
 <!-- Step-by-step instructions for the reviewer to verify this works -->
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Testing Done by Author
 <!-- Check all that apply -->
 - [ ] Unit tests written for new/changed code
 - [ ] All existing tests pass locally (`cd Tests/build && ./test_runner` → 0 Failures)
-- [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I Core/Inc Core/Src/`)
+- [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I core/Inc core/src/`)
 - [ ] Code compiled successfully (`cmake --build build`)
 - [ ] Tested in Wokwi simulation (if applicable)
 - [ ] UART output verified (if applicable)

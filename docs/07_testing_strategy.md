@@ -408,7 +408,7 @@ Add to `unit-tests.yml`:
     cmake .. -DCOVERAGE=ON
     make
     ./test_runner
-    gcov --all-blocks ../Core/Src/*.c
+    gcov --all-blocks ../core/src/*.c
 
 - name: Upload to Codecov
   uses: codecov/codecov-action@v3

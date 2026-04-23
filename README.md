@@ -109,7 +109,7 @@ ev-ecu-system/
 │   ├── ISSUE_TEMPLATE/        - Bug report, feature request templates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── dependabot.yml         - Automated dependency updates
-├── Core/
+├── core/
 │   ├── Inc/                   - Header files (.h)
 │   │   ├── ev_types.h         - Shared type definitions
 │   │   ├── ev_config.h        - All constants and thresholds
@@ -119,7 +119,7 @@ ev-ecu-system/
 │   │   ├── can_driver.h       - (Sprint 3)
 │   │   ├── logger.h           - (Sprint 4)
 │   │   └── ev_state_machine.h - (Sprint 4)
-│   └── Src/                   - Source files (.c)
+│   └── src/                   - Source files (.c)
 │       └── main.c             - Firmware entry point
 ├── Drivers/
 │   └── STM32_HAL/             - STM32 HAL library (added Sprint 2)
@@ -129,7 +129,7 @@ ev-ecu-system/
 │   ├── CMakeLists.txt         - Test build configuration
 │   ├── test_runner.c          - Test entry point
 │   └── test_placeholder.c     - Sprint 1 framework verification
-├── Simulation/
+├── simulation/
 │   └── wokwi/
 │       ├── diagram.json       - Virtual circuit definition
 │       └── wokwi.toml         - Wokwi project config
@@ -173,7 +173,7 @@ cmake -B Tests/build -S Tests && cmake --build Tests/build
 ./Tests/build/test_runner
 
 # Run static analysis
-cppcheck --enable=warning --error-exitcode=1 -I Core/Inc Core/Src/
+cppcheck --enable=warning --error-exitcode=1 -I core/Inc core/src/
 ```
 
 ### Run in Simulation (No Hardware Required)
@@ -181,7 +181,7 @@ cppcheck --enable=warning --error-exitcode=1 -I Core/Inc Core/Src/
 1. Install [Wokwi VS Code extension](https://marketplace.visualstudio.com/items?itemName=wokwi.wokwi-vscode)
 2. Get your [free Wokwi license](https://wokwi.com/license)
 3. Build firmware (step above)
-4. Open `Simulation/wokwi/wokwi.toml` in VS Code
+4. Open `simulation/wokwi/wokwi.toml` in VS Code
 5. Press `F1` -> `Wokwi: Start Simulator`
 
 You'll see a virtual STM32 with potentiometers and buttons — turn the throttle, press the brake, trigger faults.
@@ -206,7 +206,7 @@ You'll see a virtual STM32 with potentiometers and buttons — turn the throttle
 2. Create branch: git checkout -b feature/your-feature
 3. Write code following 06_CODING_STANDARDS.md
 4. Write unit tests in Tests/
-5. Run: cppcheck Core/ && cd Tests/build && ./test_runner
+5. Run: cppcheck core/ && cd Tests/build && ./test_runner
 6. Open Pull Request -> fill in template
 7. CI must be green before merge
 8. At least 1 reviewer must approve
