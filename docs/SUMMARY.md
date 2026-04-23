@@ -1,0 +1,25 @@
+# Summary
+
+## Getting Started
+
+* [Project Overview](00_project_overview.md)
+* [Environment Setup](01_environment_setup.md)
+* [GitHub Setup](02_github_setup.md)
+
+## Design & Architecture
+
+* [Requirements Specification](03_requirements.md)
+* [System Design](04_system_design.md)
+
+## DevOps
+
+* [CI/CD Pipelines](05_cicd_pipelines.md)
+
+## Development Standards
+
+* [Coding Standards](06_coding_standards.md)
+* [Testing Strategy](07_testing_strategy.md)
+
+## Reference
+
+* [Glossary](GLOSSARY.md)

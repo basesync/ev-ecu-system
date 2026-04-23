@@ -26,12 +26,12 @@
 
   <!-- Include paths — where your .h header files live -->
   <includedir>
-    <dir name="Core/Inc"/>
-    <dir name="Drivers/STM32_HAL"/>
+    <dir name="core/inc"/>
+    <dir name="drivers/STM32_HAL"/>
   </includedir>
 
   <!-- Source files to check (Cppcheck will find all .c files here) -->
-  <dir name="Core/Src"/>
+  <dir name="core/src"/>
 
   <!-- Platform: ARM 32-bit, 4-byte wchar_t -->
   <platform>arm32-wchar_t4</platform>
@@ -56,7 +56,7 @@
   <suppress>
     <!-- Unity test framework uses macros that look like unmatched suppressions -->
     <id>unmatchedSuppression</id>
-    <filename>Tests/*</filename>
+    <filename>tests/*</filename>
   </suppress>
 
 </project>
