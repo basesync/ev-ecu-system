@@ -131,7 +131,7 @@ credentials.h
 .env.local
 
 # --- Wokwi licence file (personal, not team) ----------------------------------
-Simulation/wokwi/.wokwi_license
+simulation/wokwi/.wokwi_license
 
 # --- Exceptions - files to track DESPITE matching patterns above ---------------
 # Keep these even though their folders might be ignored
