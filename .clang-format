@@ -5,11 +5,11 @@
 # "Format On Save" setting enabled).
 #
 # To format manually:
-#   clang-format -i Core/Src/sensor_hal.c      (format one file)
-#   find Core/ -name "*.c" -o -name "*.h" | xargs clang-format -i  (all files)
+#   clang-format -i core/src/sensor_hal.c      (format one file)
+#   find core/ -name "*.c" -o -name "*.h" | xargs clang-format -i  (all files)
 #
 # To check formatting without changing files (used in CI):
-#   clang-format --dry-run --Werror Core/Src/main.c
+#   clang-format --dry-run --Werror core/src/main.c
 #
 # Documentation: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 

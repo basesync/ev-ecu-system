@@ -170,7 +170,7 @@ state_machine.h / state_machine.c
 
 ```
 smart-ev-ecu/
-├── Core/
+├── core/
 │   ├── Inc/
 │   │   ├── sensor_hal.h
 │   │   ├── motor_control.h
@@ -178,7 +178,7 @@ smart-ev-ecu/
 │   │   ├── can_driver.h
 │   │   ├── logger.h
 │   │   └── state_machine.h
-│   └── Src/
+│   └── src/
 │       ├── main.c
 │       ├── sensor_hal.c
 │       ├── motor_control.c

@@ -266,7 +266,7 @@ Wokwi lets you run STM32 code in a browser simulator — **no hardware needed**.
 
 1. Install the extension: search `Wokwi` in VS Code extensions (`wokwi.wokwi-vscode`)
 2. Get a free licence: [Wokwi for Visual Studio Code](https://wokwi.com/vscode) (free for open source)
-3. Open `Simulation/wokwi/wokwi.toml` in VS Code
+3. Open `simulation/wokwi/wokwi.toml` in VS Code
 4. Press `F1` → run **Wokwi: Start Simulator**
 
 ### Option B — Wokwi Web
@@ -289,7 +289,7 @@ BusMaster simulates a CAN bus on your PC.
 2. Install with default settings
    > ⚠️ Windows only - use a VM on Mac/Linux
 3. Open BusMaster
-4. **File → Open →** `Simulation/busmaster/ev_ecu.bsm`
+4. **File → Open →** `simulation/busmaster/ev_ecu.bsm`
 5. For the Virtual CAN driver, choose one of:
    - Download: [PEAK Virtual CAN driver](https://www.peak-system.com/Virtual-PEAK-Driver.305.0.html) or Vector CANalyzer trial
    - **Linux only** — use socketcan:
