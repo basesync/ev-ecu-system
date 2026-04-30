@@ -215,7 +215,7 @@ You'll see a virtual STM32 with potentiometers and buttons — turn the throttle
 
 ## Documentation
 
-Full documentation is maintained in Confluence under the [BaseSync Confluence Space](https://basesync.atlassian.net/wiki/spaces/BSYNC/overview).
+Full documentation is maintained in [Docs](docs) folder in the repo and automatically updated in [Gitbook](https://app.gitbook.com/invite/xTvRhak8pnX1JfOuNw5K/1cNc5qV7q4HnadObVKQl).
 
 
 ---
