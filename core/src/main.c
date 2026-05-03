@@ -2,26 +2,26 @@
  * @file    main.c
  * @brief   Smart EV ECU — Firmware Entry Point (Sprint 2)
  *
- * @details Sprint 2 additions over Sprint 1:
- *          - Sensor HAL initialisation and periodic reads
- *          - Motor control initialisation and throttle → PWM mapping
- *          - Brake override: brake switch immediately cuts motor PWM
- *          - UART Teleplot-format output of all sensor values
- *          - Basic main superloop structure (foundation for state machine)
+ * @details Sprint 3 additions over Sprint 2:
+ *          - Fault Manager integrated: fault_check_all() called every loop
+ *          - EV State Machine integrated: ev_sm_run() drives state transitions
+ *          - Motor control is now ONLY allowed in RUNNING state
+ *          - CAN bus transmission: status and sensor frames every 100ms
+ *          - Fault frame transmitted immediately on fault detection
+ *          - Watchdog placeholder (HAL_IWDG_Refresh) — real IWDG in Sprint 5
+ *          - ev_status_t struct populated and kept current
  *
- *          Sprint 3 will add:
- *          - Fault detection logic
- *          - EV state machine (INIT → IDLE → RUNNING → FAULT)
- *          - CAN bus transmission
- *          - Watchdog timer feed
+ *          Sprint 4 will add:
+ *          - UART Teleplot logger module (replaces printf stubs)
+ *          - SIL simulation with Wokwi
  *
  * @note    HAL handles (hadc1, htim1, htim3) are declared as file-scope
  *          variables so that both main() and ISR callbacks can access them.
  *          In Sprint 5, CubeMX will generate these properly.
  *
  * @author  BaseSync Team
- * @version 0.2.0 (Sprint 2 — Sensor & Motor modules)
- * @date    2025
+ * @version 0.3.0 (Sprint 3 — Fault Manager + State Machine + CAN Driver)
+ * @date    2026
  */
 
 /* ─── Includes ────────────────────────────────────────────────────────────── */
@@ -33,6 +33,10 @@
 #include "ev_config.h"
 #include "sensor_hal.h"
 #include "motor_ctrl.h"
+#include "fault_manager.h"
+#include "ev_state_machine.h"
+#include "can_driver.h"
+#include "fault_logger.h"
 
 /* ─── Private Constants ──────────────────────────────────────────────────── */
 
@@ -56,15 +60,26 @@ static TIM_HandleTypeDef htim3;   /**< TIM3 handle — encoder input           *
 /** Global sensor data — updated every MAIN_LOOP_PERIOD_MS */
 static sensor_data_t g_sensor_data;
 
+/** Global EV status — updated every loop, transmitted every 100ms */
+static ev_can_status_t g_ev_status;
+
+/** System uptime counter in ms (updated in main loop) */
+static uint32_t g_uptime_ms = 0U;
+
 /** Loop counter used to rate-limit UART logging */
 static uint32_t g_loop_counter = 0U;
+
+/** Last fault code — used to detect new fault events for on-event CAN TX */
+static fault_code_t g_last_fault_code = FAULT_NONE;
 
 /* ─── Private Function Declarations ─────────────────────────────────────── */
 static ev_status_t system_hal_init(void);
 static void        main_loop_run(void);
-static void        motor_control_update(const sensor_data_t *data);
-static void        uart_log_sensors(const sensor_data_t *data);
-static void        delay_ms(uint32_t ms);
+static void         update_ev_status(fault_code_t faults);
+static void         handle_motor_output(const sensor_data_t *data);
+static void         can_periodic_transmit(void);
+static void         watchdog_feed(void);
+static void         delay_ms(uint32_t ms);
 
 /* ─── Main Entry Point ───────────────────────────────────────────────────── */
 
@@ -127,6 +142,15 @@ int main(void)
         }
     }
 
+    /* fault_logger: stub in Sprint 3, real SPI init in Sprint 6 */
+    (void)fault_logger_init(NULL);
+
+    /* can_driver: stub in Sprint 3, real CAN_Start in Sprint 5 */
+    (void)can_driver_init(NULL);
+
+    /* State machine: initialise AFTER motor_ctrl — SM calls motor_stop on entry */
+    ev_sm_init();
+
     /* ── Step 3: Signal successful boot ── */
     /*
      * Three slow blinks = system initialised OK.
@@ -170,21 +194,6 @@ int main(void)
  */
 static ev_status_t system_hal_init(void)
 {
-    /*
-     * Sprint 2: Initialise handle structs to known values.
-     * The mock HAL functions in tests/mocks/ use these to return
-     * controlled values during unit tests.
-     *
-     * Sprint 5 replacement:
-     *   HAL_Init();
-     *   SystemClock_Config();
-     *   MX_GPIO_Init();
-     *   MX_ADC1_Init();
-     *   MX_TIM1_Init();
-     *   MX_TIM3_Init();
-     *   MX_USART1_UART_Init();
-     *   MX_IWDG_Init();
-     */
     hadc1.Instance = (uint32_t)0x40012400U;  /* ADC1 base address stub */
     htim1.Instance = NULL;                    /* TIM1 stub             */
     htim3.Instance = NULL;                    /* TIM3 stub             */
@@ -210,6 +219,9 @@ static ev_status_t system_hal_init(void)
  */
 static void main_loop_run(void)
 {
+    fault_code_t current_faults;
+
+    g_uptime_ms += MAIN_LOOP_PERIOD_MS;
     g_loop_counter++;
 
     /* ── 1. Read all sensors ── */
@@ -221,123 +233,130 @@ static void main_loop_run(void)
      */
     (void)sensor_read_all(&g_sensor_data);
 
-    /* ── 2. Update motor control ── */
-    motor_control_update(&g_sensor_data);
+    /* ── 2. Check fault thresholds ── */
+    current_faults = fault_check_all(&g_sensor_data);
 
-    /* ── 3. Log sensor data over UART (rate-limited to every 100ms) ── */
+    /* ── 3. Run state machine ── */
+    /*
+     * ev_sm_run() evaluates current_faults and sensor data to:
+     *   - Transition state if conditions are met
+     *   - Call motor_stop() automatically if transitioning to FAULT/SAFE_STATE
+     */
+    ev_sm_run(&g_sensor_data, current_faults);
+
+    /* ── 4. Motor output (RUNNING state only) ── */
+    handle_motor_output(&g_sensor_data);
+
+    /* ── 5. Update status struct ── */
+    update_ev_status(current_faults);
+
+    /* ── 6. Send fault frame on new fault (on-event, not periodic) ── */
+    if ((current_faults != FAULT_NONE) && (current_faults != g_last_fault_code))
+    {
+        (void)can_send_fault_frame(current_faults, g_uptime_ms);
+        (void)fault_logger_write(current_faults, g_uptime_ms);
+    }
+    g_last_fault_code = current_faults;
+
+    /* ── 7. Periodic 100ms CAN transmissions ── */
     if (g_loop_counter >= UART_LOG_EVERY_N_LOOPS)
     {
-        uart_log_sensors(&g_sensor_data);
+        can_periodic_transmit();
         g_loop_counter = 0U;
     }
 
-    /*
-     * Sprint 3 additions here:
-     *   fault_check_all(&g_sensor_data);
-     *   ev_sm_run();
-     *   can_send_status(&ev_status);
-     *   IWDG_refresh();   // feed the watchdog
-     */
+    /* ── 8. Feed watchdog ── */
+    watchdog_feed();
 }
 
 /**
- * @brief  Update motor PWM based on sensor inputs.
+ * @brief  Update motor PWM output based on current state and sensor data.
  *
- * @details Implements the core motor control logic:
- *          1. Brake switch pressed → motor stop immediately
- *          2. Throttle > deadband  → set motor to throttle %
- *          3. Throttle <= deadband → motor stop
+ * @details Motor commands are ONLY issued when the state machine is in
+ *          EV_STATE_RUNNING. In all other states (IDLE, FAULT, SAFE_STATE,
+ *          INIT), the motor was already stopped by the state machine's
+ *          entry action (priv_enter_state).
  *
- *          Sprint 3 will add: do NOT drive motor in FAULT or SAFE states.
- *
- * @param  data  Pointer to current sensor data snapshot.
+ * @param  data  Current sensor data snapshot.
  */
-static void motor_control_update(const sensor_data_t *data)
-{
-    if (data == NULL)
-    {
-        /* Safety: if data is invalid, stop the motor */
-        (void)motor_stop();
-        return;
-    }
-
-    if (data->brake_active == true)
-    {
-        /*
-         * Brake pressed: ALWAYS stop the motor, regardless of throttle.
-         * This is a fundamental safety rule — brake overrides throttle.
-         * Using motor_stop() (not motor_set_speed(0)) for immediate effect.
-         */
-        (void)motor_stop();
-    }
-    else
-    {
-        /*
-         * Brake released: motor speed follows throttle position.
-         * motor_set_speed() handles the deadband internally.
-         * TODO(sprint3): Only run this in EV_STATE_RUNNING.
-         */
-        (void)motor_set_speed(data->throttle_pct);
-    }
-}
-
-/**
- * @brief  Output sensor data in Teleplot format over UART.
- *
- * @details Teleplot format: ">label:value\n"
- *          The Teleplot VS Code extension reads this from the serial port
- *          and plots live graphs for each label.
- *
- *          In Sprint 2, printf() is a stub (UART not yet configured).
- *          In Sprint 5, with USART1 retargeted, these will plot live.
- *
- * @param  data  Pointer to sensor data to log.
- */
-static void uart_log_sensors(const sensor_data_t *data)
+static void handle_motor_output(const sensor_data_t *data)
 {
     if (data == NULL)
     {
         return;
     }
 
+    /* Only update motor speed when actively running */
+    if (ev_sm_get_state() == EV_STATE_RUNNING)
+    {
+        if (data->brake_active == true)
+        {
+            /*
+             * Brake pressed during RUNNING — stop immediately.
+             * The state machine stays in RUNNING (brake alone doesn't change state
+             * unless throttle is also zero). The motor is stopped here.
+             */
+            (void)motor_stop();
+        }
+        else
+        {
+            /* Normal: set speed from throttle */
+            (void)motor_set_speed(data->throttle_pct);
+        }
+    }
     /*
-     * Teleplot format for live plotting:
-     * Each line: >variable_name:value
-     *
-     * The VS Code Teleplot extension reads UART at 115200 baud and
-     * automatically creates a live plot for each named variable.
-     *
-     * TODO(sprint5): Replace with HAL_UART_Transmit() calls when
-     *                USART1 is configured and printf() is retargeted.
+     * In all other states, motor_stop() was already called by the state
+     * machine transition. We do NOT call motor_stop() here again to avoid
+     * redundant HAL calls in the tight 10ms loop.
      */
-
-    /* Sprint 2: printf calls are stubs — will output in Sprint 5 */
-    (void)printf(">batt_temp:%.1f\n",   (double)data->batt_temp_c);
-    (void)printf(">motor_temp:%.1f\n",  (double)data->motor_temp_c);
-    (void)printf(">current:%.2f\n",     (double)data->current_a);
-    (void)printf(">voltage:%.1f\n",     (double)data->voltage_v);
-    (void)printf(">speed:%u\n",         (unsigned int)data->speed_rpm);
-    (void)printf(">throttle:%u\n",      (unsigned int)data->throttle_pct);
-    (void)printf(">brake:%d\n",         (int)data->brake_active);
-    (void)printf(">motor_pwm:%u\n",     (unsigned int)motor_get_speed());
 }
 
 /**
- * @brief  Software delay loop.
+ * @brief  Build the ev_status_t struct from current system state.
  *
- * @details Sprint 2: busy-loop approximation.
- *          Sprint 5: replaced by HAL_Delay() using SysTick.
+ * @param  faults  Current fault bitmask.
+ */
+static void update_ev_status(fault_code_t faults)
+{
+    g_ev_status.state          = ev_sm_get_state();
+    g_ev_status.active_faults  = faults;
+    g_ev_status.motor_duty_pct = motor_get_speed();
+    g_ev_status.soc_pct        = 0U;   /* TODO Sprint 5: Calculate from voltage */
+    g_ev_status.uptime_ms      = g_uptime_ms;
+}
+
+/**
+ * @brief  Transmit all three periodic CAN frames (every 100ms).
+ */
+static void can_periodic_transmit(void)
+{
+    (void)can_send_status(&g_ev_status);
+    (void)can_send_sensor_pack1(&g_sensor_data);
+    (void)can_send_sensor_pack2(&g_sensor_data);
+}
+
+/**
+ * @brief  Feed the watchdog timer.
  *
- * @param  ms  Approximate delay in milliseconds.
+ * @details Sprint 3: Placeholder — no real IWDG hardware in stub build.
+ *          Sprint 5: Replace with HAL_IWDG_Refresh(&hiwdg).
+ *          Called every main loop iteration (every 10ms).
+ *          With 500ms timeout and 10ms period, there are 50 feeds per window.
+ */
+static void watchdog_feed(void)
+{
+    /*
+     * TODO(sprint5): Replace with:
+     *   HAL_IWDG_Refresh(&hiwdg);
+     */
+}
+
+/**
+ * @brief  Software delay (stub — replaced by HAL_Delay in Sprint 5).
  */
 static void delay_ms(uint32_t ms)
 {
-    /*
-     * Sprint 5 TODO: Replace entire function with HAL_Delay(ms).
-     * HAL_Delay() uses the SysTick timer and is accurate to 1ms.
-     */
-    volatile uint32_t count = ms * 8000U;  /* Approximate for 72MHz clock */
-
+    volatile uint32_t count = ms * 8000U;
     while (count > 0U)
     {
         count--;

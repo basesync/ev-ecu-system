@@ -550,7 +550,6 @@ ev_status_t sensor_enable_i2c_temp(I2C_HandleTypeDef *hi2c)
          *
          * Sprint 5 TODO: ping device and set EV_PROTO_STATUS_ACTIVE.
          */
-        s_temp_backend = EV_PROTO_STATUS_STUB;
     }
 
     if (s_initialised == false)

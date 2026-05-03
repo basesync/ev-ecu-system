@@ -106,3 +106,17 @@ jobs:
             build/ev-ecu-system.hex
           retention-days: 30
           if-no-files-found: error   # Fail if no .elf was produced
+
+        - name: Print failure hint
+        if: failure()
+        run: |
+          echo "-------------------------------------------------------------"
+          echo " Firmware build failed."
+          echo " Steps to debug locally:"
+          echo "   rm -rf build && mkdir build && cd build"
+          echo "   cmake -B build -G "Unix Makefiles" -S . \"
+          echo "   -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake"
+          echo "   cmake --build ."
+          echo " Look for lines that say: error: or warning:"
+          echo " Fix the code, then re-push."
+          echo "-------------------------------------------------------------"

@@ -12,6 +12,12 @@ extern void sensor_setUp(void);
 extern void sensor_tearDown(void);
 extern void protocol_setUp(void);
 extern void protocol_tearDown(void);
+extern void can_setUp(void);
+extern void can_tearDown(void);
+extern void sm_setUp(void);
+extern void sm_tearDown(void);
+extern void fm_setUp(void);
+extern void fm_tearDown(void);
 
 /* Track which module is active so setUp/tearDown dispatch correctly */
 typedef enum { MODULE_NONE, MODULE_SENSOR, MODULE_MOTOR, MODULR_PROTOCOL } active_module_t;
@@ -108,6 +114,71 @@ extern void test_i2c_tmp102_8bit_address_is_7bit_shifted(void);
 extern void test_spi_flash_log_max_entries_matches_area_size(void);
 extern void test_spi_flash_sector_size_divides_log_size_evenly(void);
 
+/* ─── Sprint 3: Fault Manager tests ──────────────────────────────────────── */
+extern void test_fault_check_null_data_returns_fault_invalid_data(void);
+extern void test_fault_check_all_safe_data_returns_fault_none(void);
+extern void test_fault_check_batt_temp_below_threshold_no_fault(void);
+extern void test_fault_check_batt_temp_at_threshold_no_fault(void);
+extern void test_fault_check_batt_temp_above_threshold_sets_bit(void);
+extern void test_fault_check_motor_temp_above_threshold_sets_bit(void);
+extern void test_fault_check_motor_temp_at_threshold_no_fault(void);
+extern void test_fault_check_over_current_above_threshold_sets_bit(void);
+extern void test_fault_check_negative_current_no_fault(void);
+extern void test_fault_check_under_voltage_below_threshold_sets_bit(void);
+extern void test_fault_check_voltage_at_min_threshold_no_fault(void);
+extern void test_fault_check_over_voltage_above_threshold_sets_bit(void);
+extern void test_fault_check_voltage_at_max_threshold_no_fault(void);
+extern void test_fault_check_fault_switch_pressed_sets_manual_trigger(void);
+extern void test_fault_check_fault_switch_not_pressed_no_manual_trigger(void);
+extern void test_fault_check_multiple_faults_all_bits_set(void);
+extern void test_fault_is_set_returns_false_for_clear_bit(void);
+extern void test_fault_is_set_returns_true_for_set_bit(void);
+extern void test_fault_get_name_returns_none_for_no_fault(void);
+extern void test_fault_get_name_returns_correct_name_for_over_temp_batt(void);
+
+/* ─── Sprint 3: EV State Machine tests ───────────────────────────────────── */
+extern void test_sm_init_state_is_init(void);
+extern void test_sm_get_state_name_after_init_is_init(void);
+extern void test_sm_init_to_idle_on_first_run_with_no_fault(void);
+extern void test_sm_state_name_is_idle_after_transition(void);
+extern void test_sm_idle_to_running_when_throttle_above_deadband(void);
+extern void test_sm_stays_idle_when_throttle_at_deadband(void);
+extern void test_sm_stays_idle_when_brake_active_even_with_throttle(void);
+extern void test_sm_running_to_idle_when_throttle_zero_and_brake(void);
+extern void test_sm_stays_running_when_throttle_zero_but_no_brake(void);
+extern void test_sm_idle_to_fault_on_fault_code(void);
+extern void test_sm_running_to_fault_on_fault_code(void);
+extern void test_sm_fault_to_safe_state_on_next_run(void);
+extern void test_sm_safe_state_name_correct(void);
+extern void test_sm_stays_safe_state_even_with_no_faults(void);
+extern void test_sm_null_data_goes_to_safe_state(void);
+extern void test_sm_set_fault_from_running_transitions_to_fault(void);
+extern void test_sm_set_fault_with_none_is_ignored(void);
+extern void test_sm_reset_from_safe_state_returns_ok(void);
+extern void test_sm_reset_from_running_returns_error(void);
+extern void test_sm_reset_from_idle_returns_error(void);
+/* Note: 2 additional SM tests below */
+extern void test_sm_running_to_fault_on_fault_code(void);
+extern void test_sm_stays_running_when_throttle_zero_but_no_brake(void);
+
+/* ─── Sprint 3: CAN Driver tests ─────────────────────────────────────────── */
+extern void test_can_driver_init_returns_ok(void);
+extern void test_can_get_last_frame_before_any_send_returns_error(void);
+extern void test_can_get_last_frame_null_pointer_returns_invalid(void);
+extern void test_can_send_status_before_init_returns_not_ready(void);
+extern void test_can_send_status_frame_id_is_0x100(void);
+extern void test_can_send_status_byte0_is_ev_state(void);
+extern void test_can_send_status_byte1_is_fault_code(void);
+extern void test_can_send_status_byte2_is_motor_duty(void);
+extern void test_can_send_status_uptime_encoded_little_endian(void);
+extern void test_can_send_sensor_pack1_frame_id_is_0x101(void);
+extern void test_can_send_sensor_pack1_batt_temp_encoded_x10_little_endian(void);
+extern void test_can_send_sensor_pack1_speed_rpm_encoded_correctly(void);
+extern void test_can_send_fault_frame_id_is_0x1FF(void);
+extern void test_can_send_fault_frame_byte0_is_fault_code(void);
+extern void test_can_send_fault_frame_byte1_is_reserved_zero(void);
+extern void test_can_send_fault_frame_timestamp_little_endian_in_bytes_2_5(void);
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -195,6 +266,68 @@ int main(void)
     RUN_TEST(test_i2c_tmp102_8bit_address_is_7bit_shifted);
     RUN_TEST(test_spi_flash_log_max_entries_matches_area_size);
     RUN_TEST(test_spi_flash_sector_size_divides_log_size_evenly);
+
+    /* ── Sprint 3: Fault Manager ── */
+    RUN_TEST(test_fault_check_null_data_returns_fault_invalid_data);
+    RUN_TEST(test_fault_check_all_safe_data_returns_fault_none);
+    RUN_TEST(test_fault_check_batt_temp_below_threshold_no_fault);
+    RUN_TEST(test_fault_check_batt_temp_at_threshold_no_fault);
+    RUN_TEST(test_fault_check_batt_temp_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_motor_temp_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_motor_temp_at_threshold_no_fault);
+    RUN_TEST(test_fault_check_over_current_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_negative_current_no_fault);
+    RUN_TEST(test_fault_check_under_voltage_below_threshold_sets_bit);
+    RUN_TEST(test_fault_check_voltage_at_min_threshold_no_fault);
+    RUN_TEST(test_fault_check_over_voltage_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_voltage_at_max_threshold_no_fault);
+    RUN_TEST(test_fault_check_fault_switch_pressed_sets_manual_trigger);
+    RUN_TEST(test_fault_check_fault_switch_not_pressed_no_manual_trigger);
+    RUN_TEST(test_fault_check_multiple_faults_all_bits_set);
+    RUN_TEST(test_fault_is_set_returns_false_for_clear_bit);
+    RUN_TEST(test_fault_is_set_returns_true_for_set_bit);
+    RUN_TEST(test_fault_get_name_returns_none_for_no_fault);
+    RUN_TEST(test_fault_get_name_returns_correct_name_for_over_temp_batt);
+
+    /* ── Sprint 3: EV State Machine ── */
+    RUN_TEST(test_sm_init_state_is_init);
+    RUN_TEST(test_sm_get_state_name_after_init_is_init);
+    RUN_TEST(test_sm_init_to_idle_on_first_run_with_no_fault);
+    RUN_TEST(test_sm_state_name_is_idle_after_transition);
+    RUN_TEST(test_sm_idle_to_running_when_throttle_above_deadband);
+    RUN_TEST(test_sm_stays_idle_when_throttle_at_deadband);
+    RUN_TEST(test_sm_stays_idle_when_brake_active_even_with_throttle);
+    RUN_TEST(test_sm_running_to_idle_when_throttle_zero_and_brake);
+    RUN_TEST(test_sm_stays_running_when_throttle_zero_but_no_brake);
+    RUN_TEST(test_sm_idle_to_fault_on_fault_code);
+    RUN_TEST(test_sm_running_to_fault_on_fault_code);
+    RUN_TEST(test_sm_fault_to_safe_state_on_next_run);
+    RUN_TEST(test_sm_safe_state_name_correct);
+    RUN_TEST(test_sm_stays_safe_state_even_with_no_faults);
+    RUN_TEST(test_sm_null_data_goes_to_safe_state);
+    RUN_TEST(test_sm_set_fault_from_running_transitions_to_fault);
+    RUN_TEST(test_sm_set_fault_with_none_is_ignored);
+    RUN_TEST(test_sm_reset_from_safe_state_returns_ok);
+    RUN_TEST(test_sm_reset_from_running_returns_error);
+    RUN_TEST(test_sm_reset_from_idle_returns_error);
+
+    /* ── Sprint 3: CAN Driver ── */
+    RUN_TEST(test_can_driver_init_returns_ok);
+    RUN_TEST(test_can_get_last_frame_before_any_send_returns_error);
+    RUN_TEST(test_can_get_last_frame_null_pointer_returns_invalid);
+    RUN_TEST(test_can_send_status_before_init_returns_not_ready);
+    RUN_TEST(test_can_send_status_frame_id_is_0x100);
+    RUN_TEST(test_can_send_status_byte0_is_ev_state);
+    RUN_TEST(test_can_send_status_byte1_is_fault_code);
+    RUN_TEST(test_can_send_status_byte2_is_motor_duty);
+    RUN_TEST(test_can_send_status_uptime_encoded_little_endian);
+    RUN_TEST(test_can_send_sensor_pack1_frame_id_is_0x101);
+    RUN_TEST(test_can_send_sensor_pack1_batt_temp_encoded_x10_little_endian);
+    RUN_TEST(test_can_send_sensor_pack1_speed_rpm_encoded_correctly);
+    RUN_TEST(test_can_send_fault_frame_id_is_0x1FF);
+    RUN_TEST(test_can_send_fault_frame_byte0_is_fault_code);
+    RUN_TEST(test_can_send_fault_frame_byte1_is_reserved_zero);
+    RUN_TEST(test_can_send_fault_frame_timestamp_little_endian_in_bytes_2_5);
 
     return UNITY_END();
 }

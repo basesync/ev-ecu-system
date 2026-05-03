@@ -63,9 +63,9 @@ set(FIRMWARE_SOURCES_UNDER_TEST
     ../core/src/sensor_hal.c
     ../core/src/motor_ctrl.c
     ../core/src/fault_logger.c
-    # ../core/src/can_driver.c     - Add in Sprint 3
-    # ../core/src/logger.c         - Add in Sprint 4
-    # ../core/src/ev_state_machine.c - Add in Sprint 4
+    ../core/src/can_driver.c
+    ../core/src/fault_manager.c
+    ../core/src/ev_state_machine.c
 )
 
 # --- Test Files --------------------------------------------------------------
@@ -74,8 +74,9 @@ set(TEST_SOURCES
     test_sensor_hal.c
     test_motor_ctrl.c
     test_protocol_prep.c
-    # test_can_driver.c     - Add in Sprint 3
-    # test_ev_state_machine.c - Add in Sprint 4
+    test_can_driver.c
+    test_ev_state_machine.c
+    test_fault_manager.c
     test_runner.c
 )
 

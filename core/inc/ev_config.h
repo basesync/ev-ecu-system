@@ -97,7 +97,7 @@
 /** CAN frame data lengths (bytes) */
 #define EV_CAN_DLC_STATUS               (8U)
 #define EV_CAN_DLC_SENSOR               (8U)
-#define EV_CAN_DLC_FAULT                (4U)
+#define EV_CAN_DLC_FAULT                (6U)
 
 /* ===========================================================================
  * MOTOR / PWM CONFIGURATION

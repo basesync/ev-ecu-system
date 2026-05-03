@@ -35,6 +35,7 @@
 
 /* ─── Includes ───────────────────────────────────────────────────────────── */
 #include <stdint.h>
+#include <stddef.h>
 #include "ev_types.h"
 #include "ev_config.h"
 #include "stm32f1xx_hal_spi.h"

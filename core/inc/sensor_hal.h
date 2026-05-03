@@ -37,6 +37,7 @@
 /* ─── Includes ────────────────────────────────────────────────────────────── */
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include "ev_types.h"
 #include "ev_config.h"
 #include "stm32f1xx_hal.h"
