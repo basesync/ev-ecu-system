@@ -21,10 +21,10 @@ As a **[role]**, I want **[goal]**, so that **[benefit]**.
 ## Acceptance Criteria
 <!-- These are the conditions that must ALL be true for this story to be "Done".
      Be specific and testable. Each criterion should be verifiable. -->
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
+- [ ]
+- [ ]
 
 ## Definition of Done
 <!-- What specific, observable evidence proves this story is complete? -->
@@ -33,7 +33,7 @@ As a **[role]**, I want **[goal]**, so that **[benefit]**.
 - [ ] Cppcheck passes
 - [ ] CI pipeline green
 - [ ] Tested in Wokwi simulation (or hardware if applicable)
-- [ ] Confluence updated (if design changed)
+- [ ] Docs files updated (if design changed)
 
 ## Related Requirement
 <!-- Link to the requirement this implements -->
