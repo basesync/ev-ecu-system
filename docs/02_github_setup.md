@@ -170,7 +170,7 @@ Be specific and testable. Each criterion should be verifiable. -->
 - [ ] Cppcheck passes
 - [ ] CI pipeline green
 - [ ] Tested in Wokwi simulation (or hardware if applicable)
-- [ ] Confluence updated (if design changed)
+- [ ] File in [Docs](docs) folder updated (if design changed)
 
 ## Related Requirement
 <!-- Link to the requirement this implements -->
@@ -217,7 +217,7 @@ Depends on: <!-- e.g., #12 (GPIO init must be done first) -->
 ## Summary
 <!-- What does this PR do? Write 2–3 sentences. Be specific. -->
 <!-- Example: "Implements the battery temperature ADC read function in sensor_hal.c.
-              Adds unit tests for all boundary conditions. Updates the pin mapping table in Confluence." -->
+              Adds unit tests for all boundary conditions." -->
 
 
 ## Type of Change
@@ -266,7 +266,7 @@ Closes #<!-- issue number here -->
 - [ ] All `if/for/while` blocks use `{` braces even for single lines
 
 ## Documentation
-- [ ] Confluence updated if module interface or design changed
+- [ ] Docs folder updated if module interface or design changed
 - [ ] `README.md` updated if new setup steps are needed
 - [ ] Inline `/* TODO: */` comments added for any deferred work
 
