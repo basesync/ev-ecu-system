@@ -165,11 +165,11 @@ git clone git@github.com:basesync/ev-ecu-system.git
 cd ev-ecu-system
 
 # Build firmware
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake
+cmake -B build -G "Unix Makefiles" -S . -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake
 cmake --build build
 
 # Run unit tests (no hardware needed)
-cmake -B Tests/build -S Tests && cmake --build Tests/build
+cmake -B Tests/build -G "Unix Makefiles" -S Tests && cmake --build Tests/build
 ./Tests/build/test_runner
 
 # Run static analysis
@@ -239,8 +239,8 @@ Full documentation is maintained in [Docs](docs) folder in the repo and automati
 
 ## Project Status
 
-**Current Sprint:** Sprint 1 - Foundation & Setup
-**Sprint Goal:** Working development environment + full CI/CD pipeline on every PR
+**Current Sprint:** Sprint 2 - Core Sensor and Motor Modules
+**Sprint Goal:** Sensor HAL reads all 8 sensor inputs and motor control generates correct PWM. Both are unit-tested and run in Wokwi simulation.
 
 ---
 
