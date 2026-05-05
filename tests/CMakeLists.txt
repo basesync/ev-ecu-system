@@ -6,6 +6,9 @@
 # Why? Unit tests run on the CI server (x86 Linux), not on the STM32.
 # We use stub/mock functions to replace the STM32 HAL calls.
 #
+# Usage:
+#   cmake -B Tests/build -G "Unix Makefiles" -S Tests && cmake --build Tests/build
+#   ./Tests/build/test_runner
 # ---------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)

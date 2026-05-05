@@ -2,6 +2,11 @@
 # -----------------------------------------------------------------------------
 # This is the MAIN build file. CMake reads this first.
 # It describes: what to compile, how to compile it, and what to link together.
+#
+# Usage:
+#   mkdir build && cd build
+#   cmake -B build -G "Unix Makefiles" -S . -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake
+#   cmake --build build
 # -----------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)

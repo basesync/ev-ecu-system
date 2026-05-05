@@ -24,7 +24,7 @@
  * @date    2025
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes ------------------------------------------------------------ */
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -34,7 +34,7 @@
 #include "sensor_hal.h"
 #include "motor_ctrl.h"
 
-/* ─── Private Constants ──────────────────────────────────────────────────── */
+/* --- Private Constants --------------------------------------------------- */
 
 /** Main loop period in milliseconds */
 #define MAIN_LOOP_PERIOD_MS    (10U)
@@ -42,31 +42,31 @@
 /** How many loop cycles between UART log transmissions (every 100ms) */
 #define UART_LOG_EVERY_N_LOOPS (EV_LOGGER_PERIOD_MS / MAIN_LOOP_PERIOD_MS)
 
-/* ─── Private Variables ──────────────────────────────────────────────────── */
+/* --- Private Variables --------------------------------------------------- */
 
 /**
  * STM32 HAL handles.
  * In Sprint 5, CubeMX generates these as extern globals from main.c.
  * For now we declare them here as stubs — replace with real inits in Sprint 5.
  */
-static ADC_HandleTypeDef hadc1;   /**< ADC1 handle — all 5 sensor channels  */
-static TIM_HandleTypeDef htim1;   /**< TIM1 handle — motor PWM output        */
-static TIM_HandleTypeDef htim3;   /**< TIM3 handle — encoder input           */
+static ADC_HandleTypeDef hadc1;   /* ADC1 handle - all 5 sensor channels  */
+static TIM_HandleTypeDef htim1;   /* TIM1 handle - motor PWM output        */
+static TIM_HandleTypeDef htim3;   /* TIM3 handle - encoder input           */
 
-/** Global sensor data — updated every MAIN_LOOP_PERIOD_MS */
+/** Global sensor data - updated every MAIN_LOOP_PERIOD_MS */
 static sensor_data_t g_sensor_data;
 
 /** Loop counter used to rate-limit UART logging */
 static uint32_t g_loop_counter = 0U;
 
-/* ─── Private Function Declarations ─────────────────────────────────────── */
+/* --- Private Function Declarations -------------------------------------- */
 static ev_status_t system_hal_init(void);
 static void        main_loop_run(void);
 static void        motor_control_update(const sensor_data_t *data);
 static void        uart_log_sensors(const sensor_data_t *data);
 static void        delay_ms(uint32_t ms);
 
-/* ─── Main Entry Point ───────────────────────────────────────────────────── */
+/* --- Main Entry Point ------------------------------------------------- */
 
 /**
  * @brief  Firmware entry point.
@@ -76,13 +76,13 @@ int main(void)
 {
     ev_status_t init_status;
 
-    /* ── Step 1: Initialise all hardware peripherals ── */
+    /* --- Step 1: Initialise all hardware peripherals --- */
     init_status = system_hal_init();
 
     if (init_status != EV_STATUS_OK)
     {
         /*
-         * Hardware init failed — we cannot run safely.
+         * Hardware init failed - we cannot run safely.
          * In Sprint 3, this will set a FAULT_INIT_FAILED code and
          * enter SAFE_STATE. For Sprint 2, we blink an error pattern
          * and loop forever rather than running with broken hardware.
@@ -97,13 +97,13 @@ int main(void)
         }
     }
 
-    /* ── Step 2: Initialise application modules ── */
+    /* --- Step 2: Initialise application modules --- */
 
-    /* Initialise sensor HAL — must be done before any sensor read */
+    /* Initialise sensor HAL - must be done before any sensor read */
     if (sensor_init(&hadc1, &htim3) != EV_STATUS_OK)
     {
         /*
-         * Sensor init failed — ADC or encoder setup problem.
+         * Sensor init failed - ADC or encoder setup problem.
          * TODO(sprint3): fault_manager_set(FAULT_SENSOR_INIT_FAILED)
          */
         while (1)
@@ -113,11 +113,11 @@ int main(void)
         }
     }
 
-    /* Initialise motor control — must be done before any speed command */
+    /* Initialise motor control - must be done before any speed command */
     if (motor_init(&htim1) != EV_STATUS_OK)
     {
         /*
-         * Motor init failed — PWM timer setup problem.
+         * Motor init failed - PWM timer setup problem.
          * TODO(sprint3): fault_manager_set(FAULT_MOTOR_INIT_FAILED)
          */
         while (1)
@@ -127,7 +127,7 @@ int main(void)
         }
     }
 
-    /* ── Step 3: Signal successful boot ── */
+    /* --- Step 3: Signal successful boot --- */
     /*
      * Three slow blinks = system initialised OK.
      * When connected to the serial terminal, also print a boot message.
@@ -143,18 +143,18 @@ int main(void)
      * TODO(sprint5): Configure USART1 retarget for printf/puts.
      */
 
-    /* ── Step 4: Enter main superloop ── */
+    /* --- Step 4: Enter main superloop --- */
     while (1)
     {
         main_loop_run();
         delay_ms(MAIN_LOOP_PERIOD_MS);
     }
 
-    /* Unreachable — bare-metal systems never return from main */
+    /* Unreachable - bare-metal systems never return from main */
     return 0;
 }
 
-/* ─── Private Function Implementations ──────────────────────────────────── */
+/* --- Private Function Implementations ------------------------------------ */
 
 /**
  * @brief  Initialise all STM32 hardware peripherals.
@@ -212,7 +212,7 @@ static void main_loop_run(void)
 {
     g_loop_counter++;
 
-    /* ── 1. Read all sensors ── */
+    /* --- 1. Read all sensors --- */
     /*
      * sensor_read_all() populates g_sensor_data with current values.
      * We ignore the return value here — Sprint 3 will check it and
@@ -221,10 +221,10 @@ static void main_loop_run(void)
      */
     (void)sensor_read_all(&g_sensor_data);
 
-    /* ── 2. Update motor control ── */
+    /* --- 2. Update motor control --- */
     motor_control_update(&g_sensor_data);
 
-    /* ── 3. Log sensor data over UART (rate-limited to every 100ms) ── */
+    /* --- 3. Log sensor data over UART (rate-limited to every 100ms) --- */
     if (g_loop_counter >= UART_LOG_EVERY_N_LOOPS)
     {
         uart_log_sensors(&g_sensor_data);
@@ -244,9 +244,9 @@ static void main_loop_run(void)
  * @brief  Update motor PWM based on sensor inputs.
  *
  * @details Implements the core motor control logic:
- *          1. Brake switch pressed → motor stop immediately
- *          2. Throttle > deadband  → set motor to throttle %
- *          3. Throttle <= deadband → motor stop
+ *          1. Brake switch pressed -> motor stop immediately
+ *          2. Throttle > deadband  -> set motor to throttle %
+ *          3. Throttle <= deadband -> motor stop
  *
  *          Sprint 3 will add: do NOT drive motor in FAULT or SAFE states.
  *
@@ -265,7 +265,7 @@ static void motor_control_update(const sensor_data_t *data)
     {
         /*
          * Brake pressed: ALWAYS stop the motor, regardless of throttle.
-         * This is a fundamental safety rule — brake overrides throttle.
+         * This is a fundamental safety rule - brake overrides throttle.
          * Using motor_stop() (not motor_set_speed(0)) for immediate effect.
          */
         (void)motor_stop();
@@ -311,7 +311,7 @@ static void uart_log_sensors(const sensor_data_t *data)
      *                USART1 is configured and printf() is retargeted.
      */
 
-    /* Sprint 2: printf calls are stubs — will output in Sprint 5 */
+    /* Sprint 2: printf calls are stubs - will output in Sprint 5 */
     (void)printf(">batt_temp:%.1f\n",   (double)data->batt_temp_c);
     (void)printf(">motor_temp:%.1f\n",  (double)data->motor_temp_c);
     (void)printf(">current:%.2f\n",     (double)data->current_a);

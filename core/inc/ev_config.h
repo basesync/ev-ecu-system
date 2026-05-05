@@ -16,7 +16,7 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #ifndef EV_CONFIG_H
@@ -131,9 +131,9 @@
 /** Using R1=100kΩ, R2=10kΩ -> ratio = 10/(100+10) = 0.0909 */
 #define EV_VOLTAGE_DIVIDER_RATIO        (0.0909f)
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * SECTION 7 — ENCODER CONFIGURATION  (Sprint 2 addition)
- * ═══════════════════════════════════════════════════════════════════════════ */
+/* ===========================================================================
+ * ENCODER CONFIGURATION
+ * =========================================================================== */
 
 /**
  * Encoder pulses per revolution.
@@ -165,7 +165,7 @@
  * =========================================================================== */
 
 #define EV_FIRMWARE_VERSION_MAJOR       (0U)
-#define EV_FIRMWARE_VERSION_MINOR       (2U)
+#define EV_FIRMWARE_VERSION_MINOR       (3U)
 #define EV_FIRMWARE_VERSION_PATCH       (0U)
 
 /** Magic number written to backup RAM to request DFU mode (bootloader use) */
@@ -174,15 +174,15 @@
 /** Fault log size in Flash (number of fault entries to store) */
 #define EV_FAULT_LOG_MAX_ENTRIES        (32U)
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * SECTION 9 — UART CONFIGURATION
+/* ===========================================================================
+ * UART CONFIGURATION
  * Active: Sprint 5 (replaces printf() stubs with HAL_UART_Transmit())
  *
  * Peripheral : USART1
  * TX pin     : PA9
  * RX pin     : PA10
  * Format     : Teleplot  ">label:value\n"
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 /** Baud rate — must match Teleplot and serial terminal settings */
 #define EV_UART_BAUD_RATE               (115200U)
@@ -196,8 +196,8 @@
 /** Number of log lines in the transmit ring buffer (Sprint 5 DMA mode) */
 #define EV_UART_TX_BUFFER_LINES         (8U)
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * SECTION 10 — I2C CONFIGURATION
+/* ===========================================================================
+ * I2C CONFIGURATION
  * Active: Sprint 5 (TMP102 replaces ADC pot for battery temperature)
  *
  * Peripheral : I2C1
@@ -205,7 +205,7 @@
  * SDA pin    : PB7   (requires 4.7 kΩ pull-up to 3.3 V)
  * Device     : TMP102 digital temperature sensor
  * Datasheet  : https://www.ti.com/lit/ds/symlink/tmp102.pdf
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 /** I2C bus speed — 400 kHz fast mode */
 #define EV_I2C_SPEED_HZ                 (400000U)
@@ -237,8 +237,8 @@
 /** Retry limit when TMP102 returns NAK */
 #define EV_I2C_MAX_RETRIES              (3U)
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * SECTION 11 — SPI FLASH CONFIGURATION
+/* ===========================================================================
+ * SPI FLASH CONFIGURATION
  * Active: Sprint 6 (W25Q32 stores fault log in non-volatile flash)
  *
  * Peripheral : SPI1
@@ -248,7 +248,7 @@
  * CS   pin   : PA4  (GPIO output, software-controlled, active-low)
  * Device     : W25Q32 4 MB NOR Flash (Winbond)
  * Datasheet  : https://www.winbond.com/resource-files/w25q32jv%20revg%2003272018%20plus.pdf
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 /** SPI clock — 18 MHz is well within W25Q32's 80 MHz maximum */
 #define EV_SPI_FLASH_SPEED_HZ           (18000000U)
