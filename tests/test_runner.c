@@ -5,7 +5,7 @@
 
 #include "Unity/unity.h"
 
-/* ─── Module setUp/tearDown declared here ─────────────────────────────────── */
+/* --- Module setUp/tearDown declared here ------------------------------------------- */
 extern void motor_setUp(void);
 extern void motor_tearDown(void);
 extern void sensor_setUp(void);
@@ -31,12 +31,12 @@ void tearDown(void)
     else if (s_active_module == MODULR_PROTOCOL)  { protocol_tearDown();  }
 }
 
-/* ─── Sprint 1: Placeholder tests ────────────────────────────────────────── */
+/* --- Sprint 1: Placeholder tests -------------------------------------------- */
 extern void test_unity_framework_is_operational(void);
 extern void test_placeholder_integer_assertion(void);
 extern void test_placeholder_boolean_assertion(void);
 
-/* ─── Sprint 2: Sensor HAL tests ─────────────────────────────────────────── */
+/* --- Sprint 2: Sensor HAL tests ----------------------------------------------- */
 extern void test_sensor_batt_temp_adc_zero_returns_zero_degrees(void);
 extern void test_sensor_batt_temp_adc_midscale_returns_50_degrees(void);
 extern void test_sensor_batt_temp_adc_fullscale_returns_max_voltage_temp(void);
@@ -60,7 +60,7 @@ extern void test_sensor_init_valid_handles_returns_ok(void);
 extern void test_sensor_read_all_null_pointer_returns_invalid(void);
 extern void test_sensor_read_all_valid_pointer_populates_all_fields(void);
 
-/* ─── Sprint 2: Motor Control tests ──────────────────────────────────────── */
+/* --- Sprint 2: Motor Control tests ------------------------------------------ */
 extern void test_motor_init_null_handle_returns_invalid(void);
 extern void test_motor_init_valid_handle_returns_ok(void);
 extern void test_motor_init_sets_initial_speed_to_zero(void);
@@ -80,7 +80,7 @@ extern void test_motor_get_speed_returns_zero_after_stop(void);
 extern void test_motor_brake_override_throttle_80pct_with_brake_gives_zero(void);
 extern void test_motor_brake_not_active_throttle_sets_speed(void);
 
-/* ─── Sprint 2: Protocol Prep tests (S2-11) ──────────────────────────────── */
+/* --- Sprint 2: Protocol Prep tests (S2-11) ------------------------------------------ */
 extern void test_fault_logger_init_with_null_handle_returns_ok(void);
 extern void test_fault_logger_init_with_valid_handle_returns_ok(void);
 extern void test_fault_logger_write_before_init_returns_not_ready(void);
@@ -112,13 +112,13 @@ int main(void)
 {
     UNITY_BEGIN();
 
-    /* ── Sprint 1: Framework verification (no module setup needed) ── */
+    /* --- Sprint 1: Framework verification (no module setup needed) --- */
     s_active_module = MODULE_NONE;
     RUN_TEST(test_unity_framework_is_operational);
     RUN_TEST(test_placeholder_integer_assertion);
     RUN_TEST(test_placeholder_boolean_assertion);
 
-    /* ── Sprint 2: Sensor HAL ── */
+    /* --- Sprint 2: Sensor HAL --- */
     s_active_module = MODULE_SENSOR;
     RUN_TEST(test_sensor_batt_temp_adc_zero_returns_zero_degrees);
     RUN_TEST(test_sensor_batt_temp_adc_midscale_returns_50_degrees);
@@ -143,7 +143,7 @@ int main(void)
     RUN_TEST(test_sensor_read_all_null_pointer_returns_invalid);
     RUN_TEST(test_sensor_read_all_valid_pointer_populates_all_fields);
 
-    /* ── Sprint 2: Motor Control ── */
+    /* --- Sprint 2: Motor Control --- */
     s_active_module = MODULE_MOTOR;
     RUN_TEST(test_motor_init_null_handle_returns_invalid);
     RUN_TEST(test_motor_init_valid_handle_returns_ok);
@@ -164,7 +164,7 @@ int main(void)
     RUN_TEST(test_motor_brake_override_throttle_80pct_with_brake_gives_zero);
     RUN_TEST(test_motor_brake_not_active_throttle_sets_speed);
 
-    /* ── Sprint 2: Protocol Prep (S2-11) ── */
+    /* --- Sprint 2: Protocol Prep (S2-11) --- */
     /* fault_logger stub */
     RUN_TEST(test_fault_logger_init_with_null_handle_returns_ok);
     RUN_TEST(test_fault_logger_init_with_valid_handle_returns_ok);
