@@ -1,7 +1,7 @@
 ## Summary
 <!-- What does this PR do? Write 2–3 sentences. Be specific. -->
 <!-- Example: "Implements the battery temperature ADC read function in sensor_hal.c.
-              Adds unit tests for all boundary conditions. Updates the pin mapping table in Confluence." -->
+              Adds unit tests for all boundary conditions." -->
 
 
 ## Type of Change
@@ -43,14 +43,14 @@ Closes #<!-- issue number here -->
 <!-- Check all that apply. Do NOT open a PR without completing this. -->
 - [ ] Code follows naming conventions from `06_CODING_STANDARDS.md`
 - [ ] All public functions have Doxygen-style comments (`@brief`, `@param`, `@retval`)
-- [ ] No magic numbers — all constants are in `ev_config.h`
+- [ ] No magic numbers - all constants are in `ev_config.h`
 - [ ] All function parameters are validated (null checks where applicable)
 - [ ] Return values of all called functions are checked
 - [ ] All `switch` statements have a `default` case
 - [ ] All `if/for/while` blocks use `{` braces even for single lines
 
 ## Documentation
-- [ ] Confluence updated if module interface or design changed
+- [ ] Docs folder updated if module interface or design changed
 - [ ] `README.md` updated if new setup steps are needed
 - [ ] Inline `/* TODO: */` comments added for any deferred work
 
