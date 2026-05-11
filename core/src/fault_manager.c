@@ -1,26 +1,22 @@
 /**
  * @file    fault_manager.c
- * @brief   Fault Manager — threshold checking and fault bitmask construction
+ * @brief   Fault Manager - threshold checking and fault bitmask construction
  *
- * @details Sprint 3 implementation. This module evaluates every fault
+ * @details This module evaluates every fault
  *          threshold from ev_config.h against the sensor data snapshot
  *          passed in and returns a bitmask of all active faults.
  *
- *          Design decisions recorded in ADR-004 (Docs/ADR-004-fault-manager.md):
- *          - No global state — pure function design for testability
- *          - All 6 checks always evaluated (no short-circuit on first fault)
- *          - Data NULL treated as FAULT_INVALID_DATA to prevent silent unsafe op
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------------- */
 #include "fault_manager.h"
 #include <stddef.h>
 
-/* ─── Private Helper Macro ────────────────────────────────────────────────── */
+/* --- Private Helper Macro --------------------------------------------------- */
 
 /**
  * @brief  Set a fault bit in a bitmask if a condition is true.
@@ -37,7 +33,7 @@
         }                                   \
     } while (0)
 
-/* ─── Public Function Implementations ────────────────────────────────────── */
+/* --- Public Function Implementations --------------------------------------------- */
 
 /**
  * @brief  Check all sensor readings against fault thresholds.
@@ -53,7 +49,7 @@ fault_code_t fault_check_all(const sensor_data_t *data)
     }
 
     /*
-     * Check 1 — Battery over-temperature
+     * Check 1 - Battery over-temperature
      * Threshold: EV_BATT_TEMP_CRITICAL_C = 60.0°C
      * Source: ev_config.h Section 1
      */
@@ -61,7 +57,7 @@ fault_code_t fault_check_all(const sensor_data_t *data)
                  code, FAULT_OVER_TEMP_BATT);
 
     /*
-     * Check 2 — Motor over-temperature
+     * Check 2 - Motor over-temperature
      * Threshold: EV_MOTOR_TEMP_CRITICAL_C = 80.0°C
      * Motors tolerate higher temperatures than Li-ion battery cells.
      */
@@ -69,7 +65,7 @@ fault_code_t fault_check_all(const sensor_data_t *data)
                  code, FAULT_OVER_TEMP_MOTOR);
 
     /*
-     * Check 3 — Over-current
+     * Check 3 - Over-current
      * Threshold: EV_CURRENT_CRITICAL_A = 50.0A
      * Positive = discharge direction. Negative current (charging) is not a fault.
      */
@@ -77,7 +73,7 @@ fault_code_t fault_check_all(const sensor_data_t *data)
                  code, FAULT_OVER_CURRENT);
 
     /*
-     * Check 4 — Under-voltage
+     * Check 4 - Under-voltage
      * Threshold: EV_VOLTAGE_MIN_CRITICAL_V = 35.0V
      * Below this level the battery may be permanently damaged.
      */
@@ -85,7 +81,7 @@ fault_code_t fault_check_all(const sensor_data_t *data)
                  code, FAULT_UNDER_VOLTAGE);
 
     /*
-     * Check 5 — Over-voltage
+     * Check 5 - Over-voltage
      * Threshold: EV_VOLTAGE_MAX_CRITICAL_V = 55.0V
      * Indicates charging failure or regenerative braking overcurrent.
      */
@@ -93,7 +89,7 @@ fault_code_t fault_check_all(const sensor_data_t *data)
                  code, FAULT_OVER_VOLTAGE);
 
     /*
-     * Check 6 — Manual fault trigger
+     * Check 6 - Manual fault trigger
      * The physical fault switch on PB1 allows engineers to manually
      * inject a fault during testing to verify the fault response chain.
      */

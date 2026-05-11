@@ -11,19 +11,19 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------------- */
 #include "Unity/unity.h"
 #include "motor_ctrl.h"
 #include "ev_config.h"
 #include "mocks/mock_stm32_hal_tim.h"
 
-/* ─── Test fixtures ──────────────────────────────────────────────────────── */
+/* --- Test fixtures --------------------------------------------------------- */
 static TIM_HandleTypeDef s_test_htim;
 
-/* ─── setUp and tearDown ─────────────────────────────────────────────────── */
+/* --- setUp and tearDown --------------------------------------------------- */
 
 void motor_setUp(void)
 {
@@ -42,9 +42,9 @@ void motor_tearDown(void)
     (void)motor_stop();
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * motor_init() TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_motor_init_null_handle_returns_invalid(void)
 {
@@ -78,9 +78,9 @@ void test_motor_init_pwm_start_error_returns_hal_error(void)
     TEST_ASSERT_EQUAL(EV_STATUS_HAL_ERROR, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * motor_set_speed() TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_motor_set_speed_zero_sets_duty_zero(void)
 {
@@ -159,9 +159,9 @@ void test_motor_set_speed_below_deadband_sets_zero(void)
     TEST_ASSERT_EQUAL_UINT8(0U, motor_get_speed());
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * motor_stop() TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_motor_stop_sets_duty_to_zero(void)
 {
@@ -183,7 +183,7 @@ void test_motor_stop_always_returns_ok(void)
 
 void test_motor_stop_from_zero_still_returns_ok(void)
 {
-    /* Motor is already at 0 — stopping again must still succeed */
+    /* Motor is already at 0 - stopping again must still succeed */
     (void)motor_set_speed(0U);
 
     ev_status_t result = motor_stop();
@@ -191,9 +191,9 @@ void test_motor_stop_from_zero_still_returns_ok(void)
     TEST_ASSERT_EQUAL(EV_STATUS_OK, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * motor_get_speed() TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_motor_get_speed_returns_last_set_value(void)
 {
@@ -214,15 +214,15 @@ void test_motor_get_speed_returns_zero_after_stop(void)
     TEST_ASSERT_EQUAL_UINT8(0U, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * BRAKE OVERRIDE INTEGRATION TEST
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_motor_brake_override_throttle_80pct_with_brake_gives_zero(void)
 {
     /*
      * This test simulates the motor_control_update() logic in main.c:
-     * throttle = 80%, brake = active → motor should be at 0%.
+     * throttle = 80%, brake = active -> motor should be at 0%.
      *
      * We test the logic directly to verify the branch works.
      */
@@ -245,7 +245,7 @@ void test_motor_brake_override_throttle_80pct_with_brake_gives_zero(void)
 void test_motor_brake_not_active_throttle_sets_speed(void)
 {
     /*
-     * throttle = 80%, brake = not active → motor should be at 80%.
+     * throttle = 80%, brake = not active -> motor should be at 80%.
      */
     bool    brake_active  = false;
     uint8_t throttle_pct  = 80U;

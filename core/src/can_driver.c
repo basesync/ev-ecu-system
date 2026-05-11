@@ -1,14 +1,12 @@
 /**
  * @file    can_driver.c
- * @brief   CAN Bus Driver — frame encoding and UART-logged transmission stub
+ * @brief   CAN Bus Driver - frame encoding and UART-logged transmission stub
  *
- * @details Sprint 3 implementation.
- *
- *          This module encodes all four CAN frame types into the standard
+ * @details This module encodes all four CAN frame types into the standard
  *          8-byte layout and stores the last transmitted frame for test
  *          inspection via can_get_last_frame().
  *
- *          CAN transmission in Sprint 3:
+ *          CAN transmission:
  *            - Frames ARE correctly encoded in memory
  *            - Frames are NOT sent over the physical CAN bus
  *            - Frame bytes are logged over UART (printf stub) for verification
@@ -19,27 +17,27 @@
  *            HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox);
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------------- */
 #include <stdio.h>
 #include <string.h>
 #include "can_driver.h"
 
-/* ─── Module-Private State ────────────────────────────────────────────────── */
+/* --- Module-Private State ------------------------------------------------------ */
 
-/** Initialisation flag — enforces that can_driver_init() is called first */
+/** Initialisation flag - enforces that can_driver_init() is called first */
 static bool s_initialised = false;
 
-/** Last frame encoded — used by can_get_last_frame() and unit tests */
+/** Last frame encoded - used by can_get_last_frame() and unit tests */
 static can_frame_t s_last_frame;
 
 /** Flag to track whether s_last_frame contains a valid frame */
 static bool s_frame_ready = false;
 
-/* ─── Private Helper Functions ────────────────────────────────────────────── */
+/* --- Private Helper Functions ------------------------------------------------ */
 
 /**
  * @brief  Encode a 16-bit integer into two bytes (little-endian).
@@ -111,7 +109,7 @@ static void priv_transmit_frame(const can_frame_t *frame)
     (void)printf("]\n");
 }
 
-/* ─── Public Function Implementations ────────────────────────────────────── */
+/* --- Public Function Implementations ------------------------------------ */
 
 /**
  * @brief  Initialise the CAN driver module.
@@ -247,7 +245,7 @@ ev_status_t can_send_sensor_pack2(const sensor_data_t *data)
 
     /*
      * Bytes 0-1: voltage × 10  (uint16, little-endian)
-     * Bytes 2-3: current × 10  (int16, little-endian — signed for charge/discharge)
+     * Bytes 2-3: current × 10  (int16, little-endian - signed for charge/discharge)
      * Byte 4:    brake_active  (0x00 = released, 0x01 = pressed)
      * Bytes 5-7: reserved = 0x00
      */

@@ -68,7 +68,7 @@ Each version maps directly to one sprint.
 - `stm32f1xx_hal_tim.c` — `HAL_TIM_PWM_Start()` and `HAL_TIM_Encoder_Start()` set `htim->Instance` to static `TIM_TypeDef` (prevents null-dereference in `__HAL_TIM_SET_COMPARE` macro)
 - `stm32f1xx_hal_uart.c` — `HAL_UART_Transmit()` discards data; returns `HAL_OK`
 - `stm32f1xx_hal_i2c.c` — `HAL_I2C_IsDeviceReady()` returns `HAL_ERROR` (keeps sensor in ADC mode); `HAL_I2C_Mem_Read()` zeroes buffer
-- `stm32f1xx_hal_spi.c` — `HAL_SPI_TransmitReceive()` fills buffer with `0xFF` (JEDEC mismatch → fault logger stays stub)
+- `stm32f1xx_hal_spi.c` — `HAL_SPI_TransmitReceive()` fills buffer with `0xFF` (JEDEC mismatch -> fault logger stays stub)
 
 #### Tests
 - `tests/mocks/mock_stm32_hal_adc.c/.h` — `mock_adc_set_channel_value()`, `mock_adc_set_start_error()`, `mock_adc_set_poll_timeout()`
@@ -209,10 +209,10 @@ Each version maps directly to one sprint.
 When a sprint ends and a new release is tagged:
 
 1. Rename `[Unreleased]` to `[X.Y.Z] — Sprint N: Short description`
-2. Add the release date after the version: `[0.4.0] — 2025-MM-DD — Sprint 4: ...`
+2. Add the release date after the version: `[0.4.0] — 2026-MM-DD — Sprint 4: ...`
 3. Create a new empty `[Unreleased]` section at the top
 4. Follow the sections: **Added**, **Changed**, **Fixed**, **Removed**, **Known Limitations**
-5. Commit the updated `CHANGELOG.md` as part of the release PR (develop → main)
+5. Commit the updated `CHANGELOG.md` as part of the release PR (develop -> main)
 
 ```
 git add CHANGELOG.md

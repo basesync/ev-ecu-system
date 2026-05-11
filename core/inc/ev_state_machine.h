@@ -1,28 +1,28 @@
 /**
  * @file    ev_state_machine.h
- * @brief   EV ECU State Machine — state management and transitions
+ * @brief   EV ECU State Machine - state management and transitions
  *
  * @details Implements the EV operating state machine:
  *
- *          INIT → IDLE → RUNNING → FAULT → SAFE_STATE
- *                          ↑           |
- *                          └───────────┘ (reset clears fault)
+ *          INIT -> IDLE -> RUNNING -> FAULT -> SAFE_STATE
+ *                          |           |
+ *                       (reset clears fault)
  *
  *          State rules:
- *            INIT       — hardware initialising, motor locked off
- *            IDLE       — sensors running, motor command ignored (speed 0)
- *            RUNNING    — normal operation, motor follows throttle
- *            FAULT      — fault detected, motor immediately stopped
- *            SAFE_STATE — all outputs off, only reset clears this
+ *            INIT       - hardware initialising, motor locked off
+ *            IDLE       - sensors running, motor command ignored (speed 0)
+ *            RUNNING    - normal operation, motor follows throttle
+ *            FAULT      - fault detected, motor immediately stopped
+ *            SAFE_STATE - all outputs off, only reset clears this
  *
  *          Transition table:
- *            INIT       → IDLE       : init complete, no faults
- *            IDLE       → RUNNING    : throttle > deadband, no faults
- *            RUNNING    → IDLE       : throttle = 0 and brake pressed
- *            RUNNING    → FAULT      : fault_code != FAULT_NONE
- *            IDLE       → FAULT      : fault_code != FAULT_NONE
- *            FAULT      → SAFE_STATE : automatic, immediate on fault
- *            SAFE_STATE → INIT       : manual reset only (CAN command or power cycle)
+ *            INIT       -> IDLE       : init complete, no faults
+ *            IDLE       -> RUNNING    : throttle > deadband, no faults
+ *            RUNNING    -> IDLE       : throttle = 0 and brake pressed
+ *            RUNNING    -> FAULT      : fault_code != FAULT_NONE
+ *            IDLE       -> FAULT      : fault_code != FAULT_NONE
+ *            FAULT      -> SAFE_STATE : automatic, immediate on fault
+ *            SAFE_STATE -> INIT       : manual reset only (CAN command or power cycle)
  *
  *          The state machine is the ONLY code that calls motor_stop().
  *          All other fault paths must go through ev_sm_set_fault() to
@@ -31,20 +31,20 @@
  *
  * @author  BaseSync Team
  * @version 1.0 (Sprint 3)
- * @date    2025
+ * @date    2026
  */
 
 #ifndef EV_STATE_MACHINE_H
 #define EV_STATE_MACHINE_H
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------- */
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include "ev_types.h"
 #include "ev_config.h"
 
-/* ─── Public Function Declarations ───────────────────────────────────────── */
+/* --- Public Function Declarations --------------------------------------- */
 
 /**
  * @brief  Initialise the state machine.
@@ -52,7 +52,7 @@
  * @details Sets the initial state to EV_STATE_INIT and clears the active
  *          fault code. Must be called once before ev_sm_run().
  *
- *          Does NOT require any hardware handle — the state machine is
+ *          Does NOT require any hardware handle - the state machine is
  *          a pure software module. It calls motor_stop() on transitions
  *          to FAULT/SAFE_STATE, so motor_init() must be called first.
  */
@@ -74,7 +74,7 @@ void ev_sm_init(void);
  *          motor_stop() separately.
  *
  * @param  data    Pointer to current sensor data snapshot. May be NULL
- *                 (treated as a critical fault → SAFE_STATE).
+ *                 (treated as a critical fault -> SAFE_STATE).
  * @param  faults  Fault bitmask from fault_check_all(). Use FAULT_NONE
  *                 if no faults were detected this cycle.
  */
@@ -103,7 +103,7 @@ void ev_sm_set_fault(fault_code_t fault_code);
  *
  * @details Only valid when current state is SAFE_STATE.
  *          Clears the fault code and returns to INIT state so the
- *          system re-enters the normal INIT → IDLE → RUNNING path.
+ *          system re-enters the normal INIT -> IDLE -> RUNNING path.
  *
  *          This function is called when a reset command is received
  *          over CAN (Sprint 3) or when the operator presses a physical

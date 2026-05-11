@@ -5,15 +5,15 @@
  * @details Tests for all fault threshold checks in fault_check_all(),
  *          fault_is_set(), and fault_get_name().
  *
- *          No mocks required — fault_check_all() is a pure function that
+ *          No mocks required - fault_check_all() is a pure function that
  *          only reads the sensor_data_t passed in. setUp()/tearDown() are
  *          kept minimal.
  *
  *          Total tests: 20
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
 #include "Unity/unity.h"
@@ -21,22 +21,22 @@
 #include "ev_config.h"
 #include "fault_manager.h"
 
-/* ─── Test fixture helpers ────────────────────────────────────────────────── */
+/* --- Test fixture helpers --------------------------------------------------- */
 
 /**
  * @brief  Return a sensor_data_t with all values in the SAFE (no-fault) range.
  *
- * @details Used as the baseline for all tests — each test modifies only
+ * @details Used as the baseline for all tests - each test modifies only
  *          the field under test. This ensures tests are isolated.
  */
 static sensor_data_t make_safe_data(void)
 {
     sensor_data_t d;
 
-    d.batt_temp_c  = 25.0f;   /* Room temperature — well below 60°C */
+    d.batt_temp_c  = 25.0f;   /* Room temperature - well below 60°C */
     d.motor_temp_c = 30.0f;   /* Well below 80°C */
     d.current_a    = 10.0f;   /* Well below 50A */
-    d.voltage_v    = 48.0f;   /* Nominal pack voltage — between 35V and 55V */
+    d.voltage_v    = 48.0f;   /* Nominal pack voltage - between 35V and 55V */
     d.speed_rpm    = 0U;
     d.throttle_pct = 0U;
     d.brake_active = false;
@@ -45,11 +45,11 @@ static sensor_data_t make_safe_data(void)
     return d;
 }
 
-/* ─── setUp / tearDown ────────────────────────────────────────────────────── */
+/* --- setUp / tearDown ------------------------------------------------------ */
 
 void fm_setUp(void)
 {
-    /* No module state to reset — fault_manager is stateless */
+    /* No module state to reset - fault_manager is stateless */
 }
 
 void fm_tearDown(void)
@@ -57,7 +57,7 @@ void fm_tearDown(void)
     /* Nothing to tear down */
 }
 
-/* ─── Tests: NULL pointer guard ──────────────────────────────────────────── */
+/* --- Tests: NULL pointer guard ------------------------------------------------ */
 
 void test_fault_check_null_data_returns_fault_invalid_data(void)
 {
@@ -66,7 +66,7 @@ void test_fault_check_null_data_returns_fault_invalid_data(void)
     TEST_ASSERT_EQUAL_HEX8(FAULT_INVALID_DATA, result);
 }
 
-/* ─── Tests: No-fault baseline ───────────────────────────────────────────── */
+/* --- Tests: No-fault baseline ------------------------------------------------ */
 
 void test_fault_check_all_safe_data_returns_fault_none(void)
 {
@@ -77,7 +77,7 @@ void test_fault_check_all_safe_data_returns_fault_none(void)
     TEST_ASSERT_EQUAL_HEX8(FAULT_NONE, result);
 }
 
-/* ─── Tests: Battery over-temperature ────────────────────────────────────── */
+/* --- Tests: Battery over-temperature --------------------------------------- */
 
 void test_fault_check_batt_temp_below_threshold_no_fault(void)
 {
@@ -113,7 +113,7 @@ void test_fault_check_batt_temp_above_threshold_sets_bit(void)
     TEST_ASSERT_TRUE(fault_is_set(result, FAULT_OVER_TEMP_BATT));
 }
 
-/* ─── Tests: Motor over-temperature ─────────────────────────────────────── */
+/* --- Tests: Motor over-temperature ------------------------------------------------ */
 
 void test_fault_check_motor_temp_above_threshold_sets_bit(void)
 {
@@ -135,7 +135,7 @@ void test_fault_check_motor_temp_at_threshold_no_fault(void)
     TEST_ASSERT_FALSE(fault_is_set(result, FAULT_OVER_TEMP_MOTOR));
 }
 
-/* ─── Tests: Over-current ────────────────────────────────────────────────── */
+/* --- Tests: Over-current ------------------------------------------------ */
 
 void test_fault_check_over_current_above_threshold_sets_bit(void)
 {
@@ -158,7 +158,7 @@ void test_fault_check_negative_current_no_fault(void)
     TEST_ASSERT_FALSE(fault_is_set(result, FAULT_OVER_CURRENT));
 }
 
-/* ─── Tests: Under-voltage ───────────────────────────────────────────────── */
+/* --- Tests: Under-voltage ------------------------------------------------ */
 
 void test_fault_check_under_voltage_below_threshold_sets_bit(void)
 {
@@ -180,7 +180,7 @@ void test_fault_check_voltage_at_min_threshold_no_fault(void)
     TEST_ASSERT_FALSE(fault_is_set(result, FAULT_UNDER_VOLTAGE));
 }
 
-/* ─── Tests: Over-voltage ────────────────────────────────────────────────── */
+/* --- Tests: Over-voltage --------------------------------------------------- */
 
 void test_fault_check_over_voltage_above_threshold_sets_bit(void)
 {
@@ -202,7 +202,7 @@ void test_fault_check_voltage_at_max_threshold_no_fault(void)
     TEST_ASSERT_FALSE(fault_is_set(result, FAULT_OVER_VOLTAGE));
 }
 
-/* ─── Tests: Manual fault trigger ───────────────────────────────────────── */
+/* --- Tests: Manual fault trigger ------------------------------------------------ */
 
 void test_fault_check_fault_switch_pressed_sets_manual_trigger(void)
 {
@@ -224,7 +224,7 @@ void test_fault_check_fault_switch_not_pressed_no_manual_trigger(void)
     TEST_ASSERT_FALSE(fault_is_set(result, FAULT_MANUAL_TRIGGER));
 }
 
-/* ─── Tests: Multiple simultaneous faults ────────────────────────────────── */
+/* --- Tests: Multiple simultaneous faults --------------------------------------- */
 
 void test_fault_check_multiple_faults_all_bits_set(void)
 {
@@ -242,7 +242,7 @@ void test_fault_check_multiple_faults_all_bits_set(void)
     TEST_ASSERT_TRUE(fault_is_set(result, FAULT_MANUAL_TRIGGER));
 }
 
-/* ─── Tests: fault_is_set() helper ──────────────────────────────────────── */
+/* --- Tests: fault_is_set() helper --------------------------------------- */
 
 void test_fault_is_set_returns_false_for_clear_bit(void)
 {
@@ -258,7 +258,7 @@ void test_fault_is_set_returns_true_for_set_bit(void)
     TEST_ASSERT_TRUE(fault_is_set(faults, FAULT_OVER_CURRENT));
 }
 
-/* ─── Tests: fault_get_name() ────────────────────────────────────────────── */
+/* --- Tests: fault_get_name() --------------------------------------- */
 
 void test_fault_get_name_returns_none_for_no_fault(void)
 {

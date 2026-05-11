@@ -37,7 +37,7 @@ Every time someone pushes code or opens a PR, a robot automatically:
 3. Runs static analysis (Cppcheck)
 4. Scans for security issues (Snyk)
 
-> ⛔ If any of these fail → **the PR is blocked**. Code cannot merge until it's fixed.
+> ⛔ If any of these fail -> **the PR is blocked**. Code cannot merge until it's fixed.
 
 ### CD — Continuous Deployment
 
@@ -436,7 +436,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -specs=nano.specs" CACHE STRING ""
 
 ### Branch Protection Rules
 
-Configure these in **GitHub → Settings → Branches → Branch protection rules** for `main` and `develop`:
+Configure these in **GitHub -> Settings -> Branches -> Branch protection rules** for `main` and `develop`:
 
 ```
 ☑ Require status checks to pass before merging

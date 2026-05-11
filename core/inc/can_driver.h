@@ -1,6 +1,6 @@
 /**
  * @file    can_driver.h
- * @brief   CAN Bus Driver — frame encoding and transmission
+ * @brief   CAN Bus Driver - frame encoding and transmission
  *
  * @details This module encodes EV system data into CAN frames and
  *          transmits them via the STM32 CAN1 peripheral through the
@@ -8,33 +8,33 @@
  *
  *          CAN Frame Layout (500 kbps, standard 11-bit IDs):
  *
- *          0x100 — EV_STATUS (every 100ms):
+ *          0x100 - EV_STATUS (every 100ms):
  *            Byte 0:   current state (ev_state_t)
  *            Byte 1:   active fault bitmask (fault_code_t)
  *            Byte 2:   motor duty % (0–100)
  *            Byte 3:   SOC % (0–100)
  *            Bytes 4-7: uptime_ms (uint32_t, little-endian)
  *
- *          0x101 — SENSOR_PACK_1 (every 100ms):
+ *          0x101 - SENSOR_PACK_1 (every 100ms):
  *            Bytes 0-1: battery temp × 10 (int16, little-endian)
  *            Bytes 2-3: motor temp × 10 (int16, little-endian)
  *            Bytes 4-5: speed RPM (uint16, little-endian)
  *            Byte 6:    throttle % (uint8)
  *            Byte 7:    reserved = 0x00
  *
- *          0x102 — SENSOR_PACK_2 (every 100ms):
+ *          0x102 - SENSOR_PACK_2 (every 100ms):
  *            Bytes 0-1: voltage × 10 (uint16, little-endian)
  *            Bytes 2-3: current × 10 (int16, little-endian)
  *            Byte 4:    brake_active (0x00 or 0x01)
  *            Bytes 5-7: reserved = 0x00
  *
- *          0x1FF — FAULT_FRAME (on-event only, not periodic):
+ *          0x1FF - FAULT_FRAME (on-event only, not periodic):
  *            Byte 0:   fault code bitmask
  *            Byte 1:   reserved = 0x00
  *            Bytes 2-5: timestamp_ms (uint32_t, little-endian)
  *            Bytes 6-7: reserved = 0x00
  *
- *          Sprint 3: CAN1 peripheral is a stub — frames are encoded in
+ *          Sprint 3: CAN1 peripheral is a stub - frames are encoded in
  *          memory and logged over UART for verification. Real CAN hardware
  *          transmission is enabled in Sprint 5 hardware bring-up.
  *
@@ -42,20 +42,20 @@
  *          and HAL_CAN_AddTxMessage() calls from CubeMX.
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
 #ifndef CAN_DRIVER_H
 #define CAN_DRIVER_H
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------------- */
 #include <stdint.h>
 #include <stddef.h>
 #include "ev_types.h"
 #include "ev_config.h"
 
-/* ─── Public Type Definitions ─────────────────────────────────────────────── */
+/* --- Public Type Definitions --------------------------------------------------- */
 
 /**
  * @brief  Raw CAN frame data container.
@@ -66,12 +66,12 @@
  */
 typedef struct
 {
-    uint32_t id;            /**< 11-bit standard CAN identifier     */
-    uint8_t  dlc;           /**< Data length code (0–8 bytes)       */
-    uint8_t  data[8];       /**< Frame payload bytes                 */
+    uint32_t id;            /* 11-bit standard CAN identifier     */
+    uint8_t  dlc;           /* Data length code (0–8 bytes)       */
+    uint8_t  data[8];       /* Frame payload bytes                 */
 } can_frame_t;
 
-/* ─── Public Function Declarations ───────────────────────────────────────── */
+/* --- Public Function Declarations --------------------------------------------- */
 
 /**
  * @brief  Initialise the CAN driver module.

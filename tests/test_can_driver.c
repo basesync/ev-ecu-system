@@ -1,6 +1,6 @@
 /**
  * @file    test_can_driver.c
- * @brief   Unit tests for can_driver.c — frame encoding verification
+ * @brief   Unit tests for can_driver.c - frame encoding verification
  *
  * @details Tests verify that each CAN frame type is encoded correctly
  *          into the 8-byte data array. Uses can_get_last_frame() to
@@ -9,8 +9,8 @@
  *          Total tests: 18
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
 #include "Unity/unity.h"
@@ -18,11 +18,11 @@
 #include "ev_config.h"
 #include "can_driver.h"
 
-/* ─── setUp / tearDown ────────────────────────────────────────────────────── */
+/* --- setUp / tearDown --------------------------------------------------------- */
 
 void can_setUp(void)
 {
-    /* Fresh init before every test — resets last frame and initialised flag */
+    /* Fresh init before every test - resets last frame and initialised flag */
     (void)can_driver_init(NULL);
 }
 
@@ -31,11 +31,11 @@ void can_tearDown(void)
     /* Nothing to tear down */
 }
 
-/* ─── Tests: Initialisation ─────────────────────────────────────────────── */
+/* --- Tests: Initialisation --------------------------------------------------- */
 
 void test_can_driver_init_returns_ok(void)
 {
-    /* setUp already called can_driver_init — test re-init for isolation */
+    /* setUp already called can_driver_init - test re-init for isolation */
     ev_status_t result = can_driver_init(NULL);
 
     TEST_ASSERT_EQUAL_INT(EV_STATUS_OK, result);
@@ -45,7 +45,7 @@ void test_can_get_last_frame_before_any_send_returns_error(void)
 {
     can_frame_t frame;
 
-    /* Fresh init — no frame sent yet */
+    /* Fresh init - no frame sent yet */
     (void)can_driver_init(NULL);
     ev_status_t result = can_get_last_frame(&frame);
 
@@ -59,13 +59,13 @@ void test_can_get_last_frame_null_pointer_returns_invalid(void)
     TEST_ASSERT_EQUAL_INT(EV_STATUS_INVALID, result);
 }
 
-/* ─── Tests: Not-ready guard ─────────────────────────────────────────────── */
+/* --- Tests: Not-ready guard --------------------------------------------------- */
 
 void test_can_send_status_before_init_returns_not_ready(void)
 {
     ev_can_status_t status_data;
     ev_status_t result;
-    can_frame_t uninit_dummy;   /* Use uninitialised state — call init explicitly */
+    can_frame_t uninit_dummy;   /* Use uninitialised state - call init explicitly */
 
     /*
      * We need to test the NOT_READY path. can_driver_init() was called in
@@ -73,7 +73,7 @@ void test_can_send_status_before_init_returns_not_ready(void)
      * so instead we test via the NULL send path which verifies the guard
      * at a lower level.
      * Alternative approach: test the not-ready path by not calling setUp.
-     * The NULL guard on status is tested separately — so just document this.
+     * The NULL guard on status is tested separately - so just document this.
      */
     (void)status_data;
     (void)uninit_dummy;
@@ -83,7 +83,7 @@ void test_can_send_status_before_init_returns_not_ready(void)
     TEST_ASSERT_EQUAL_INT(EV_STATUS_INVALID, result);
 }
 
-/* ─── Tests: EV_STATUS frame (0x100) encoding ────────────────────────────── */
+/* --- Tests: EV_STATUS frame (0x100) encoding ------------------------------------ */
 
 void test_can_send_status_frame_id_is_0x100(void)
 {
@@ -158,7 +158,7 @@ void test_can_send_status_uptime_encoded_little_endian(void)
     ev_can_status_t st;
     can_frame_t frame;
 
-    /* uptime = 0x01020304 → bytes 4,5,6,7 should be 0x04, 0x03, 0x02, 0x01 */
+    /* uptime = 0x01020304 -> bytes 4,5,6,7 should be 0x04, 0x03, 0x02, 0x01 */
     st.state          = EV_STATE_RUNNING;
     st.active_faults  = FAULT_NONE;
     st.motor_duty_pct = 0U;
@@ -174,7 +174,7 @@ void test_can_send_status_uptime_encoded_little_endian(void)
     TEST_ASSERT_EQUAL_UINT8(0x01U, frame.data[7]);
 }
 
-/* ─── Tests: SENSOR_PACK_1 frame (0x101) encoding ────────────────────────── */
+/* --- Tests: SENSOR_PACK_1 frame (0x101) encoding --------------------------- */
 
 void test_can_send_sensor_pack1_frame_id_is_0x101(void)
 {
@@ -202,7 +202,7 @@ void test_can_send_sensor_pack1_batt_temp_encoded_x10_little_endian(void)
     can_frame_t   frame;
 
     /*
-     * batt_temp = 35.2°C → encoded as 352 = 0x0160
+     * batt_temp = 35.2°C -> encoded as 352 = 0x0160
      * Little-endian: byte0 = 0x60 = 96, byte1 = 0x01 = 1
      */
     data.batt_temp_c  = 35.2f;
@@ -227,7 +227,7 @@ void test_can_send_sensor_pack1_speed_rpm_encoded_correctly(void)
     sensor_data_t data;
     can_frame_t   frame;
 
-    /* speed = 2400 RPM = 0x0960 → byte4=0x60, byte5=0x09 */
+    /* speed = 2400 RPM = 0x0960 -> byte4=0x60, byte5=0x09 */
     data.batt_temp_c  = 25.0f;
     data.motor_temp_c = 25.0f;
     data.current_a    = 0.0f;
@@ -245,7 +245,7 @@ void test_can_send_sensor_pack1_speed_rpm_encoded_correctly(void)
     TEST_ASSERT_EQUAL_UINT8(80U,   frame.data[6]);
 }
 
-/* ─── Tests: FAULT_FRAME (0x1FF) encoding ────────────────────────────────── */
+/* --- Tests: FAULT_FRAME (0x1FF) encoding --------------------------------- */
 
 void test_can_send_fault_frame_id_is_0x1FF(void)
 {

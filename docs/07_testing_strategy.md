@@ -295,9 +295,9 @@ SIL means running the complete firmware in a **simulator**, not on real hardware
 1. Open Wokwi with `diagram.json`
 2. Start simulation
 3. Check UART terminal shows Teleplot data
-4. Turn virtual potentiometer → verify motor PWM changes
-5. Press virtual brake button → verify motor stops
-6. Press virtual fault button → verify state machine enters `FAULT`
+4. Turn virtual potentiometer -> verify motor PWM changes
+5. Press virtual brake button -> verify motor stops
+6. Press virtual fault button -> verify state machine enters `FAULT`
 7. Check CAN output (via UART-CAN bridge simulation)
 
 ### Wokwi `diagram.json` Skeleton

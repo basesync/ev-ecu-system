@@ -1,6 +1,6 @@
 /**
  * @file    sensor_hal.h
- * @brief   Sensor Hardware Abstraction Layer — public interface
+ * @brief   Sensor Hardware Abstraction Layer - public interface
  *
  * @details This module provides a clean interface for reading all physical
  *          sensors connected to the EV ECU. It abstracts the STM32 ADC,
@@ -28,13 +28,13 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #ifndef SENSOR_HAL_H
 #define SENSOR_HAL_H
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------- */
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -42,7 +42,7 @@
 #include "ev_config.h"
 #include "stm32f1xx_hal.h"
 
-/* ─── Public Function Declarations ───────────────────────────────────────── */
+/* --- Public Function Declarations ------------------------------------------ */
 
 /**
  * @brief  Initialise the sensor HAL module.
@@ -119,8 +119,8 @@ float sensor_read_current(void);
  * @brief  Read battery pack voltage from ADC channel 3 (PA3).
  *
  * @details A resistor voltage divider scales the 48V battery pack voltage
- *          down to fit in the 0–3.3V ADC input range.
- *          Divider: R1=100kΩ, R2=10kΩ → ratio = (R1+R2)/R2 = 11
+ *          down to fit in the 0-3.3V ADC input range.
+ *          Divider: R1=100kΩ, R2=10kΩ -> ratio = (R1+R2)/R2 = 11
  *          battery_V = adc_voltage_V * 11.0
  *
  * @retval Battery pack voltage in Volts. Returns 0.0f on error.
@@ -141,7 +141,7 @@ uint16_t sensor_read_speed(void);
 /**
  * @brief  Read throttle position from ADC channel 4 (PA4).
  *
- * @details A 10kΩ potentiometer provides 0–3.3V. This is linearly mapped
+ * @details A 10kΩ potentiometer provides 0-3.3V. This is linearly mapped
  *          to a 0–100% throttle percentage.
  *          Values are clamped to 100 maximum to prevent invalid motor commands.
  *
@@ -154,8 +154,8 @@ uint8_t sensor_read_throttle(void);
  * @brief  Read brake switch state from GPIO PB0.
  *
  * @details The brake switch is wired active-low with an internal pull-up:
- *          - Switch open (not pressed):  PB0 = HIGH → returns false
- *          - Switch closed (pressed):    PB0 = LOW  → returns true
+ *          - Switch open (not pressed):  PB0 = HIGH -> returns false
+ *          - Switch closed (pressed):    PB0 = LOW  -> returns true
  *
  *          A 20ms software debounce is applied to prevent false triggers
  *          from switch bounce on rapid presses.
@@ -177,7 +177,7 @@ bool sensor_read_brake(void);
  */
 bool sensor_read_fault_switch(void);
 
-/* ─── Sprint 5 — I2C Temperature Sensor Functions ────────────────────────── */
+/* --- Sprint 5 - I2C Temperature Sensor Functions --------------------- */
 
 /**
  * @brief  Enable I2C-based battery temperature sensing (TMP102).
@@ -198,7 +198,7 @@ ev_status_t sensor_enable_i2c_temp(I2C_HandleTypeDef *hi2c);
 /**
  * @brief  Return which backend is in use for battery temperature reading.
  *
- * @retval EV_PROTO_STATUS_STUB   Using ADC simulation (Sprint 1–4 default).
+ * @retval EV_PROTO_STATUS_STUB   Using ADC simulation (Sprint 1-4 default).
  * @retval EV_PROTO_STATUS_ACTIVE Using real TMP102 over I2C (Sprint 5+).
  */
 ev_proto_status_t sensor_get_temp_backend(void);

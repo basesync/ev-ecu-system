@@ -1,11 +1,11 @@
 /**
  * @file    fault_manager.h
- * @brief   Fault Manager — threshold checking and fault code management
+ * @brief   Fault Manager - threshold checking and fault code management
  *
  * @details This module is responsible for comparing all sensor readings
  *          against configured thresholds (ev_config.h) and building the
  *          active fault bitmask. It is the ONLY module allowed to set
- *          fault codes — all other modules read them.
+ *          fault codes - all other modules read them.
  *
  *          Fault bits are defined in ev_types.h:
  *            FAULT_OVER_TEMP_BATT  = 0x01
@@ -26,23 +26,23 @@
  *
  *          Design rule: fault_check_all() NEVER modifies global state.
  *          It only reads the sensor data passed in and returns a bitmask.
- *          This makes it trivially testable — no setUp/tearDown needed.
+ *          This makes it trivially testable - no setUp/tearDown needed.
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
 #ifndef FAULT_MANAGER_H
 #define FAULT_MANAGER_H
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------- */
 #include <stdint.h>
 #include <stddef.h>
 #include "ev_types.h"
 #include "ev_config.h"
 
-/* ─── Public Function Declarations ───────────────────────────────────────── */
+/* --- Public Function Declarations --------------------------------------- */
 
 /**
  * @brief  Check all sensor readings against configured fault thresholds.
@@ -51,17 +51,17 @@
  *          corresponding bit in the returned fault_code_t bitmask.
  *
  *          Checks performed:
- *            1. batt_temp_c   > EV_BATT_TEMP_CRITICAL_C  → FAULT_OVER_TEMP_BATT
- *            2. motor_temp_c  > EV_MOTOR_TEMP_CRITICAL_C → FAULT_OVER_TEMP_MOTOR
- *            3. current_a     > EV_CURRENT_CRITICAL_A    → FAULT_OVER_CURRENT
- *            4. voltage_v     < EV_VOLTAGE_MIN_CRITICAL_V → FAULT_UNDER_VOLTAGE
- *            5. voltage_v     > EV_VOLTAGE_MAX_CRITICAL_V → FAULT_OVER_VOLTAGE
- *            6. fault_switch  == true                     → FAULT_MANUAL_TRIGGER
+ *            1. batt_temp_c   > EV_BATT_TEMP_CRITICAL_C  -> FAULT_OVER_TEMP_BATT
+ *            2. motor_temp_c  > EV_MOTOR_TEMP_CRITICAL_C -> FAULT_OVER_TEMP_MOTOR
+ *            3. current_a     > EV_CURRENT_CRITICAL_A    -> FAULT_OVER_CURRENT
+ *            4. voltage_v     < EV_VOLTAGE_MIN_CRITICAL_V -> FAULT_UNDER_VOLTAGE
+ *            5. voltage_v     > EV_VOLTAGE_MAX_CRITICAL_V -> FAULT_OVER_VOLTAGE
+ *            6. fault_switch  == true                     -> FAULT_MANUAL_TRIGGER
  *
- *          All 6 checks are always evaluated — no early return on first fault.
+ *          All 6 checks are always evaluated - no early return on first fault.
  *          This ensures the complete fault picture is captured in one call.
  *
- *          This function is PURE — it has no side effects, no global reads or
+ *          This function is PURE - it has no side effects, no global reads or
  *          writes. Same inputs always produce the same output. Unit-testable
  *          with zero mocking required.
  *

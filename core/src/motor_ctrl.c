@@ -5,19 +5,17 @@
  * @details Controls motor speed via TIM1_CH1 PWM output on PA8.
  *
  *          How PWM motor control works:
- *          ─────────────────────────────
  *          The STM32 timer generates a square wave at 20kHz.
  *          The "duty cycle" is what fraction of each period is HIGH:
  *
- *          Duty 0%:   ─────────────────────  (LOW always, motor off)
- *          Duty 50%:  ████─────████─────████  (on half the time, half speed)
- *          Duty 100%: █████████████████████   (HIGH always, full speed)
+ *          Duty 0%:   LOW always, motor off
+ *          Duty 50%:  on half the time, half speed
+ *          Duty 100%: HIGH always, full speed
  *
  *          The motor driver IC (e.g., L298N) converts this PWM to average
  *          current through the motor windings.
  *
  *          Setting the duty cycle:
- *          ───────────────────────
  *          The timer has an "auto-reload register" (ARR) that sets the period.
  *          The "compare register" (CCR1) sets when in the period to go LOW.
  *
@@ -29,14 +27,14 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------- */
 #include "motor_ctrl.h"
 #include "ev_config.h"
 
-/* ─── Private Variables ──────────────────────────────────────────────────── */
+/* --- Private Variables ------------------------------------------------ */
 
 /* TIM1 handle stored at init, used by all motor control functions */
 static TIM_HandleTypeDef *s_htim1 = NULL;
@@ -47,17 +45,17 @@ static uint8_t s_current_duty_pct = 0U;
 /* Flag to track whether motor_init() succeeded */
 static bool s_motor_initialised = false;
 
-/* ─── Private Function Declarations ─────────────────────────────────────── */
+/* --- Private Function Declarations --------------------------------------- */
 static void priv_set_pwm_duty(uint8_t duty_pct);
 
-/* ─── Public Function Implementations ───────────────────────────────────── */
+/* --- Public Function Implementations --------------------------------------- */
 
 /**
  * @brief Initialise the motor control module.
  */
 ev_status_t motor_init(TIM_HandleTypeDef *htim)
 {
-    /* Validate input — NULL handle means no PWM output */
+    /* Validate input - NULL handle means no PWM output */
     if (htim == NULL)
     {
         return EV_STATUS_INVALID;
@@ -75,7 +73,7 @@ ev_status_t motor_init(TIM_HandleTypeDef *htim)
         return EV_STATUS_HAL_ERROR;
     }
 
-    /* Set initial duty to 0 — motor is stopped */
+    /* Set initial duty to 0 - motor is stopped */
     priv_set_pwm_duty(0U);
     s_current_duty_pct  = 0U;
     s_motor_initialised = true;
@@ -126,7 +124,7 @@ ev_status_t motor_stop(void)
 {
     /*
      * Set duty to 0 directly without going through motor_set_speed().
-     * This bypasses all checks — we always want stop to succeed
+     * This bypasses all checks - we always want stop to succeed
      * even if the module is in an unusual state.
      *
      * We call priv_set_pwm_duty() directly instead of motor_set_speed(0)
@@ -135,7 +133,7 @@ ev_status_t motor_stop(void)
     priv_set_pwm_duty(0U);
     s_current_duty_pct = 0U;
 
-    /* Always return OK — safety stop must never report failure */
+    /* Always return OK - safety stop must never report failure */
     return EV_STATUS_OK;
 }
 
@@ -177,7 +175,7 @@ ev_status_t motor_soft_start(uint8_t target_pct)
      * Number of steps = target_pct - current (each step = 1%)
      * Delay per step  = total_ms / num_steps
      *
-     * Example: current=0, target=80 → 80 steps → 500/80 = 6ms per step
+     * Example: current=0, target=80 -> 80 steps -> 500/80 = 6ms per step
      */
     uint8_t num_steps = target_pct - current;
 
@@ -218,22 +216,22 @@ uint8_t motor_get_speed(void)
     return s_current_duty_pct;
 }
 
-/* ─── Private Function Implementations ──────────────────────────────────── */
+/* --- Private Function Implementations ------------------------------------ */
 
 /**
  * @brief  Write a duty cycle percentage directly to the PWM compare register.
  *
- * @details This is the lowest-level function — it does the actual hardware write.
+ * @details This is the lowest-level function - it does the actual hardware write.
  *          All other motor control functions route through here.
  *
  *          Formula:
  *            compare_value = (duty_pct * ARR) / 100
  *          where ARR is the timer auto-reload value (the PWM period in counts).
  *
- *          Example: ARR=1000, duty_pct=75 → compare_value=750
- *          The timer counts 0→1000, goes HIGH at 0, goes LOW at 750 → 75% duty.
+ *          Example: ARR=1000, duty_pct=75 -> compare_value=750
+ *          The timer counts 0->1000, goes HIGH at 0, goes LOW at 750 -> 75% duty.
  *
- * @param  duty_pct  Duty cycle as a percentage (0–100). Caller must validate.
+ * @param  duty_pct  Duty cycle as a percentage (0-100). Caller must validate.
  */
 static void priv_set_pwm_duty(uint8_t duty_pct)
 {

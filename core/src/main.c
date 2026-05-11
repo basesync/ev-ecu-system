@@ -1,6 +1,6 @@
 /**
  * @file    main.c
- * @brief   Smart EV ECU — Firmware Entry Point (Sprint 2)
+ * @brief   EV ECU System - Firmware Entry Point
  *
  * @details Sprint 3 additions over Sprint 2:
  *          - Fault Manager integrated: fault_check_all() called every loop
@@ -8,7 +8,7 @@
  *          - Motor control is now ONLY allowed in RUNNING state
  *          - CAN bus transmission: status and sensor frames every 100ms
  *          - Fault frame transmitted immediately on fault detection
- *          - Watchdog placeholder (HAL_IWDG_Refresh) — real IWDG in Sprint 5
+ *          - Watchdog placeholder (HAL_IWDG_Refresh) - real IWDG in Sprint 5
  *          - ev_status_t struct populated and kept current
  *
  *          Sprint 4 will add:
@@ -20,11 +20,11 @@
  *          In Sprint 5, CubeMX will generate these properly.
  *
  * @author  BaseSync Team
- * @version 0.3.0 (Sprint 3 — Fault Manager + State Machine + CAN Driver)
+ * @version 0.3.0 (Sprint 3 - Fault Manager + State Machine + CAN Driver)
  * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------------- */
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -38,7 +38,7 @@
 #include "can_driver.h"
 #include "fault_logger.h"
 
-/* ─── Private Constants ──────────────────────────────────────────────────── */
+/* --- Private Constants ------------------------------------------------------ */
 
 /** Main loop period in milliseconds */
 #define MAIN_LOOP_PERIOD_MS    (10U)
@@ -46,21 +46,21 @@
 /** How many loop cycles between UART log transmissions (every 100ms) */
 #define UART_LOG_EVERY_N_LOOPS (EV_LOGGER_PERIOD_MS / MAIN_LOOP_PERIOD_MS)
 
-/* ─── Private Variables ──────────────────────────────────────────────────── */
+/* --- Private Variables --------------------------------------------------- */
 
 /**
  * STM32 HAL handles.
  * In Sprint 5, CubeMX generates these as extern globals from main.c.
- * For now we declare them here as stubs — replace with real inits in Sprint 5.
+ * For now we declare them here as stubs - replace with real inits in Sprint 5.
  */
-static ADC_HandleTypeDef hadc1;   /**< ADC1 handle — all 5 sensor channels  */
-static TIM_HandleTypeDef htim1;   /**< TIM1 handle — motor PWM output        */
-static TIM_HandleTypeDef htim3;   /**< TIM3 handle — encoder input           */
+static ADC_HandleTypeDef hadc1;   /* ADC1 handle - all 5 sensor channels  */
+static TIM_HandleTypeDef htim1;   /* TIM1 handle - motor PWM output        */
+static TIM_HandleTypeDef htim3;   /* TIM3 handle - encoder input           */
 
-/** Global sensor data — updated every MAIN_LOOP_PERIOD_MS */
+/** Global sensor data - updated every MAIN_LOOP_PERIOD_MS */
 static sensor_data_t g_sensor_data;
 
-/** Global EV status — updated every loop, transmitted every 100ms */
+/** Global EV status - updated every loop, transmitted every 100ms */
 static ev_can_status_t g_ev_status;
 
 /** System uptime counter in ms (updated in main loop) */
@@ -69,10 +69,10 @@ static uint32_t g_uptime_ms = 0U;
 /** Loop counter used to rate-limit UART logging */
 static uint32_t g_loop_counter = 0U;
 
-/** Last fault code — used to detect new fault events for on-event CAN TX */
+/** Last fault code - used to detect new fault events for on-event CAN TX */
 static fault_code_t g_last_fault_code = FAULT_NONE;
 
-/* ─── Private Function Declarations ─────────────────────────────────────── */
+/* --- Private Function Declarations --------------------------------------- */
 static ev_status_t system_hal_init(void);
 static void        main_loop_run(void);
 static void         update_ev_status(fault_code_t faults);
@@ -81,7 +81,7 @@ static void         can_periodic_transmit(void);
 static void         watchdog_feed(void);
 static void         delay_ms(uint32_t ms);
 
-/* ─── Main Entry Point ───────────────────────────────────────────────────── */
+/* --- Main Entry Point --------------------------------------------------------- */
 
 /**
  * @brief  Firmware entry point.
@@ -91,19 +91,11 @@ int main(void)
 {
     ev_status_t init_status;
 
-    /* ── Step 1: Initialise all hardware peripherals ── */
+    /* --- Step 1: Initialise all hardware peripherals --- */
     init_status = system_hal_init();
 
     if (init_status != EV_STATUS_OK)
     {
-        /*
-         * Hardware init failed — we cannot run safely.
-         * In Sprint 3, this will set a FAULT_INIT_FAILED code and
-         * enter SAFE_STATE. For Sprint 2, we blink an error pattern
-         * and loop forever rather than running with broken hardware.
-         *
-         * TODO(sprint3): Replace with fault_manager_set(FAULT_INIT_FAILED)
-         */
         while (1)
         {
             /* Blink LED rapidly to signal init failure */
@@ -112,14 +104,14 @@ int main(void)
         }
     }
 
-    /* ── Step 2: Initialise application modules ── */
+    /* --- Step 2: Initialise application modules --- */
 
-    /* Initialise sensor HAL — must be done before any sensor read */
+    /* Initialise sensor HAL - must be done before any sensor read */
     if (sensor_init(&hadc1, &htim3) != EV_STATUS_OK)
     {
         /*
-         * Sensor init failed — ADC or encoder setup problem.
-         * TODO(sprint3): fault_manager_set(FAULT_SENSOR_INIT_FAILED)
+         * Sensor init failed - ADC or encoder setup problem.
+         * TODO: fault_manager_set(FAULT_SENSOR_INIT_FAILED)
          */
         while (1)
         {
@@ -128,12 +120,12 @@ int main(void)
         }
     }
 
-    /* Initialise motor control — must be done before any speed command */
+    /* Initialise motor control - must be done before any speed command */
     if (motor_init(&htim1) != EV_STATUS_OK)
     {
         /*
-         * Motor init failed — PWM timer setup problem.
-         * TODO(sprint3): fault_manager_set(FAULT_MOTOR_INIT_FAILED)
+         * Motor init failed - PWM timer setup problem.
+         * TODO: fault_manager_set(FAULT_MOTOR_INIT_FAILED)
          */
         while (1)
         {
@@ -148,10 +140,10 @@ int main(void)
     /* can_driver: stub in Sprint 3, real CAN_Start in Sprint 5 */
     (void)can_driver_init(NULL);
 
-    /* State machine: initialise AFTER motor_ctrl — SM calls motor_stop on entry */
+    /* State machine: initialise AFTER motor_ctrl - SM calls motor_stop on entry */
     ev_sm_init();
 
-    /* ── Step 3: Signal successful boot ── */
+    /* --- Step 3: Signal successful boot --- */
     /*
      * Three slow blinks = system initialised OK.
      * When connected to the serial terminal, also print a boot message.
@@ -163,22 +155,21 @@ int main(void)
 
     /*
      * NOTE: printf() will work in Sprint 5 when UART is properly configured.
-     * For Sprint 2 stub, this is a placeholder.
      * TODO(sprint5): Configure USART1 retarget for printf/puts.
      */
 
-    /* ── Step 4: Enter main superloop ── */
+    /* --- Step 4: Enter main superloop --- */
     while (1)
     {
         main_loop_run();
         delay_ms(MAIN_LOOP_PERIOD_MS);
     }
 
-    /* Unreachable — bare-metal systems never return from main */
+    /* Unreachable - bare-metal systems never return from main */
     return 0;
 }
 
-/* ─── Private Function Implementations ──────────────────────────────────── */
+/* --- Private Function Implementations --------------------------------------------- */
 
 /**
  * @brief  Initialise all STM32 hardware peripherals.
@@ -224,19 +215,19 @@ static void main_loop_run(void)
     g_uptime_ms += MAIN_LOOP_PERIOD_MS;
     g_loop_counter++;
 
-    /* ── 1. Read all sensors ── */
+    /* --- 1. Read all sensors --- */
     /*
      * sensor_read_all() populates g_sensor_data with current values.
-     * We ignore the return value here — Sprint 3 will check it and
+     * We ignore the return value here - Sprint 3 will check it and
      * pass bad reads to the fault manager.
      * TODO(sprint3): Check return value and feed to fault_manager.
      */
     (void)sensor_read_all(&g_sensor_data);
 
-    /* ── 2. Check fault thresholds ── */
+    /* --- 2. Check fault thresholds --- */
     current_faults = fault_check_all(&g_sensor_data);
 
-    /* ── 3. Run state machine ── */
+    /* --- 3. Run state machine --- */
     /*
      * ev_sm_run() evaluates current_faults and sensor data to:
      *   - Transition state if conditions are met
@@ -244,13 +235,13 @@ static void main_loop_run(void)
      */
     ev_sm_run(&g_sensor_data, current_faults);
 
-    /* ── 4. Motor output (RUNNING state only) ── */
+    /* --- 4. Motor output (RUNNING state only) --- */
     handle_motor_output(&g_sensor_data);
 
-    /* ── 5. Update status struct ── */
+    /* --- 5. Update status struct --- */
     update_ev_status(current_faults);
 
-    /* ── 6. Send fault frame on new fault (on-event, not periodic) ── */
+    /* --- 6. Send fault frame on new fault (on-event, not periodic) --- */
     if ((current_faults != FAULT_NONE) && (current_faults != g_last_fault_code))
     {
         (void)can_send_fault_frame(current_faults, g_uptime_ms);
@@ -258,14 +249,14 @@ static void main_loop_run(void)
     }
     g_last_fault_code = current_faults;
 
-    /* ── 7. Periodic 100ms CAN transmissions ── */
+    /* --- 7. Periodic 100ms CAN transmissions --- */
     if (g_loop_counter >= UART_LOG_EVERY_N_LOOPS)
     {
         can_periodic_transmit();
         g_loop_counter = 0U;
     }
 
-    /* ── 8. Feed watchdog ── */
+    /* --- 8. Feed watchdog --- */
     watchdog_feed();
 }
 
@@ -292,7 +283,7 @@ static void handle_motor_output(const sensor_data_t *data)
         if (data->brake_active == true)
         {
             /*
-             * Brake pressed during RUNNING — stop immediately.
+             * Brake pressed during RUNNING - stop immediately.
              * The state machine stays in RUNNING (brake alone doesn't change state
              * unless throttle is also zero). The motor is stopped here.
              */
@@ -338,7 +329,7 @@ static void can_periodic_transmit(void)
 /**
  * @brief  Feed the watchdog timer.
  *
- * @details Sprint 3: Placeholder — no real IWDG hardware in stub build.
+ * @details Sprint 3: Placeholder - no real IWDG hardware in stub build.
  *          Sprint 5: Replace with HAL_IWDG_Refresh(&hiwdg).
  *          Called every main loop iteration (every 10ms).
  *          With 500ms timeout and 10ms period, there are 50 feeds per window.
@@ -352,7 +343,7 @@ static void watchdog_feed(void)
 }
 
 /**
- * @brief  Software delay (stub — replaced by HAL_Delay in Sprint 5).
+ * @brief  Software delay (stub - replaced by HAL_Delay in Sprint 5).
  */
 static void delay_ms(uint32_t ms)
 {

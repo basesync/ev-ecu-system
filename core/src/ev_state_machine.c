@@ -1,53 +1,32 @@
 /**
  * @file    ev_state_machine.c
- * @brief   EV ECU State Machine — state transitions and output control
+ * @brief   EV ECU State Machine - state transitions and output control
  *
- * @details Sprint 3 implementation.
- *
- *          State transition diagram:
- *
- *          ┌──────────┐  init OK    ┌──────────┐  throttle>0  ┌───────────┐
- *          │   INIT   │────────────▶│   IDLE   │─────────────▶│  RUNNING  │
- *          └──────────┘             └──────────┘              └───────────┘
- *                                        │ fault                 │       │
- *                                        ▼                       │ fault │
- *                                   ┌────────┐◀──────────────────┘       │
- *                                   │ FAULT  │                            │
- *                                   └────────┘                            │
- *                                        │ auto                           │ brake+
- *                                        ▼                       throttle=0│
- *                                  ┌────────────┐                         ▼
- *                                  │ SAFE_STATE │               back to  IDLE
- *                                  └────────────┘
- *                                        │ manual reset
- *                                        ▼
- *                                  back to INIT
- *
- *          Motor control rules by state:
- *            INIT       → motor locked at 0% (motor_stop() on entry)
- *            IDLE       → motor locked at 0% (motor_stop() on entry)
- *            RUNNING    → motor follows throttle
- *            FAULT      → motor locked at 0% (motor_stop() on entry)
- *            SAFE_STATE → motor locked at 0% (motor_stop() on entry)
+ * @details Motor control rules by state:
+ *            INIT       -> motor locked at 0% (motor_stop() on entry)
+ *            IDLE       -> motor locked at 0% (motor_stop() on entry)
+ *            RUNNING    -> motor follows throttle
+ *            FAULT      -> motor locked at 0% (motor_stop() on entry)
+ *            SAFE_STATE -> motor locked at 0% (motor_stop() on entry)
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 3)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes --------------------------------------------------------------- */
 #include "ev_state_machine.h"
 #include "motor_ctrl.h"
 
-/* ─── Module-Private State ────────────────────────────────────────────────── */
+/* --- Module-Private State --------------------------------------------------- */
 
-/** Current operating state — only modified by ev_sm_run() and ev_sm_set_fault() */
+/** Current operating state - only modified by ev_sm_run() and ev_sm_set_fault() */
 static ev_state_t   s_current_state  = EV_STATE_INIT;
 
 /** Fault code set during last transition to FAULT state */
 static fault_code_t s_active_faults  = FAULT_NONE;
 
-/* ─── Private Helper ──────────────────────────────────────────────────────── */
+/* --- Private Helper --------------------------------------------------------- */
 
 /**
  * @brief  Execute entry actions for a new state.
@@ -81,7 +60,7 @@ static void priv_enter_state(ev_state_t new_state, fault_code_t faults)
              * On entering IDLE:
              *   - Motor must be stopped (not just set to 0%)
              *   - motor_stop() is used, not motor_set_speed(0), because
-             *     IDLE→IDLE transitions could happen if a fault clears quickly,
+             *     IDLE->IDLE transitions could happen if a fault clears quickly,
              *     and motor_stop() guarantees the output is 0%.
              */
             (void)motor_stop();
@@ -90,7 +69,7 @@ static void priv_enter_state(ev_state_t new_state, fault_code_t faults)
         case EV_STATE_RUNNING:
             /*
              * On entering RUNNING:
-             *   - No immediate motor action — the main loop will call
+             *   - No immediate motor action - the main loop will call
              *     motor_set_speed(throttle_pct) on the next iteration.
              *   - We do NOT call motor_set_speed here to avoid a potentially
              *     stale throttle value from before the transition.
@@ -100,7 +79,7 @@ static void priv_enter_state(ev_state_t new_state, fault_code_t faults)
         case EV_STATE_FAULT:
             /*
              * On entering FAULT:
-             *   - Stop motor IMMEDIATELY — this is the safety-critical path.
+             *   - Stop motor IMMEDIATELY - this is the safety-critical path.
              *   - Fault code is already stored in s_active_faults.
              *   - CAN FAULT_FRAME transmission is handled by the main loop
              *     (can_send_fault_frame()) on the next cycle.
@@ -112,13 +91,13 @@ static void priv_enter_state(ev_state_t new_state, fault_code_t faults)
             /*
              * On entering SAFE_STATE:
              *   - Motor stop (belt-and-suspenders with FAULT entry stop).
-             *   - All outputs are held off — only a reset clears this.
+             *   - All outputs are held off - only a reset clears this.
              */
             (void)motor_stop();
             break;
 
         default:
-            /* Defensive: unknown state — stop motor and go to SAFE_STATE */
+            /* Defensive: unknown state - stop motor and go to SAFE_STATE */
             s_current_state = EV_STATE_SAFE_STATE;
             s_active_faults = FAULT_INVALID_DATA;
             (void)motor_stop();
@@ -126,7 +105,7 @@ static void priv_enter_state(ev_state_t new_state, fault_code_t faults)
     }
 }
 
-/* ─── Public Function Implementations ────────────────────────────────────── */
+/* --- Public Function Implementations --------------------------------------- */
 
 /**
  * @brief  Initialise the state machine.
@@ -144,7 +123,7 @@ void ev_sm_init(void)
 void ev_sm_run(const sensor_data_t *data, fault_code_t faults)
 {
     /*
-     * NULL data guard — treat as critical fault immediately.
+     * NULL data guard - treat as critical fault immediately.
      * A NULL pointer means sensor_read_all() failed, which is a hardware
      * or software bug that cannot be safely recovered from at runtime.
      */
@@ -169,23 +148,23 @@ void ev_sm_run(const sensor_data_t *data, fault_code_t faults)
         else if (s_current_state == EV_STATE_FAULT)
         {
             /*
-             * Already in FAULT — transition immediately to SAFE_STATE.
+             * Already in FAULT - transition immediately to SAFE_STATE.
              * Motor was already stopped on FAULT entry; motor_stop() is
              * called again in priv_enter_state(SAFE_STATE) as a redundant
              * safety measure.
              */
             priv_enter_state(EV_STATE_SAFE_STATE, faults);
         }
-        /* If already in SAFE_STATE, stay there — no automatic exit */
+        /* If already in SAFE_STATE, stay there - no automatic exit */
         return;
     }
 
-    /* No faults — evaluate normal state transitions */
+    /* No faults - evaluate normal state transitions */
     switch (s_current_state)
     {
         case EV_STATE_INIT:
             /*
-             * INIT → IDLE transition: hardware initialisation is complete.
+             * INIT -> IDLE transition: hardware initialisation is complete.
              * The main loop calls ev_sm_run() only after sensor_init() and
              * motor_init() have both returned EV_STATUS_OK, so by the time
              * we are here the hardware is ready.
@@ -195,7 +174,7 @@ void ev_sm_run(const sensor_data_t *data, fault_code_t faults)
 
         case EV_STATE_IDLE:
             /*
-             * IDLE → RUNNING transition:
+             * IDLE -> RUNNING transition:
              * Throttle above deadband (handled inside motor_set_speed)
              * and brake not pressed.
              */
@@ -208,9 +187,9 @@ void ev_sm_run(const sensor_data_t *data, fault_code_t faults)
 
         case EV_STATE_RUNNING:
             /*
-             * RUNNING → IDLE transition:
+             * RUNNING -> IDLE transition:
              * Throttle at zero AND brake pressed.
-             * Only brake + zero throttle together cause this transition —
+             * Only brake + zero throttle together cause this transition -
              * brake alone at speed just holds motor_stop() via motor_control
              * in main.c, it does not change the state.
              */
@@ -222,7 +201,7 @@ void ev_sm_run(const sensor_data_t *data, fault_code_t faults)
 
         case EV_STATE_FAULT:
             /*
-             * FAULT → SAFE_STATE transition is automatic and immediate.
+             * FAULT -> SAFE_STATE transition is automatic and immediate.
              * We transition here on the NEXT cycle after entering FAULT.
              * (FAULT entry is handled in the fault-code check above.)
              */
@@ -234,7 +213,7 @@ void ev_sm_run(const sensor_data_t *data, fault_code_t faults)
             break;
 
         default:
-            /* Defensive: unknown state — go to SAFE_STATE */
+            /* Defensive: unknown state - go to SAFE_STATE */
             priv_enter_state(EV_STATE_SAFE_STATE, FAULT_INVALID_DATA);
             break;
     }
@@ -255,7 +234,7 @@ void ev_sm_set_fault(fault_code_t fault_code)
 {
     if (fault_code == FAULT_NONE)
     {
-        /* Ignore FAULT_NONE — it would be a no-op */
+        /* Ignore FAULT_NONE - it would be a no-op */
         return;
     }
 

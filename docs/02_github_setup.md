@@ -247,7 +247,7 @@ Closes #<!-- issue number here -->
 ## Testing Done by Author
 <!-- Check all that apply -->
 - [ ] Unit tests written for new/changed code
-- [ ] All existing tests pass locally (`cd tests/build && ./test_runner` → 0 Failures)
+- [ ] All existing tests pass locally (`cd tests/build && ./test_runner` -> 0 Failures)
 - [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I core/inc core/src/`)
 - [ ] Code compiled successfully (`cmake --build build`)
 - [ ] Tested in Wokwi simulation (if applicable)

@@ -1,10 +1,10 @@
 /**
  * @file    fault_logger.c
- * @brief   Fault Logger — STUB implementation (Sprint 2–5)
+ * @brief   Fault Logger - STUB implementation (Sprint 2–5)
  *
  * @details All functions here are stubs that compile cleanly, pass all
  *          CI checks, and allow other modules (fault_manager, main) to
- *          call fault_logger functions without errors from Sprint 3 onward.
+ *          call fault_logger functions without errors.
  *
  *          Sprint 6 action: Delete this file and replace with the real
  *          implementation using HAL_SPI_Transmit/Receive + W25Q32 commands.
@@ -18,14 +18,14 @@
  *          - Circular buffer management across flash sectors
  *
  * @author  BaseSync Team
- * @version 0.1.0 (Sprint 2 stub)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
-/* ─── Includes ───────────────────────────────────────────────────────────── */
+/* --- Includes ------------------------------------------------------------ */
 #include "fault_logger.h"
 
-/* ─── Private variables ──────────────────────────────────────────────────── */
+/* --- Private variables --------------------------------------------------- */
 
 /** SPI handle stored at init. NULL means stub mode (no real flash). */
 static SPI_HandleTypeDef *s_hspi            = NULL;
@@ -36,7 +36,7 @@ static bool               s_initialised     = false;
 /** Backend status — STUB until Sprint 6 wires real SPI flash. */
 static ev_proto_status_t  s_backend_status  = EV_PROTO_STATUS_STUB;
 
-/* ─── Public Function Implementations (Stubs) ────────────────────────────── */
+/* --- Public Function Implementations (Stubs) --------------------------- */
 
 ev_status_t fault_logger_init(SPI_HandleTypeDef *hspi)
 {
@@ -61,7 +61,7 @@ ev_status_t fault_logger_init(SPI_HandleTypeDef *hspi)
 
 ev_status_t fault_logger_write(fault_code_t code, uint32_t timestamp_ms)
 {
-    /* Suppress unused parameter warnings — parameters used in Sprint 6 */
+    /* Suppress unused parameter warnings - parameters used in Sprint 6 */
     (void)code;
     (void)timestamp_ms;
 
@@ -100,7 +100,7 @@ ev_status_t fault_logger_read_last(fault_code_t *code, uint32_t *timestamp_ms)
 
     /*
      * STUB: Return safe empty-log defaults.
-     * EV_STATUS_ERROR signals "no entries" — consistent with Sprint 6 behaviour
+     * EV_STATUS_ERROR signals "no entries" - consistent with Sprint 6 behaviour
      * when the log has zero entries in it.
      *
      * Sprint 6 TODO:
@@ -115,7 +115,7 @@ ev_status_t fault_logger_read_last(fault_code_t *code, uint32_t *timestamp_ms)
     *code         = FAULT_NONE;
     *timestamp_ms = 0U;
 
-    return EV_STATUS_ERROR;  /* Empty log — correct stub behaviour */
+    return EV_STATUS_ERROR;  /* Empty log - correct stub behaviour */
 }
 
 uint16_t fault_logger_get_count(void)

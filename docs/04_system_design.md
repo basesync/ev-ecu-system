@@ -72,14 +72,14 @@ graph TD
 
 ```
 sensor_hal.h / sensor_hal.c
-├── read_battery_temp()     → float °C
-├── read_motor_temp()       → float °C
-├── read_battery_voltage()  → float V
-├── read_battery_current()  → float A
-├── read_throttle()         → float 0–100%
-├── read_speed()            → float RPM
-├── read_brake_switch()     → bool
-└── read_fault_switch()     → bool
+├── read_battery_temp()     -> float °C
+├── read_motor_temp()       -> float °C
+├── read_battery_voltage()  -> float V
+├── read_battery_current()  -> float A
+├── read_throttle()         -> float 0–100%
+├── read_speed()            -> float RPM
+├── read_brake_switch()     -> bool
+└── read_fault_switch()     -> bool
 ```
 
 ---
@@ -105,7 +105,7 @@ motor_control.h / motor_control.c
 ```
 fault_manager.h / fault_manager.c
 ├── fault_check_all(SensorData_t *data)
-├── fault_get_active()         → FaultCode_t
+├── fault_get_active()         -> FaultCode_t
 ├── fault_clear()              ← explicit command only
 ├── fault_store_to_flash()
 └── Fault codes:
@@ -156,7 +156,7 @@ logger.h / logger.c
 state_machine.h / state_machine.c
 ├── sm_init()
 ├── sm_run()                   ← called every main loop tick
-├── sm_get_state()             → SystemState_t
+├── sm_get_state()             -> SystemState_t
 └── States:
     ├── STATE_INIT
     ├── STATE_IDLE

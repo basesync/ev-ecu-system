@@ -1,11 +1,11 @@
 /**
  * @file    test_runner.c
- * @brief   Unity test runner — Sprint 2 (Sensor HAL + Motor Control tests)
+ * @brief   Unity test runner
  */
 
 #include "Unity/unity.h"
 
-/* ─── Module setUp/tearDown declared here ─────────────────────────────────── */
+/* --- Module setUp/tearDown declared here ------------------------------------ */
 extern void motor_setUp(void);
 extern void motor_tearDown(void);
 extern void sensor_setUp(void);
@@ -37,12 +37,12 @@ void tearDown(void)
     else if (s_active_module == MODULR_PROTOCOL)  { protocol_tearDown();  }
 }
 
-/* ─── Sprint 1: Placeholder tests ────────────────────────────────────────── */
+/* --- Sprint 1: Placeholder tests --------------------------------------------- */
 extern void test_unity_framework_is_operational(void);
 extern void test_placeholder_integer_assertion(void);
 extern void test_placeholder_boolean_assertion(void);
 
-/* ─── Sprint 2: Sensor HAL tests ─────────────────────────────────────────── */
+/* --- Sprint 2: Sensor HAL tests --------------------------------------------- */
 extern void test_sensor_batt_temp_adc_zero_returns_zero_degrees(void);
 extern void test_sensor_batt_temp_adc_midscale_returns_50_degrees(void);
 extern void test_sensor_batt_temp_adc_fullscale_returns_max_voltage_temp(void);
@@ -66,7 +66,7 @@ extern void test_sensor_init_valid_handles_returns_ok(void);
 extern void test_sensor_read_all_null_pointer_returns_invalid(void);
 extern void test_sensor_read_all_valid_pointer_populates_all_fields(void);
 
-/* ─── Sprint 2: Motor Control tests ──────────────────────────────────────── */
+/* --- Sprint 2: Motor Control tests ------------------------------------------ */
 extern void test_motor_init_null_handle_returns_invalid(void);
 extern void test_motor_init_valid_handle_returns_ok(void);
 extern void test_motor_init_sets_initial_speed_to_zero(void);
@@ -86,7 +86,7 @@ extern void test_motor_get_speed_returns_zero_after_stop(void);
 extern void test_motor_brake_override_throttle_80pct_with_brake_gives_zero(void);
 extern void test_motor_brake_not_active_throttle_sets_speed(void);
 
-/* ─── Sprint 2: Protocol Prep tests (S2-11) ──────────────────────────────── */
+/* --- Sprint 2: Protocol Prep tests ------------------------------------ */
 extern void test_fault_logger_init_with_null_handle_returns_ok(void);
 extern void test_fault_logger_init_with_valid_handle_returns_ok(void);
 extern void test_fault_logger_write_before_init_returns_not_ready(void);
@@ -114,7 +114,7 @@ extern void test_i2c_tmp102_8bit_address_is_7bit_shifted(void);
 extern void test_spi_flash_log_max_entries_matches_area_size(void);
 extern void test_spi_flash_sector_size_divides_log_size_evenly(void);
 
-/* ─── Sprint 3: Fault Manager tests ──────────────────────────────────────── */
+/* --- Sprint 3: Fault Manager tests ------------------------------------------ */
 extern void test_fault_check_null_data_returns_fault_invalid_data(void);
 extern void test_fault_check_all_safe_data_returns_fault_none(void);
 extern void test_fault_check_batt_temp_below_threshold_no_fault(void);
@@ -136,7 +136,7 @@ extern void test_fault_is_set_returns_true_for_set_bit(void);
 extern void test_fault_get_name_returns_none_for_no_fault(void);
 extern void test_fault_get_name_returns_correct_name_for_over_temp_batt(void);
 
-/* ─── Sprint 3: EV State Machine tests ───────────────────────────────────── */
+/* --- Sprint 3: EV State Machine tests --------------------------------------------- */
 extern void test_sm_init_state_is_init(void);
 extern void test_sm_get_state_name_after_init_is_init(void);
 extern void test_sm_init_to_idle_on_first_run_with_no_fault(void);
@@ -161,7 +161,7 @@ extern void test_sm_reset_from_idle_returns_error(void);
 extern void test_sm_running_to_fault_on_fault_code(void);
 extern void test_sm_stays_running_when_throttle_zero_but_no_brake(void);
 
-/* ─── Sprint 3: CAN Driver tests ─────────────────────────────────────────── */
+/* --- Sprint 3: CAN Driver tests --------------------------------------------- */
 extern void test_can_driver_init_returns_ok(void);
 extern void test_can_get_last_frame_before_any_send_returns_error(void);
 extern void test_can_get_last_frame_null_pointer_returns_invalid(void);
@@ -183,13 +183,13 @@ int main(void)
 {
     UNITY_BEGIN();
 
-    /* ── Sprint 1: Framework verification (no module setup needed) ── */
+    /* --- Sprint 1: Framework verification (no module setup needed) --- */
     s_active_module = MODULE_NONE;
     RUN_TEST(test_unity_framework_is_operational);
     RUN_TEST(test_placeholder_integer_assertion);
     RUN_TEST(test_placeholder_boolean_assertion);
 
-    /* ── Sprint 2: Sensor HAL ── */
+    /* --- Sprint 2: Sensor HAL --- */
     s_active_module = MODULE_SENSOR;
     RUN_TEST(test_sensor_batt_temp_adc_zero_returns_zero_degrees);
     RUN_TEST(test_sensor_batt_temp_adc_midscale_returns_50_degrees);
@@ -214,7 +214,7 @@ int main(void)
     RUN_TEST(test_sensor_read_all_null_pointer_returns_invalid);
     RUN_TEST(test_sensor_read_all_valid_pointer_populates_all_fields);
 
-    /* ── Sprint 2: Motor Control ── */
+    /* --- Sprint 2: Motor Control --- */
     s_active_module = MODULE_MOTOR;
     RUN_TEST(test_motor_init_null_handle_returns_invalid);
     RUN_TEST(test_motor_init_valid_handle_returns_ok);
@@ -235,7 +235,7 @@ int main(void)
     RUN_TEST(test_motor_brake_override_throttle_80pct_with_brake_gives_zero);
     RUN_TEST(test_motor_brake_not_active_throttle_sets_speed);
 
-    /* ── Sprint 2: Protocol Prep (S2-11) ── */
+    /* --- Sprint 2: Protocol Prep --- */
     /* fault_logger stub */
     RUN_TEST(test_fault_logger_init_with_null_handle_returns_ok);
     RUN_TEST(test_fault_logger_init_with_valid_handle_returns_ok);
@@ -267,7 +267,7 @@ int main(void)
     RUN_TEST(test_spi_flash_log_max_entries_matches_area_size);
     RUN_TEST(test_spi_flash_sector_size_divides_log_size_evenly);
 
-    /* ── Sprint 3: Fault Manager ── */
+    /* --- Sprint 3: Fault Manager --- */
     RUN_TEST(test_fault_check_null_data_returns_fault_invalid_data);
     RUN_TEST(test_fault_check_all_safe_data_returns_fault_none);
     RUN_TEST(test_fault_check_batt_temp_below_threshold_no_fault);
@@ -289,7 +289,7 @@ int main(void)
     RUN_TEST(test_fault_get_name_returns_none_for_no_fault);
     RUN_TEST(test_fault_get_name_returns_correct_name_for_over_temp_batt);
 
-    /* ── Sprint 3: EV State Machine ── */
+    /* --- Sprint 3: EV State Machine --- */
     RUN_TEST(test_sm_init_state_is_init);
     RUN_TEST(test_sm_get_state_name_after_init_is_init);
     RUN_TEST(test_sm_init_to_idle_on_first_run_with_no_fault);
@@ -311,7 +311,7 @@ int main(void)
     RUN_TEST(test_sm_reset_from_running_returns_error);
     RUN_TEST(test_sm_reset_from_idle_returns_error);
 
-    /* ── Sprint 3: CAN Driver ── */
+    /* --- Sprint 3: CAN Driver --- */
     RUN_TEST(test_can_driver_init_returns_ok);
     RUN_TEST(test_can_get_last_frame_before_any_send_returns_error);
     RUN_TEST(test_can_get_last_frame_null_pointer_returns_invalid);

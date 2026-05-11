@@ -81,7 +81,7 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 | FR-003-04 | The system SHALL detect over-voltage (>4.2V cell simulated) and set `FAULT_OVER_VOLTAGE` | **MUST** |
 | FR-003-05 | The system SHALL enter `SAFE_STATE` (motor OFF, CAN fault frame sent) on any critical fault | **MUST** |
 | FR-003-06 | The system SHALL activate the manual fault trigger switch to simulate any fault for testing | **MUST** |
-| FR-003-07 | The system SHALL implement a watchdog timer. Failure to feed watchdog → system reset | **MUST** |
+| FR-003-07 | The system SHALL implement a watchdog timer. Failure to feed watchdog -> system reset | **MUST** |
 | FR-003-08 | The system SHALL store fault codes in non-volatile memory (simulated via EEPROM/Flash) | **SHOULD** |
 | FR-003-09 | The system SHALL allow fault clearing only via explicit command, not automatically | **MUST** |
 
@@ -115,7 +115,7 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 | FR-005-01 | The system SHALL output sensor readings over UART at 115200 baud | **MUST** |
 | FR-005-02 | Log format SHALL be Teleplot-compatible (`>label:value`) for live plotting | **MUST** |
 | FR-005-03 | The system SHALL log fault events with a timestamp | **MUST** |
-| FR-005-04 | The system SHALL log system state changes (e.g., `IDLE → RUNNING → FAULT`) | **MUST** |
+| FR-005-04 | The system SHALL log system state changes (e.g., `IDLE -> RUNNING -> FAULT`) | **MUST** |
 
 #### UART Log Format (Teleplot)
 
@@ -164,7 +164,7 @@ stateDiagram-v2
     style SAFE_STATE fill:#664D80,color:white
 ```
 
-> **States:** `INIT` → `IDLE` → `RUNNING` ↔ `SAFE_STATE`
+> **States:** `INIT` -> `IDLE` -> `RUNNING` ↔ `SAFE_STATE`
 
 ---
 

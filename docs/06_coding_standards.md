@@ -124,7 +124,7 @@ ev_config.h                         ← all #defines / thresholds
  * @file    sensor_hal.h
  * @brief   Sensor Hardware Abstraction Layer — public interface
  * @author  BaseSync Team
- * @date    2025
+ * @date    2026
  * @version 1.0
  */
 
