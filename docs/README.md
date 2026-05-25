@@ -35,9 +35,9 @@ The system reads sensors, controls motor output, detects faults, communicates ov
 
 | Stage | Description | Sprint |
 |---|---|---|
-| **SIL** | Software-in-the-Loop — full simulation on Wokwi, no hardware | 1–4 |
+| **SIL** | Software-in-the-Loop - full simulation on Wokwi, no hardware | 1–4 |
 | **Hardware Bring-Up** | Flash firmware to real STM32, fix hardware bugs | 5 |
-| **HIL** | Hardware-in-the-Loop — real STM32, simulated sensors via BusMaster | 6 |
+| **HIL** | Hardware-in-the-Loop - real STM32, simulated sensors via BusMaster | 6 |
 | **RTOS** | Port to FreeRTOS, add bootloader, build GUI *(stretch)* | TBD |
 
 ---
@@ -52,7 +52,7 @@ The system reads sensors, controls motor output, detects faults, communicates ov
 
 | Document ID | Title | Version |
 |---|---|---|
-| — | Project Overview | v1.0.0 |
+| - | Project Overview | v1.0.0 |
 | 02_environment_setup | Environment Setup | v1.0.0 |
 | 03_requirements | Requirements Specification | v1.0 |
 | 04_system_design | System Design | v1.0 |

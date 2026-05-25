@@ -15,10 +15,10 @@
  *
  * @author  BaseSync Team
  * @version 1.0 (Sprint 2)
- * @date    2025
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes -------------------------------------------------------------- */
 #include "Unity/unity.h"
 #include "fault_logger.h"
 #include "sensor_hal.h"
@@ -29,13 +29,13 @@
 #include "mocks/mock_stm32_hal_adc.h"
 #include "mocks/mock_stm32_hal_tim.h"
 
-/* ─── Test fixtures ──────────────────────────────────────────────────────── */
+/* --- Test fixtures -------------------------------------------------------- */
 static SPI_HandleTypeDef  s_test_hspi;
 static I2C_HandleTypeDef *s_test_hi2c;
 static ADC_HandleTypeDef  s_test_hadc;
 static TIM_HandleTypeDef  s_test_htim;
 
-/* ─── setUp / tearDown ───────────────────────────────────────────────────── */
+/* --- setUp / tearDown ----------------------------------------------------- */
 
 void protocol_setUp(void)
 {
@@ -63,10 +63,10 @@ void protocol_tearDown(void)
     /* Nothing to clean up */
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * FAULT LOGGER STUB TESTS
  * Verify the stub returns correct safe values and never crashes.
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_fault_logger_init_with_null_handle_returns_ok(void)
 {
@@ -105,7 +105,7 @@ void test_fault_logger_write_before_init_returns_not_ready(void)
      * if a previous test already called init. The real guard is
      * tested by test_fault_logger_write_returns_ok_after_init().
      */
-    (void)0;  /* Guard test noted — see test below */
+    (void)0;  /* Guard test noted - see test below */
     TEST_PASS();
 }
 
@@ -161,7 +161,7 @@ void test_fault_logger_read_last_null_timestamp_returns_invalid(void)
 void test_fault_logger_read_last_stub_returns_error_empty_log(void)
 {
     /*
-     * Stub has no flash — read_last always returns EV_STATUS_ERROR
+     * Stub has no flash - read_last always returns EV_STATUS_ERROR
      * (empty log). This is consistent with how real empty flash behaves.
      */
     (void)fault_logger_init(NULL);
@@ -185,7 +185,7 @@ void test_fault_logger_get_count_returns_zero_in_stub_mode(void)
 
     uint16_t count = fault_logger_get_count();
 
-    /* Stub always returns 0 — no flash entries */
+    /* Stub always returns 0 - no flash entries */
     TEST_ASSERT_EQUAL_UINT16(0U, count);
 }
 
@@ -215,7 +215,7 @@ void test_fault_logger_backend_status_still_stub_with_handle(void)
 {
     /*
      * Even when a non-NULL SPI handle is passed, Sprint 2 stub
-     * cannot verify the hardware — stays STUB until Sprint 6.
+     * cannot verify the hardware - stays STUB until Sprint 6.
      */
     (void)fault_logger_init(&s_test_hspi);
 
@@ -224,10 +224,10 @@ void test_fault_logger_backend_status_still_stub_with_handle(void)
     TEST_ASSERT_EQUAL(EV_PROTO_STATUS_STUB, status);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * SENSOR HAL — I2C STUB TESTS
+/* ===========================================================================
+ * SENSOR HAL - I2C STUB TESTS
  * Verify the Sprint 5 preparation stubs in sensor_hal.
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_enable_i2c_temp_null_stays_in_adc_mode(void)
 {
@@ -256,7 +256,7 @@ void test_sensor_get_temp_backend_returns_stub_in_sprint2(void)
 {
     /*
      * No real I2C hardware connected in Sprint 2.
-     * Backend must report STUB — not ACTIVE.
+     * Backend must report STUB - not ACTIVE.
      */
     ev_proto_status_t status = sensor_get_temp_backend();
 
@@ -288,15 +288,15 @@ void test_sensor_read_batt_temp_still_works_after_i2c_enable(void)
 
     float temp = sensor_read_batt_temp();
 
-    /* ADC path still active — should read ~50°C */
+    /* ADC path still active - should read ~50°C */
     TEST_ASSERT_FLOAT_WITHIN(2.0f, 50.0f, temp);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * EV TYPES — STRUCT SIZE VERIFICATION
+/* ===========================================================================
+ * EV TYPES - STRUCT SIZE VERIFICATION
  * Verify the new fault_log_entry_t struct is exactly 8 bytes.
  * This is critical for flash page alignment in Sprint 6.
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_fault_log_entry_struct_is_8_bytes(void)
 {
@@ -336,10 +336,10 @@ void test_fault_log_entry_timestamp_is_last_4_bytes(void)
     TEST_ASSERT_EQUAL_UINT32(test_timestamp, entry.timestamp_ms);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * EV CONFIG — PROTOCOL CONSTANTS SANITY CHECKS
+/* ===========================================================================
+ * EV CONFIG - PROTOCOL CONSTANTS SANITY CHECKS
  * Verify constants are within expected hardware ranges.
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_uart_baud_rate_is_115200(void)
 {

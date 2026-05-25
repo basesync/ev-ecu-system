@@ -1,13 +1,13 @@
 /**
  * @file    fault_logger.h
- * @brief   Fault Logger — persistent fault storage via SPI NOR Flash
+ * @brief   Fault Logger - persistent fault storage via SPI NOR Flash
  *
  * @details This module stores fault events in W25Q32 SPI flash so they
  *          survive power cycling. On next boot, the system reads the
  *          fault log to understand recent fault history.
  *
  *          Implementation timeline:
- *            Sprint 2-5: Stub — all functions return OK, no actual storage
+ *            Sprint 2-5: Stub - all functions return OK, no actual storage
  *            Sprint 6:   Full implementation using SPI1 + W25Q32 driver
  *
  *          Integration point in fault_manager.c (Sprint 3+):
@@ -21,25 +21,25 @@
  *          @code
  *            fault_logger_init(&hspi1);
  *            if (fault_logger_get_count() > 0U) {
- *                // Previous faults exist — log them to UART on boot
+ *                // Previous faults exist - log them to UART on boot
  *            }
  *          @endcode
  *
  * @author  BaseSync Team
- * @version 0.1.0 (Sprint 2 — Interface defined, stub implementation)
- * @date    2025
+ * @version 1.0
+ * @date    2026
  */
 
 #ifndef FAULT_LOGGER_H
 #define FAULT_LOGGER_H
 
-/* ─── Includes ───────────────────────────────────────────────────────────── */
+/* --- Includes ------------------------------------------------------------- */
 #include <stdint.h>
 #include "ev_types.h"
 #include "ev_config.h"
 #include "stm32f1xx_hal_spi.h"
 
-/* ─── Public Function Declarations ──────────────────────────────────────── */
+/* --- Public Function Declarations ---------------------------------------- */
 
 /**
  * @brief  Initialise the fault logger.
@@ -54,7 +54,7 @@
  * @param  hspi  Pointer to SPI1 handle. NULL = stub mode (no flash).
  *
  * @retval EV_STATUS_OK        Initialised successfully (or stub mode).
- * @retval EV_STATUS_INVALID   JEDEC ID mismatch — wrong chip or not wired.
+ * @retval EV_STATUS_INVALID   JEDEC ID mismatch - wrong chip or not wired.
  * @retval EV_STATUS_HAL_ERROR SPI communication error.
  */
 ev_status_t fault_logger_init(SPI_HandleTypeDef *hspi);
@@ -117,7 +117,7 @@ uint16_t fault_logger_get_count(void);
  *          Takes up to EV_SPI_FLASH_ERASE_TIMEOUT_MS milliseconds.
  *
  *          Only call on explicit service request (e.g., CAN command 0x7FF).
- *          Do NOT call automatically — fault history is valuable.
+ *          Do NOT call automatically - fault history is valuable.
  *
  * @retval EV_STATUS_OK        Log erased (or no-op in stub mode).
  * @retval EV_STATUS_NOT_READY fault_logger_init() not called.
