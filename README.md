@@ -99,47 +99,47 @@ The project follows industry-standard development practices:
 
 ```
 ev-ecu-system/
-├── .github/
-│   ├── workflows/             - CI/CD pipeline definitions
-│   │   ├── build.yml          - Firmware compile check
-│   │   ├── unit-tests.yml     - Unity test runner
-│   │   ├── static-analysis.yml- Cppcheck analysis
-│   │   ├── security.yml       - Snyk + CodeQL scanning
-│   │   └── release.yml        - Automated release builds
-│   ├── ISSUE_TEMPLATE/        - Bug report, feature request templates
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── dependabot.yml         - Automated dependency updates
-├── core/
-│   ├── Inc/                   - Header files (.h)
-│   │   ├── ev_types.h         - Shared type definitions
-│   │   ├── ev_config.h        - All constants and thresholds
-│   │   ├── sensor_hal.h       - (Sprint 2)
-│   │   ├── motor_ctrl.h       - (Sprint 2)
-│   │   ├── fault_manager.h    - (Sprint 3)
-│   │   ├── can_driver.h       - (Sprint 3)
-│   │   ├── logger.h           - (Sprint 4)
-│   │   └── ev_state_machine.h - (Sprint 4)
-│   └── src/                   - Source files (.c)
-│       └── main.c             - Firmware entry point
-├── Drivers/
-│   └── STM32_HAL/             - STM32 HAL library (added Sprint 2)
-├── Tests/
-│   ├── Unity/                 - Unity test framework source
-│   ├── mocks/                 - STM32 HAL stub functions
-│   ├── CMakeLists.txt         - Test build configuration
-│   ├── test_runner.c          - Test entry point
-│   └── test_placeholder.c     - Sprint 1 framework verification
-├── simulation/
-│   └── wokwi/
-│       ├── diagram.json       - Virtual circuit definition
-│       └── wokwi.toml         - Wokwi project config
-├── cmake/
-│   └── arm-gcc-toolchain.cmake- Cross-compilation configuration
-├── .vscode/                   - Shared VS Code configuration
-├── CMakeLists.txt             - Root build configuration
-├── .cppcheck                  - Static analysis configuration
-├── .clang-format              - Code formatting rules
-└── .editorconfig              - Editor consistency settings
+├-- .github/
+│   ├-- workflows/             - CI/CD pipeline definitions
+│   │   ├-- build.yml          - Firmware compile check
+│   │   ├-- unit-tests.yml     - Unity test runner
+│   │   ├-- static-analysis.yml- Cppcheck analysis
+│   │   ├-- security.yml       - Snyk + CodeQL scanning
+│   │   └-- release.yml        - Automated release builds
+│   ├-- ISSUE_TEMPLATE/        - Bug report, feature request templates
+│   ├-- PULL_REQUEST_TEMPLATE.md
+│   └-- dependabot.yml         - Automated dependency updates
+├-- core/
+│   ├-- Inc/                   - Header files (.h)
+│   │   ├-- ev_types.h         - Shared type definitions
+│   │   ├-- ev_config.h        - All constants and thresholds
+│   │   ├-- sensor_hal.h       - (Sprint 2)
+│   │   ├-- motor_ctrl.h       - (Sprint 2)
+│   │   ├-- fault_manager.h    - (Sprint 3)
+│   │   ├-- can_driver.h       - (Sprint 3)
+│   │   ├-- logger.h           - (Sprint 4)
+│   │   └-- ev_state_machine.h - (Sprint 4)
+│   └-- src/                   - Source files (.c)
+│       └-- main.c             - Firmware entry point
+├-- Drivers/
+│   └-- STM32_HAL/             - STM32 HAL library (added Sprint 2)
+├-- Tests/
+│   ├-- Unity/                 - Unity test framework source
+│   ├-- mocks/                 - STM32 HAL stub functions
+│   ├-- CMakeLists.txt         - Test build configuration
+│   ├-- test_runner.c          - Test entry point
+│   └-- test_placeholder.c     - Sprint 1 framework verification
+├-- simulation/
+│   └-- wokwi/
+│       ├-- diagram.json       - Virtual circuit definition
+│       └-- wokwi.toml         - Wokwi project config
+├-- cmake/
+│   └-- arm-gcc-toolchain.cmake- Cross-compilation configuration
+├-- .vscode/                   - Shared VS Code configuration
+├-- CMakeLists.txt             - Root build configuration
+├-- .cppcheck                  - Static analysis configuration
+├-- .clang-format              - Code formatting rules
+└-- .editorconfig              - Editor consistency settings
 ```
 
 ---
@@ -184,7 +184,7 @@ cppcheck --enable=warning --error-exitcode=1 -I core/Inc core/src/
 4. Open `simulation/wokwi/wokwi.toml` in VS Code
 5. Press `F1` -> `Wokwi: Start Simulator`
 
-You'll see a virtual STM32 with potentiometers and buttons — turn the throttle, press the brake, trigger faults.
+You'll see a virtual STM32 with potentiometers and buttons - turn the throttle, press the brake, trigger faults.
 
 ---
 
@@ -246,6 +246,6 @@ Full documentation is maintained in [Docs](docs) folder in the repo and automati
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---

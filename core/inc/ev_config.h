@@ -40,7 +40,7 @@
 #define EV_CURRENT_WARNING_A            (40.0f)   /* Warning: reduce throttle */
 #define EV_CURRENT_CRITICAL_A           (50.0f)   /* Critical: enter fault   */
 
-/** Battery voltage thresholds (Volts) — based on 13S Li-ion pack */
+/** Battery voltage thresholds (Volts) - based on 13S Li-ion pack */
 #define EV_VOLTAGE_MIN_WARN_V           (37.0f)   /* Under-voltage warning   */
 #define EV_VOLTAGE_MIN_CRITICAL_V       (35.0f)   /* Under-voltage fault     */
 #define EV_VOLTAGE_MAX_WARN_V           (54.0f)   /* Over-voltage warning    */
@@ -157,7 +157,7 @@
 #define EV_PIN_ADC_VOLTAGE              (3U)      /* PA3 -> ADC1_CH3         */
 #define EV_PIN_ADC_THROTTLE             (4U)      /* PA4 -> ADC1_CH4         */
 
-/** GPIO assignments (logical names only — actual GPIO in BSP) */
+/** GPIO assignments (logical names only - actual GPIO in BSP) */
 #define EV_NUM_ADC_CHANNELS             (5U)      /* Total ADC channels used */
 
 /* ===========================================================================
@@ -184,7 +184,7 @@
  * Format     : Teleplot  ">label:value\n"
  * =========================================================================== */
 
-/** Baud rate — must match Teleplot and serial terminal settings */
+/** Baud rate - must match Teleplot and serial terminal settings */
 #define EV_UART_BAUD_RATE               (115200U)
 
 /** Maximum characters in one Teleplot log line */
@@ -207,7 +207,7 @@
  * Datasheet  : https://www.ti.com/lit/ds/symlink/tmp102.pdf
  * =========================================================================== */
 
-/** I2C bus speed — 400 kHz fast mode */
+/** I2C bus speed - 400 kHz fast mode */
 #define EV_I2C_SPEED_HZ                 (400000U)
 
 /** TMP102 default 7-bit address when ADD0 pin is tied to GND */
@@ -220,10 +220,10 @@
 #define EV_I2C_TMP102_ADDR_8BIT         (EV_I2C_TMP102_ADDR_7BIT << 1U)
 
 /** TMP102 internal register addresses */
-#define EV_I2C_TMP102_REG_TEMP          (0x00U)  /**< Temperature result (read)  */
-#define EV_I2C_TMP102_REG_CONFIG        (0x01U)  /**< Configuration (r/w)        */
-#define EV_I2C_TMP102_REG_TLOW         (0x02U)  /**< Low alert threshold (r/w)  */
-#define EV_I2C_TMP102_REG_THIGH        (0x03U)  /**< High alert threshold (r/w) */
+#define EV_I2C_TMP102_REG_TEMP          (0x00U)  /* Temperature result (read)  */
+#define EV_I2C_TMP102_REG_CONFIG        (0x01U)  /* Configuration (r/w)        */
+#define EV_I2C_TMP102_REG_TLOW         (0x02U)  /* Low alert threshold (r/w)  */
+#define EV_I2C_TMP102_REG_THIGH        (0x03U)  /* High alert threshold (r/w) */
 
 /** TMP102 temperature resolution: 12-bit, 0.0625 °C per bit */
 #define EV_I2C_TMP102_DEG_PER_LSB      (0.0625f)
@@ -250,18 +250,18 @@
  * Datasheet  : https://www.winbond.com/resource-files/w25q32jv%20revg%2003272018%20plus.pdf
  * =========================================================================== */
 
-/** SPI clock — 18 MHz is well within W25Q32's 80 MHz maximum */
+/** SPI clock - 18 MHz is well within W25Q32's 80 MHz maximum */
 #define EV_SPI_FLASH_SPEED_HZ           (18000000U)
 
-/** W25Q32 JEDEC manufacturer ID — read with CMD 0x9F to verify chip */
+/** W25Q32 JEDEC manufacturer ID - read with CMD 0x9F to verify chip */
 #define EV_SPI_FLASH_JEDEC_MFR_ID       (0xEFU)
 
 /** W25Q32 JEDEC device ID (16-bit) */
 #define EV_SPI_FLASH_JEDEC_DEV_ID       (0x4016U)
 
 /** Flash geometry */
-#define EV_SPI_FLASH_PAGE_SIZE_BYTES    (256U)     /**< Minimum write unit     */
-#define EV_SPI_FLASH_SECTOR_SIZE_BYTES  (4096U)    /**< Minimum erase unit     */
+#define EV_SPI_FLASH_PAGE_SIZE_BYTES    (256U)     /* Minimum write unit     */
+#define EV_SPI_FLASH_SECTOR_SIZE_BYTES  (4096U)    /* Minimum erase unit     */
 
 /**
  * Fault log occupies first 2 sectors of flash (8 KB total).
@@ -285,20 +285,20 @@
 /** Operation timeouts */
 #define EV_SPI_FLASH_TX_TIMEOUT_MS      (100U)
 #define EV_SPI_FLASH_RX_TIMEOUT_MS      (100U)
-#define EV_SPI_FLASH_ERASE_TIMEOUT_MS   (400U)   /**< Sector erase: 45ms typ, 400ms max */
-#define EV_SPI_FLASH_WRITE_TIMEOUT_MS   (3U)     /**< Page program: 0.7ms typ, 3ms max  */
+#define EV_SPI_FLASH_ERASE_TIMEOUT_MS   (400U)   /* Sector erase: 45ms typ, 400ms max */
+#define EV_SPI_FLASH_WRITE_TIMEOUT_MS   (3U)     /* Page program: 0.7ms typ, 3ms max  */
 
 /** W25Q32 SPI command bytes */
-#define EV_SPI_FLASH_CMD_WRITE_ENABLE   (0x06U)  /**< Must precede any write/erase     */
-#define EV_SPI_FLASH_CMD_WRITE_DISABLE  (0x04U)  /**< Disable write after operation    */
-#define EV_SPI_FLASH_CMD_READ_STATUS1   (0x05U)  /**< Read status register 1           */
-#define EV_SPI_FLASH_CMD_PAGE_PROGRAM   (0x02U)  /**< Write up to 256 bytes            */
-#define EV_SPI_FLASH_CMD_READ_DATA      (0x03U)  /**< Read bytes at 24-bit address     */
-#define EV_SPI_FLASH_CMD_SECTOR_ERASE   (0x20U)  /**< Erase one 4 KB sector            */
-#define EV_SPI_FLASH_CMD_CHIP_ERASE     (0xC7U)  /**< Erase entire chip (use carefully)*/
-#define EV_SPI_FLASH_CMD_READ_JEDEC_ID  (0x9FU)  /**< Read manufacturer + device ID    */
-#define EV_SPI_FLASH_CMD_POWER_DOWN     (0xB9U)  /**< Enter deep power-down mode       */
-#define EV_SPI_FLASH_CMD_RELEASE_PD     (0xABU)  /**< Exit deep power-down mode        */
+#define EV_SPI_FLASH_CMD_WRITE_ENABLE   (0x06U)  /* Must precede any write/erase     */
+#define EV_SPI_FLASH_CMD_WRITE_DISABLE  (0x04U)  /* Disable write after operation    */
+#define EV_SPI_FLASH_CMD_READ_STATUS1   (0x05U)  /* Read status register 1           */
+#define EV_SPI_FLASH_CMD_PAGE_PROGRAM   (0x02U)  /* Write up to 256 bytes            */
+#define EV_SPI_FLASH_CMD_READ_DATA      (0x03U)  /* Read bytes at 24-bit address     */
+#define EV_SPI_FLASH_CMD_SECTOR_ERASE   (0x20U)  /* Erase one 4 KB sector            */
+#define EV_SPI_FLASH_CMD_CHIP_ERASE     (0xC7U)  /* Erase entire chip (use carefully)*/
+#define EV_SPI_FLASH_CMD_READ_JEDEC_ID  (0x9FU)  /* Read manufacturer + device ID    */
+#define EV_SPI_FLASH_CMD_POWER_DOWN     (0xB9U)  /* Enter deep power-down mode       */
+#define EV_SPI_FLASH_CMD_RELEASE_PD     (0xABU)  /* Exit deep power-down mode        */
 
 /** Status register bit mask: WIP = Write In Progress */
 #define EV_SPI_FLASH_STATUS_WIP_MASK    (0x01U)

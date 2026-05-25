@@ -1,4 +1,4 @@
-# EV Control & Diagnostics System — Project Overview
+# EV Control & Diagnostics System - Project Overview
 
 | |  |
 |:---|:---|
@@ -52,7 +52,7 @@ This project is designed to demonstrate a broad set of industry-relevant enginee
 | **CAN Bus Communication** | Industry-standard vehicle networking protocol |
 | **CI/CD Pipelines** | Automated testing and deployment |
 | **Safety-Critical Design** | Fault detection, watchdogs, safe states |
-| **Simulation-First Development** | SIL → HIL workflow used in the automotive industry |
+| **Simulation-First Development** | SIL -> HIL workflow used in the automotive industry |
 | **RTOS** | Managing multiple tasks simultaneously with FreeRTOS |
 
 ---
@@ -122,7 +122,7 @@ graph TD
 All code runs entirely in simulation. No physical hardware needed.
 
 ```
-[Write C Code] → [Simulate on Wokwi/Renode] → [Test with Unity] → [CI/CD checks pass]
+[Write C Code] -> [Simulate on Wokwi/Renode] -> [Test with Unity] -> [CI/CD checks pass]
 ```
 
 ### Stage 2 - Hardware Bring-Up
@@ -130,7 +130,7 @@ All code runs entirely in simulation. No physical hardware needed.
 Flash the same code onto a real STM32 board. Fix any hardware-specific bugs.
 
 ```
-[Stage 1 Code] → [Flash to STM32] → [Oscilloscope / Logic Analyser checks] → [Fix HW bugs]
+[Stage 1 Code] -> [Flash to STM32] -> [Oscilloscope / Logic Analyser checks] -> [Fix HW bugs]
 ```
 
 ### Stage 3 - HIL Testing
@@ -138,7 +138,7 @@ Flash the same code onto a real STM32 board. Fix any hardware-specific bugs.
 Real hardware, but sensors and motor are simulated by external equipment.
 
 ```
-[STM32 Hardware] ↔ [HIL Simulator / BusMaster CAN] → [Automated Test Suite]
+[STM32 Hardware] ↔ [HIL Simulator / BusMaster CAN] -> [Automated Test Suite]
 ```
 
 ### Stage 4 - RTOS + Bootloader *(Advanced)*
@@ -146,7 +146,7 @@ Real hardware, but sensors and motor are simulated by external equipment.
 Port the system to FreeRTOS, add a bootloader, and build a GUI.
 
 ```
-[Bare-Metal Firmware] → [FreeRTOS Tasks] → [Bootloader] → [Desktop GUI Dashboard]
+[Bare-Metal Firmware] -> [FreeRTOS Tasks] -> [Bootloader] -> [Desktop GUI Dashboard]
 ```
 
 ---
@@ -197,45 +197,45 @@ Define what the system must do and how well it must do it.
 - **Functional Requirements** - *What* it does (e.g., "The system shall read battery temperature every 100ms")
 - **Non-Functional Requirements** - *How well* it does it (e.g., "Fault detection shall trigger within 10ms of threshold breach")
 
-→ See: `03_requirements`
+-> See: `03_requirements`
 
 ### Step 2 - System Design
 
-Draw the architecture. Define all modules. Decide interfaces between modules. No code — just boxes and arrows.
+Draw the architecture. Define all modules. Decide interfaces between modules. No code - just boxes and arrows.
 
-→ See: `04_system_design`
+-> See: `04_system_design`
 
 ### Step 3 - Set Up Your Environment
 
 Install all tools. Make sure every team member has the same setup. Write it down so a new joiner can replicate it in 30 minutes.
 
-→ See: `01_environment_setup`
+-> See: `01_environment_setup`
 
-### Step 4 — Set Up GitHub
+### Step 4 - Set Up GitHub
 
 Create branch protection rules, PR templates, and issue templates.
 
-→ See: `02_gitHub_setup`
+-> See: `02_gitHub_setup`
 
-### Step 5 — Set Up CI/CD Pipeline
+### Step 5 - Set Up CI/CD Pipeline
 
 GitHub Actions must run on every Pull Request. Nothing merges without passing.
 
-→ See: `05_cicd_pipelines`
+-> See: `05_cicd_pipelines`
 
-### Step 6 — Define Coding Standards
+### Step 6 - Define Coding Standards
 
 Agree on naming conventions, file structure, and comment style **before anyone writes code**.
 
-→ See: `06_coding_standards`
+-> See: `06_coding_standards`
 
-### Step 7 — Sprint Planning
+### Step 7 - Sprint Planning
 
 Break requirements into User Stories. Estimate effort. Assign to Sprint 1.
 
-→ See: Sprint Planning board
+-> See: Sprint Planning board
 
-### Step 8 — Start Coding
+### Step 8 - Start Coding
 
 **Now, and only now, do you write code.**
 
@@ -252,7 +252,7 @@ Break requirements into User Stories. Estimate effort. Assign to Sprint 1.
 | [`basesync/ev-ecu-system`](https://github.com/basesync/ev-ecu-system) | Main firmware repository |
 | `basesync/ev-ecu-tests` | Upcoming |
 
-### Branch Protection Rules (`main` → `develop`)
+### Branch Protection Rules (`main` -> `develop`)
 
 - Require Pull Request before merging
 - Require at least 1 approving review

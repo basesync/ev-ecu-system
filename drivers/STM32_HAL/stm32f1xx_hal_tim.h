@@ -12,30 +12,30 @@
 #include <stdint.h>
 #include "stm32f1xx_hal.h"
 
-/* ─── Timer channel defines ──────────────────────────────────────────────── */
+/* --- Timer channel defines ------------------------------------------------ */
 #define TIM_CHANNEL_1   (0x00000000U)
 #define TIM_CHANNEL_2   (0x00000004U)
 
-/* ─── Timer instance type (opaque in stub) ───────────────────────────────── */
+/* --- Timer instance type (opaque in stub) --------------------------------- */
 typedef struct
 {
-    uint32_t CR1;    /**< Control register 1  */
-    uint32_t CR2;    /**< Control register 2  */
-    uint32_t CNT;    /**< Counter value        */
-    uint32_t ARR;    /**< Auto-reload register */
-    uint32_t CCR1;   /**< Capture/Compare register 1 (PWM duty) */
+    uint32_t CR1;    /* Control register 1  */
+    uint32_t CR2;    /* Control register 2  */
+    uint32_t CNT;    /* Counter value        */
+    uint32_t ARR;    /* Auto-reload register */
+    uint32_t CCR1;   /* Capture/Compare register 1 (PWM duty) */
 } TIM_TypeDef;
 
-/* ─── Timer handle type ──────────────────────────────────────────────────── */
+/* --- Timer handle type ---------------------------------------------------- */
 typedef struct
 {
-    TIM_TypeDef *Instance;    /**< Timer peripheral base address */
-    uint32_t     Channel;     /**< Active channel                */
-    uint32_t     State;       /**< Timer state                   */
-    uint32_t     Init_Period; /**< Auto-reload value (PWM period) */
+    TIM_TypeDef *Instance;    /* Timer peripheral base address */
+    uint32_t     Channel;     /* Active channel                */
+    uint32_t     State;       /* Timer state                   */
+    uint32_t     Init_Period; /* Auto-reload value (PWM period) */
 } TIM_HandleTypeDef;
 
-/* ─── Macro: set PWM compare value (controls duty cycle) ─────────────────── */
+/* --- Macro: set PWM compare value (controls duty cycle) ------------------- */
 /**
  * @brief Set the PWM duty cycle via the capture/compare register.
  * Usage: __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, compare_value);
@@ -56,7 +56,7 @@ typedef struct
 #define __HAL_TIM_GET_COUNTER(__HANDLE__) \
     ((__HANDLE__)->Instance->CNT)
 
-/* ─── Timer function declarations ────────────────────────────────────────── */
+/* --- Timer function declarations ------------------------------------------ */
 
 /**
  * @brief Start PWM generation on a timer channel.

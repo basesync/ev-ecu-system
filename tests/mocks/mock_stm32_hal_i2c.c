@@ -3,20 +3,20 @@
  * @brief   Mock STM32 I2C HAL implementation for unit testing
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 2 — minimal stub for compilation)
+ * @version 1.0 (Sprint 2 - minimal stub for compilation)
  */
 
 #include "mock_stm32_hal_i2c.h"
 #include <string.h>
 #include <stdbool.h>
 
-/* ─── Mock state ─────────────────────────────────────────────────────────── */
+/* --- Mock state ----------------------------------------------------------- */
 static bool              s_device_present = true;
 static uint8_t           s_rx_data[32];
 static uint16_t          s_rx_data_len   = 0U;
 static I2C_HandleTypeDef s_mock_handle   = { .Instance = 0x40005400U };
 
-/* ─── Mock control functions ─────────────────────────────────────────────── */
+/* --- Mock control functions ----------------------------------------------- */
 
 void mock_i2c_reset(void)
 {
@@ -44,7 +44,7 @@ I2C_HandleTypeDef *mock_i2c_get_handle(void)
     return &s_mock_handle;
 }
 
-/* ─── Mock HAL function implementations ─────────────────────────────────── */
+/* --- Mock HAL function implementations ----------------------------------- */
 
 HAL_StatusTypeDef HAL_I2C_IsDeviceReady(I2C_HandleTypeDef *hi2c,
                                           uint16_t           DevAddress,

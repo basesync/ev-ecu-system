@@ -186,12 +186,12 @@ Depends on: <!-- e.g., #12 (GPIO init must be done first) -->
 
 ## Story Points Estimate
 <!-- Delete all but one -->
-- [ ] 1 point — Trivial (1–2 hours)
-- [ ] 2 points — Small (half a day)
-- [ ] 3 points — Medium (1 day)
-- [ ] 5 points — Large (2–3 days)
-- [ ] 8 points — Very large (needs whole sprint)
-- [ ] 13 points — Too big, must be split
+- [ ] 1 point - Trivial (1–2 hours)
+- [ ] 2 points - Small (half a day)
+- [ ] 3 points - Medium (1 day)
+- [ ] 5 points - Large (2–3 days)
+- [ ] 8 points - Very large (needs whole sprint)
+- [ ] 13 points - Too big, must be split
 
 ## Module
 <!-- Which module does this belong to? -->
@@ -248,7 +248,7 @@ Closes #<!-- issue number here -->
 ## Testing Done by Author
 <!-- Check all that apply -->
 - [ ] Unit tests written for new/changed code
-- [ ] All existing tests pass locally (`cd Tests/build && ./test_runner` → 0 Failures)
+- [ ] All existing tests pass locally (`cd Tests/build && ./test_runner` -> 0 Failures)
 - [ ] Cppcheck passes locally (`cppcheck --error-exitcode=1 -I core/Inc core/src/`)
 - [ ] Code compiled successfully (`cmake --build build`)
 - [ ] Tested in Wokwi simulation (if applicable)
@@ -259,7 +259,7 @@ Closes #<!-- issue number here -->
 <!-- Check all that apply. Do NOT open a PR without completing this. -->
 - [ ] Code follows naming conventions from `BASESYNC-STD-001`
 - [ ] All public functions have Doxygen-style comments (`@brief`, `@param`, `@retval`)
-- [ ] No magic numbers — all constants are in `ev_config.h`
+- [ ] No magic numbers - all constants are in `ev_config.h`
 - [ ] All function parameters are validated (null checks where applicable)
 - [ ] Return values of all called functions are checked
 - [ ] All `switch` statements have a `default` case
@@ -390,7 +390,7 @@ git push origin feature/your-task-name
 - Fill in the PR template completely
 - Assign a reviewer
 
-### Step 6 — After Review + CI Passes
+### Step 6 - After Review + CI Passes
 
 - Merge into `develop` using **Squash and merge**
 - Delete your feature branch

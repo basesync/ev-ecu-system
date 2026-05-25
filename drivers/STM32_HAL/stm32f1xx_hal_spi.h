@@ -19,22 +19,22 @@
 #include <stdint.h>
 #include "stm32f1xx_hal.h"
 
-/* ─── SPI Handle ─────────────────────────────────────────────────────────── */
+/* --- SPI Handle ----------------------------------------------------------- */
 typedef struct
 {
-    uint32_t Instance;            /**< SPI peripheral base address          */
-    uint32_t BaudRatePrescaler;   /**< Clock prescaler (APB clock / n)      */
-    uint32_t CLKPolarity;         /**< CPOL: clock idle state               */
-    uint32_t CLKPhase;            /**< CPHA: data capture edge              */
-    uint32_t State;               /**< SPI state flags                      */
-    uint32_t ErrorCode;           /**< Last error code                      */
+    uint32_t Instance;            /* SPI peripheral base address          */
+    uint32_t BaudRatePrescaler;   /* Clock prescaler (APB clock / n)      */
+    uint32_t CLKPolarity;         /* CPOL: clock idle state               */
+    uint32_t CLKPhase;            /* CPHA: data capture edge              */
+    uint32_t State;               /* SPI state flags                      */
+    uint32_t ErrorCode;           /* Last error code                      */
 } SPI_HandleTypeDef;
 
-/* ─── Peripheral base addresses ──────────────────────────────────────────── */
+/* --- Peripheral base addresses -------------------------------------------- */
 #define SPI1  ((uint32_t)0x40013000U)
 #define SPI2  ((uint32_t)0x40003800U)
 
-/* ─── SPI function declarations ──────────────────────────────────────────── */
+/* --- SPI function declarations -------------------------------------------- */
 
 /**
  * @brief Transmit data over SPI in blocking mode.

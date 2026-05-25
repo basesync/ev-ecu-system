@@ -15,18 +15,18 @@
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Step 1 — Install VS Code](#step-1--install-vs-code)
+2. [Step 1 - Install VS Code](#step-1--install-vs-code)
 3. [Step 2 - Install MSYS2](#step-2---install-msys2)
-3. [Step 3 — Install ARM GCC Toolchain](#step-3--install-arm-gcc-toolchain)
-4. [Step 4 — Install CMake & Build Tools](#step-4--install-cmake--build-tools)
-5. [Step 5 — Install STM32CubeIDE](#step-5--install-stm32cubeide)
-6. [Step 6 — Install VS Code Extensions](#step-6--install-vs-code-extensions)
-7. [Step 7 — Install Cppcheck](#step-7--install-cppcheck)
-8. [Step 8 — Install Git & Configure GitHub](#step-8--install-git--configure-github)
-9. [Step 9 — Clone and Build the Project](#step-9--clone-and-build-the-project)
-10. [Step 10 — Setup Wokwi Simulation](#step-10--setup-wokwi-simulation)
-11. [Step 11 — Set Up BusMaster CAN Simulation](#step-11--set-up-busmaster-can-simulation)
-12. [Step 12 — Run Unit Tests Locally](#step-12--run-unit-tests-locally)
+3. [Step 3 - Install ARM GCC Toolchain](#step-3--install-arm-gcc-toolchain)
+4. [Step 4 - Install CMake & Build Tools](#step-4--install-cmake--build-tools)
+5. [Step 5 - Install STM32CubeIDE](#step-5--install-stm32cubeide)
+6. [Step 6 - Install VS Code Extensions](#step-6--install-vs-code-extensions)
+7. [Step 7 - Install Cppcheck](#step-7--install-cppcheck)
+8. [Step 8 - Install Git & Configure GitHub](#step-8--install-git--configure-github)
+9. [Step 9 - Clone and Build the Project](#step-9--clone-and-build-the-project)
+10. [Step 10 - Setup Wokwi Simulation](#step-10--setup-wokwi-simulation)
+11. [Step 11 - Set Up BusMaster CAN Simulation](#step-11--set-up-busmaster-can-simulation)
+12. [Step 12 - Run Unit Tests Locally](#step-12--run-unit-tests-locally)
 13. [Verification Checklist](#verification-checklist)
 
 ---
@@ -43,7 +43,7 @@
 
 ---
 
-## Step 1 — Install VS Code
+## Step 1 - Install VS Code
 
 VS Code is our main code editor.
 
@@ -61,8 +61,8 @@ VS Code is our main code editor.
 2. Run the installer and give installation path as C:\msys64
 3. After default installation, Copy the paths `C:\msys64\usr\bin` and `C:\msys64\ucrt64\bin`.
 4. Press the **Windows Key** and type `"env"`
-5. Select **"Edit the system environment variables"** → click the **Environment Variables** button
-6. In the **System variables** list (bottom), find `Path` → click **Edit** → click **New** → paste the two paths.
+5. Select **"Edit the system environment variables"** -> click the **Environment Variables** button
+6. In the **System variables** list (bottom), find `Path` -> click **Edit** -> click **New** -> paste the two paths.
 7. Click **OK** on all three windows
 8. Open Command Prompt and verify:
 
@@ -72,9 +72,9 @@ gcc --version
 
 ---
 
-## Step 3 — Install ARM GCC Toolchain
+## Step 3 - Install ARM GCC Toolchain
 
-This is the **compiler** — it converts your C code into binary that runs on the STM32.
+This is the **compiler** - it converts your C code into binary that runs on the STM32.
 
 ### Windows
 
@@ -85,8 +85,8 @@ This is the **compiler** — it converts your C code into binary that runs on th
 5. Open the folder and navigate into the `bin` subfolder - you'll see many `.exe` files inside
 6. While inside the `bin` folder, click the **Address Bar** at the top of File Explorer and **copy the path** (e.g. `C:\arm-gnu-toolchain\bin`)
 7. Press the **Windows Key** and type `"env"`
-8. Select **"Edit the system environment variables"** → click the **Environment Variables** button
-9. In the **System variables** list (bottom), find `Path` → click **Edit** → click **New** → paste your path (`C:\arm-gnu-toolchain\bin`)
+8. Select **"Edit the system environment variables"** -> click the **Environment Variables** button
+9. In the **System variables** list (bottom), find `Path` -> click **Edit** -> click **New** -> paste your path (`C:\arm-gnu-toolchain\bin`)
 10. Click **OK** on all three windows
 11. Open Command Prompt and verify:
 
@@ -96,7 +96,7 @@ arm-none-eabi-gcc --version
 
 ---
 
-## Step 4 — Install CMake & Build Tools
+## Step 4 - Install CMake & Build Tools
 
 CMake is our build system. It tells the compiler which files to compile and how.
 
@@ -132,11 +132,11 @@ STM32CubeIDE is ST Microelectronics' official IDE. We use it for:
 
 ---
 
-## Step 6 — Install VS Code Extensions
+## Step 6 - Install VS Code Extensions
 
-> ⚠️ **Don't install these yet** — wait until the repo is cloned so workspace settings are applied correctly.
+> ⚠️ **Don't install these yet** - wait until the repo is cloned so workspace settings are applied correctly.
 
-When ready: open VS Code → press `Ctrl+Shift+X` → search and install each extension below.
+When ready: open VS Code -> press `Ctrl+Shift+X` -> search and install each extension below.
 
 | Extension | Identifier |
 |---|---|
@@ -151,7 +151,7 @@ When ready: open VS Code → press `Ctrl+Shift+X` → search and install each ex
 
 ---
 
-## Step 7 — Install Cppcheck
+## Step 7 - Install Cppcheck
 
 Cppcheck analyses your C code for bugs **without running it**.
 
@@ -160,8 +160,8 @@ Cppcheck analyses your C code for bugs **without running it**.
 1. Download: [https://cppcheck.sourceforge.io/](https://cppcheck.sourceforge.io/)
 2. Run the installer with default settings
 3. Press the **Windows Key** and type `"env"`
-4. Select **"Edit the system environment variables"** → click **Environment Variables**
-5. In the **System variables** list, find `Path` → click **Edit** → click **New** → paste `C:\Program Files\Cppcheck`
+4. Select **"Edit the system environment variables"** -> click **Environment Variables**
+5. In the **System variables** list, find `Path` -> click **Edit** -> click **New** -> paste `C:\Program Files\Cppcheck`
 6. Verify:
 
 ```bash
@@ -214,7 +214,7 @@ cat ~/.ssh/id_ed25519.pub
 ```
 
 1. Copy the output
-2. Go to **GitHub → Settings → SSH and GPG keys → New SSH key**
+2. Go to **GitHub -> Settings -> SSH and GPG keys -> New SSH key**
 3. Paste and save
 4. Test the connection:
 
@@ -258,18 +258,18 @@ cmake --build build
 
 ---
 
-## Step 10 — Setup Wokwi Simulation
+## Step 10 - Setup Wokwi Simulation
 
-Wokwi lets you run STM32 code in a browser simulator — **no hardware needed**.
+Wokwi lets you run STM32 code in a browser simulator - **no hardware needed**.
 
-### Option A — Wokwi VS Code Extension *(Recommended)*
+### Option A - Wokwi VS Code Extension *(Recommended)*
 
 1. Install the extension: search `Wokwi` in VS Code extensions (`wokwi.wokwi-vscode`)
 2. Get a free licence: [Wokwi for Visual Studio Code](https://wokwi.com/vscode) (free for open source)
 3. Open `simulation/wokwi/wokwi.toml` in VS Code
-4. Press `F1` → run **Wokwi: Start Simulator**
+4. Press `F1` -> run **Wokwi: Start Simulator**
 
-### Option B — Wokwi Web
+### Option B - Wokwi Web
 
 1. Go to: [https://wokwi.com](https://wokwi.com)
 2. Create a free account
@@ -289,10 +289,10 @@ BusMaster simulates a CAN bus on your PC.
 2. Install with default settings
    > ⚠️ Windows only - use a VM on Mac/Linux
 3. Open BusMaster
-4. **File → Open →** `simulation/busmaster/ev_ecu.bsm`
+4. **File -> Open ->** `simulation/busmaster/ev_ecu.bsm`
 5. For the Virtual CAN driver, choose one of:
    - Download: [PEAK Virtual CAN driver](https://www.peak-system.com/Virtual-PEAK-Driver.305.0.html) or Vector CANalyzer trial
-   - **Linux only** — use socketcan:
+   - **Linux only** - use socketcan:
 
 ```bash
 sudo modprobe vcan
@@ -333,7 +333,7 @@ OK
 | Repo clones OK | `git clone git@github.com:basesync/ev-ecu-system.git` | Clones without error |
 | Firmware builds | `cmake .. && cmake --build .` | Compiles without errors |
 | Tests pass | `./test_runner` | All tests pass |
-| Wokwi opens | Press `F1` → Wokwi: Start Simulator | Virtual STM32 visible |
+| Wokwi opens | Press `F1` -> Wokwi: Start Simulator | Virtual STM32 visible |
 | VS Code extensions | Check Extensions panel | All 8 extensions listed as installed |
 
 ---

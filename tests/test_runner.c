@@ -1,6 +1,6 @@
 /**
  * @file    test_runner.c
- * @brief   Unity test runner — Sprint 2 (Sensor HAL + Motor Control tests)
+ * @brief   Unity test runner - Sprint 2 (Sensor HAL + Motor Control tests)
  */
 
 #include "Unity/unity.h"

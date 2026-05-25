@@ -61,7 +61,7 @@ set(MOCK_SOURCES
 
 # --- Firmware Sources Under Test --------------------------------------------
 # Add the actual firmware .c files you want to test.
-# Do NOT add main.c here — it has the main() function which conflicts.
+# Do NOT add main.c here - it has the main() function which conflicts.
 set(FIRMWARE_SOURCES_UNDER_TEST
     ../core/src/sensor_hal.c
     ../core/src/motor_ctrl.c

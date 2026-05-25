@@ -7,7 +7,7 @@
  *          Real SPI mock with full command simulation added in Sprint 6.
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 2 — minimal stub for compilation)
+ * @version 1.0 (Sprint 2 - minimal stub for compilation)
  */
 
 #ifndef MOCK_STM32_HAL_SPI_H
