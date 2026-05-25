@@ -108,6 +108,28 @@ extern void test_i2c_tmp102_8bit_address_is_7bit_shifted(void);
 extern void test_spi_flash_log_max_entries_matches_area_size(void);
 extern void test_spi_flash_sector_size_divides_log_size_evenly(void);
 
+/* --- Sprint 3: Fault Manager tests ------------------------------------------ */
+extern void test_fault_check_null_data_returns_fault_invalid_data(void);
+extern void test_fault_check_all_safe_data_returns_fault_none(void);
+extern void test_fault_check_batt_temp_below_threshold_no_fault(void);
+extern void test_fault_check_batt_temp_at_threshold_no_fault(void);
+extern void test_fault_check_batt_temp_above_threshold_sets_bit(void);
+extern void test_fault_check_motor_temp_above_threshold_sets_bit(void);
+extern void test_fault_check_motor_temp_at_threshold_no_fault(void);
+extern void test_fault_check_over_current_above_threshold_sets_bit(void);
+extern void test_fault_check_negative_current_no_fault(void);
+extern void test_fault_check_under_voltage_below_threshold_sets_bit(void);
+extern void test_fault_check_voltage_at_min_threshold_no_fault(void);
+extern void test_fault_check_over_voltage_above_threshold_sets_bit(void);
+extern void test_fault_check_voltage_at_max_threshold_no_fault(void);
+extern void test_fault_check_fault_switch_pressed_sets_manual_trigger(void);
+extern void test_fault_check_fault_switch_not_pressed_no_manual_trigger(void);
+extern void test_fault_check_multiple_faults_all_bits_set(void);
+extern void test_fault_is_set_returns_false_for_clear_bit(void);
+extern void test_fault_is_set_returns_true_for_set_bit(void);
+extern void test_fault_get_name_returns_none_for_no_fault(void);
+extern void test_fault_get_name_returns_correct_name_for_over_temp_batt(void);
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -195,6 +217,28 @@ int main(void)
     RUN_TEST(test_i2c_tmp102_8bit_address_is_7bit_shifted);
     RUN_TEST(test_spi_flash_log_max_entries_matches_area_size);
     RUN_TEST(test_spi_flash_sector_size_divides_log_size_evenly);
+
+    /* --- Sprint 3: Fault Manager --- */
+    RUN_TEST(test_fault_check_null_data_returns_fault_invalid_data);
+    RUN_TEST(test_fault_check_all_safe_data_returns_fault_none);
+    RUN_TEST(test_fault_check_batt_temp_below_threshold_no_fault);
+    RUN_TEST(test_fault_check_batt_temp_at_threshold_no_fault);
+    RUN_TEST(test_fault_check_batt_temp_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_motor_temp_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_motor_temp_at_threshold_no_fault);
+    RUN_TEST(test_fault_check_over_current_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_negative_current_no_fault);
+    RUN_TEST(test_fault_check_under_voltage_below_threshold_sets_bit);
+    RUN_TEST(test_fault_check_voltage_at_min_threshold_no_fault);
+    RUN_TEST(test_fault_check_over_voltage_above_threshold_sets_bit);
+    RUN_TEST(test_fault_check_voltage_at_max_threshold_no_fault);
+    RUN_TEST(test_fault_check_fault_switch_pressed_sets_manual_trigger);
+    RUN_TEST(test_fault_check_fault_switch_not_pressed_no_manual_trigger);
+    RUN_TEST(test_fault_check_multiple_faults_all_bits_set);
+    RUN_TEST(test_fault_is_set_returns_false_for_clear_bit);
+    RUN_TEST(test_fault_is_set_returns_true_for_set_bit);
+    RUN_TEST(test_fault_get_name_returns_none_for_no_fault);
+    RUN_TEST(test_fault_get_name_returns_correct_name_for_over_temp_batt);
 
     return UNITY_END();
 }
