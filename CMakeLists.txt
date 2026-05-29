@@ -41,7 +41,7 @@ set(FIRMWARE_SOURCES
     core/src/sensor_hal.c
     core/src/motor_ctrl.c
     core/src/fault_logger.c
-    # core/src/can_driver.c
+    core/src/fault_manager.c
     # core/src/logger.c
     # core/src/ev_state_machine.c
     drivers/STM32_HAL/stm32_stubs.c
