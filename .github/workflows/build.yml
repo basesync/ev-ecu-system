@@ -33,13 +33,13 @@ jobs:
     steps:
       # Step 1: Check out the repository code (including submodules if any)
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive    # Fetch any git submodules
 
       # Step 2: Cache the ARM toolchain to speed up future runs
       - name: Cache ARM GCC toolchain
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: cache-arm-gcc
         with:
           path: /usr/share/arm-toolchain
