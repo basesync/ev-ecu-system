@@ -1,4 +1,4 @@
-# Coding Standards — EV ECU System
+# Coding Standards - EV ECU System
 
 | |  |
 |:---|:---|
@@ -18,7 +18,7 @@
 2. [Naming Conventions](#naming-conventions)
    - [Variables](#variables)
    - [Functions](#functions)
-   - [Types — Structs, Enums, Typedefs](#types--structs-enums-typedefs)
+   - [Types - Structs, Enums, Typedefs](#types--structs-enums-typedefs)
    - [Files](#files)
 3. [File Structure](#file-structure)
    - [Header File (.h)](#header-file-h-structure)
@@ -67,8 +67,8 @@ Pattern: `<module>_<verb>_<noun>()`
 
 ```c
 sensor_read_battery_temp()     // ✅ Good
-readBattTemp()                 // ❌ Bad — no module prefix, camelCase
-sensor_battery_temperature()   // ❌ Bad — no verb
+readBattTemp()                 // ❌ Bad - no module prefix, camelCase
+sensor_battery_temperature()   // ❌ Bad - no verb
 
 motor_set_speed(uint8_t pct)   // ✅ Good
 fault_check_over_temperature() // ✅ Good
@@ -77,7 +77,7 @@ can_send_status_frame()        // ✅ Good
 
 ---
 
-### Types — Structs, Enums, Typedefs
+### Types - Structs, Enums, Typedefs
 
 ```c
 /* Structs: snake_case_t (always typedef) */
@@ -122,37 +122,37 @@ ev_config.h                         ← all #defines / thresholds
 ```c
 /**
  * @file    sensor_hal.h
- * @brief   Sensor Hardware Abstraction Layer — public interface
+ * @brief   Sensor Hardware Abstraction Layer - public interface
  * @author  BaseSync Team
- * @date    2025
+ * @date    2026
  * @version 1.0
  */
 
-#ifndef SENSOR_HAL_H     /* Header guard — ALWAYS include this */
+#ifndef SENSOR_HAL_H     /* Header guard - ALWAYS include this */
 #define SENSOR_HAL_H
 
-/* ─── Includes ─────────────────────────────────────── */
+/* --- Includes --------------------------------------- */
 #include <stdint.h>
 #include <stdbool.h>
 #include "ev_types.h"
 
-/* ─── Constants ─────────────────────────────────────── */
+/* --- Constants --------------------------------------- */
 #define SENSOR_BATT_TEMP_MAX_C    (60.0f)
 #define SENSOR_SAMPLE_PERIOD_MS   (100U)
 
-/* ─── Type Definitions ──────────────────────────────── */
+/* --- Type Definitions -------------------------------- */
 typedef struct {
-    float    batt_temp;     /**< Battery temperature in °C */
-    float    motor_temp;    /**< Motor temperature in °C   */
-    float    current;       /**< Battery current in Amps   */
-    float    voltage;       /**< Battery voltage in Volts  */
-    uint16_t speed_rpm;     /**< Motor speed in RPM        */
-    uint8_t  throttle_pct;  /**< Throttle position 0-100%  */
-    bool     brake_active;  /**< Brake switch state        */
-    bool     fault_switch;  /**< Manual fault switch state */
+    float    batt_temp;     /* Battery temperature in °C */
+    float    motor_temp;    /* Motor temperature in °C   */
+    float    current;       /* Battery current in Amps   */
+    float    voltage;       /* Battery voltage in Volts  */
+    uint16_t speed_rpm;     /* Motor speed in RPM        */
+    uint8_t  throttle_pct;  /* Throttle position 0-100%  */
+    bool     brake_active;  /* Brake switch state        */
+    bool     fault_switch;  /* Manual fault switch state */
 } sensor_data_t;
 
-/* ─── Function Declarations ─────────────────────────── */
+/* --- Function Declarations --------------------------- */
 ev_status_t sensor_init(void);
 ev_status_t sensor_read_all(sensor_data_t *data);
 float       sensor_read_batt_temp(void);
@@ -177,31 +177,31 @@ bool        sensor_read_fault_switch(void);
  * @brief   Sensor HAL implementation
  */
 
-/* ─── Includes ─────────────────────────────────────── */
+/* --- Includes --------------------------------------- */
 #include "sensor_hal.h"
 #include "main.h"           /* STM32 HAL */
 #include <string.h>
 
-/* ─── Private Constants ─────────────────────────────── */
+/* --- Private Constants ------------------------------- */
 #define ADC_VREF_MV          (3300U)
 #define ADC_MAX_VALUE        (4095U)
 #define TEMP_SENSOR_GAIN     (0.01f)   /* V/°C for LM35 */
 
-/* ─── Private Variables ─────────────────────────────── */
+/* --- Private Variables ------------------------------- */
 static ADC_HandleTypeDef *s_hadc1 = NULL;
 
-/* ─── Private Function Declarations ─────────────────── */
+/* --- Private Function Declarations ------------------- */
 static float adc_to_voltage(uint16_t raw_adc);
 static float voltage_to_temperature(float voltage);
 
-/* ─── Public Function Implementations ───────────────── */
+/* --- Public Function Implementations ----------------- */
 ev_status_t sensor_init(void)
 {
     /* ... implementation ... */
     return EV_STATUS_OK;
 }
 
-/* ─── Private Function Implementations ──────────────── */
+/* --- Private Function Implementations ---------------- */
 static float adc_to_voltage(uint16_t raw_adc)
 {
     return ((float)raw_adc / ADC_MAX_VALUE) * (ADC_VREF_MV / 1000.0f);
@@ -220,10 +220,10 @@ static float adc_to_voltage(uint16_t raw_adc)
 6. **Functions that can fail must return a status code**, not just `void`.
 
 ```c
-/* ✅ Good — returns status, caller can check */
+/* ✅ Good - returns status, caller can check */
 ev_status_t sensor_init(void);
 
-/* ❌ Bad — silent failure */
+/* ❌ Bad - silent failure */
 void sensor_init(void);
 ```
 
@@ -258,10 +258,10 @@ unsigned int tick;
 ### Rule: Comment the WHY, not the WHAT
 
 ```c
-/* ❌ Bad — explains WHAT (obvious from code) */
+/* ❌ Bad - explains WHAT (obvious from code) */
 speed = speed + 1;  /* add 1 to speed */
 
-/* ✅ Good — explains WHY */
+/* ✅ Good - explains WHY */
 speed = speed + 1;  /* Compensate for encoder dead zone below 5 RPM */
 ```
 
@@ -357,11 +357,11 @@ Every `.h` file **MUST** start and end with:
 A "magic number" is a raw number with no name. **They are forbidden.**
 
 ```c
-/* ❌ Bad — what do 60, 50, 3.0 mean? */
+/* ❌ Bad - what do 60, 50, 3.0 mean? */
 if (temp > 60)      { fault_set(2); }
 if (current > 50)   { fault_set(4); }
 
-/* ✅ Good — self-documenting */
+/* ✅ Good - self-documenting */
 #define FAULT_TEMP_CRITICAL_C    (60.0f)
 #define FAULT_CURRENT_MAX_A      (50.0f)
 #define FAULT_OVER_TEMP          (0x01U)
@@ -384,10 +384,10 @@ if (current > FAULT_CURRENT_MAX_A)  { fault_set(FAULT_OVER_CURRENT); }
 4. **Stack depth:** Keep local variables small. Avoid large arrays on the stack.
 
 ```c
-/* ❌ Bad — dynamic allocation */
+/* ❌ Bad - dynamic allocation */
 uint8_t *buffer = malloc(256);
 
-/* ✅ Good — static allocation */
+/* ✅ Good - static allocation */
 static uint8_t s_uart_buffer[256];
 ```
 
@@ -407,7 +407,7 @@ Simplified from MISRA-C - the gold standard in automotive software.
 | **MISRA-S6** | Boolean expressions must be truly boolean (not `int` `0`/`1`) |
 
 ```c
-/* ❌ Bad — MISRA-S3 violation */
+/* ❌ Bad - MISRA-S3 violation */
 if (fault_active)
     motor_stop();
 
@@ -416,7 +416,7 @@ if (fault_active) {
     motor_stop();
 }
 
-/* ❌ Bad — MISRA-S2 violation (missing default) */
+/* ❌ Bad - MISRA-S2 violation (missing default) */
 switch (state) {
     case EV_STATE_IDLE:    break;
     case EV_STATE_RUNNING: break;

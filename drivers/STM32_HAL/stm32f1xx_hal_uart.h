@@ -19,20 +19,20 @@
 #include <stdint.h>
 #include "stm32f1xx_hal.h"
 
-/* ─── UART Handle ─────────────────────────────────────────────────────────── */
+/* --- UART Handle ----------------------------------------------------------- */
 typedef struct
 {
-    uint32_t Instance;    /**< UART peripheral base address  */
-    uint32_t BaudRate;    /**< Configured baud rate          */
-    uint32_t State;       /**< UART state flags              */
+    uint32_t Instance;    /* UART peripheral base address  */
+    uint32_t BaudRate;    /* Configured baud rate          */
+    uint32_t State;       /* UART state flags              */
 } UART_HandleTypeDef;
 
-/* ─── Peripheral base addresses ──────────────────────────────────────────── */
+/* --- Peripheral base addresses -------------------------------------------- */
 #define USART1   ((uint32_t)0x40013800U)
 #define USART2   ((uint32_t)0x40004400U)
 #define USART3   ((uint32_t)0x40004800U)
 
-/* ─── UART function declarations ─────────────────────────────────────────── */
+/* --- UART function declarations ------------------------------------------- */
 
 /**
  * @brief Transmit data over UART in blocking mode.

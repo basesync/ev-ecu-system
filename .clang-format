@@ -1,4 +1,4 @@
-# .clang-format — Code Formatting Configuration
+# .clang-format - Code Formatting Configuration
 #
 # This file enforces consistent code formatting across all team members.
 # VS Code applies this automatically when you save a file (with the
@@ -66,7 +66,7 @@ SortIncludes:           false   # Do NOT re-sort includes (order is intentional)
 IncludeBlocks:          Preserve
 
 # --- Functions ---------------------------------------------------------------
-# Allow short functions on one line? No — always expand
+# Allow short functions on one line? No - always expand
 AllowShortFunctionsOnASingleLine:  None
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine:      false

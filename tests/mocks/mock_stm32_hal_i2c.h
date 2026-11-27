@@ -7,7 +7,7 @@
  *          Sprint 5: Expand with full TMP102 register simulation.
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 2 — minimal stub for compilation)
+ * @version 1.0 (Sprint 2 - minimal stub for compilation)
  */
 
 #ifndef MOCK_STM32_HAL_I2C_H

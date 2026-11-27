@@ -19,24 +19,24 @@
 #include <stdint.h>
 #include "stm32f1xx_hal.h"
 
-/* ─── I2C Handle ─────────────────────────────────────────────────────────── */
+/* --- I2C Handle ----------------------------------------------------------- */
 typedef struct
 {
-    uint32_t Instance;      /**< I2C peripheral base address   */
-    uint32_t ClockSpeed;    /**< SCL clock speed in Hz         */
-    uint32_t State;         /**< I2C state flags               */
-    uint32_t ErrorCode;     /**< Last error code               */
+    uint32_t Instance;      /* I2C peripheral base address   */
+    uint32_t ClockSpeed;    /* SCL clock speed in Hz         */
+    uint32_t State;         /* I2C state flags               */
+    uint32_t ErrorCode;     /* Last error code               */
 } I2C_HandleTypeDef;
 
-/* ─── Peripheral base addresses ──────────────────────────────────────────── */
+/* --- Peripheral base addresses -------------------------------------------- */
 #define I2C1  ((uint32_t)0x40005400U)
 #define I2C2  ((uint32_t)0x40005800U)
 
-/* ─── Memory address size defines ────────────────────────────────────────── */
+/* --- Memory address size defines ------------------------------------------ */
 #define I2C_MEMADD_SIZE_8BIT    (0x00000001U)
 #define I2C_MEMADD_SIZE_16BIT   (0x00000002U)
 
-/* ─── I2C function declarations ──────────────────────────────────────────── */
+/* --- I2C function declarations -------------------------------------------- */
 
 /**
  * @brief Send data to an I2C slave device.

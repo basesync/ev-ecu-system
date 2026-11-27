@@ -14,12 +14,12 @@
 
 1. [Introduction](#introduction)
 2. [Functional Requirements](#functional-requirements)
-   - [FR-001 — Sensor Reading](#fr-001--sensor-reading)
-   - [FR-002 — Motor Control](#fr-002--motor-control)
-   - [FR-003 — Fault Detection & Safety](#fr-003--fault-detection--safety)
-   - [FR-004 — Communication (CAN Bus)](#fr-004--communication-can-bus)
-   - [FR-005 — UART / Data Logging](#fr-005--uart--data-logging)
-   - [FR-006 — State Machine](#fr-006--state-machine)
+   - [FR-001 - Sensor Reading](#fr-001--sensor-reading)
+   - [FR-002 - Motor Control](#fr-002--motor-control)
+   - [FR-003 - Fault Detection & Safety](#fr-003--fault-detection--safety)
+   - [FR-004 - Communication (CAN Bus)](#fr-004--communication-can-bus)
+   - [FR-005 - UART / Data Logging](#fr-005--uart--data-logging)
+   - [FR-006 - State Machine](#fr-006--state-machine)
 3. [Non-Functional Requirements](#non-functional-requirements)
 4. [Assumptions](#assumptions)
 5. [Requirements Traceability Matrix](#requirements-traceability-matrix)
@@ -43,7 +43,7 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 
 ## Functional Requirements
 
-### FR-001 — Sensor Reading
+### FR-001 - Sensor Reading
 
 | ID | Requirement | Priority |
 |---|---|---|
@@ -58,7 +58,7 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 
 ---
 
-### FR-002 — Motor Control
+### FR-002 - Motor Control
 
 | ID | Requirement | Priority |
 |---|---|---|
@@ -71,7 +71,7 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 
 ---
 
-### FR-003 — Fault Detection & Safety
+### FR-003 - Fault Detection & Safety
 
 | ID | Requirement | Priority |
 |---|---|---|
@@ -81,13 +81,13 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 | FR-003-04 | The system SHALL detect over-voltage (>4.2V cell simulated) and set `FAULT_OVER_VOLTAGE` | **MUST** |
 | FR-003-05 | The system SHALL enter `SAFE_STATE` (motor OFF, CAN fault frame sent) on any critical fault | **MUST** |
 | FR-003-06 | The system SHALL activate the manual fault trigger switch to simulate any fault for testing | **MUST** |
-| FR-003-07 | The system SHALL implement a watchdog timer. Failure to feed watchdog → system reset | **MUST** |
+| FR-003-07 | The system SHALL implement a watchdog timer. Failure to feed watchdog -> system reset | **MUST** |
 | FR-003-08 | The system SHALL store fault codes in non-volatile memory (simulated via EEPROM/Flash) | **SHOULD** |
 | FR-003-09 | The system SHALL allow fault clearing only via explicit command, not automatically | **MUST** |
 
 ---
 
-### FR-004 — Communication (CAN Bus)
+### FR-004 - Communication (CAN Bus)
 
 | ID | Requirement | Priority |
 |---|---|---|
@@ -108,14 +108,14 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 
 ---
 
-### FR-005 — UART / Data Logging
+### FR-005 - UART / Data Logging
 
 | ID | Requirement | Priority |
 |---|---|---|
 | FR-005-01 | The system SHALL output sensor readings over UART at 115200 baud | **MUST** |
 | FR-005-02 | Log format SHALL be Teleplot-compatible (`>label:value`) for live plotting | **MUST** |
 | FR-005-03 | The system SHALL log fault events with a timestamp | **MUST** |
-| FR-005-04 | The system SHALL log system state changes (e.g., `IDLE → RUNNING → FAULT`) | **MUST** |
+| FR-005-04 | The system SHALL log system state changes (e.g., `IDLE -> RUNNING -> FAULT`) | **MUST** |
 
 #### UART Log Format (Teleplot)
 
@@ -131,7 +131,7 @@ This document covers the firmware for the **EV ECU System** running on an **STM3
 
 ---
 
-### FR-006 — State Machine
+### FR-006 - State Machine
 
 The ECU shall implement the following state machine:
 
@@ -164,7 +164,7 @@ stateDiagram-v2
     style SAFE_STATE fill:#664D80,color:white
 ```
 
-> **States:** `INIT` → `IDLE` → `RUNNING` ↔ `SAFE_STATE`
+> **States:** `INIT` -> `IDLE` -> `RUNNING` ↔ `SAFE_STATE`
 
 ---
 
@@ -215,10 +215,10 @@ stateDiagram-v2
 
 | Symbol | Meaning |
 |---|---|
-| 🟡 | **Planned** — test not yet written |
-| 🔵 | **Written** — test written, not yet run |
-| 🟢 | **Passing** — test written and passing |
-| 🔴 | **Failing** — test written but failing |
+| 🟡 | **Planned** - test not yet written |
+| 🔵 | **Written** - test written, not yet run |
+| 🟢 | **Passing** - test written and passing |
+| 🔴 | **Failing** - test written but failing |
 
 ---
 

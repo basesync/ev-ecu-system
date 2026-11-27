@@ -1,6 +1,6 @@
 /**
  * @file    motor_ctrl.h
- * @brief   Motor Control module — public interface
+ * @brief   Motor Control module - public interface
  *
  * @details This module controls the traction motor speed via PWM output.
  *          It abstracts the STM32 TIM1 peripheral so higher-level modules
@@ -26,18 +26,18 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #ifndef MOTOR_CTRL_H
 #define MOTOR_CTRL_H
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes -------------------------------------------------------------- */
 #include <stdint.h>
 #include "ev_types.h"
 #include "stm32f1xx_hal.h"
 
-/* ─── Public Function Declarations ───────────────────────────────────────── */
+/* --- Public Function Declarations ----------------------------------------- */
 
 /**
  * @brief  Initialise the motor control module.
@@ -59,7 +59,7 @@ ev_status_t motor_init(TIM_HandleTypeDef *htim);
  * @details Calculates the PWM compare register value from the percentage
  *          and the timer's auto-reload value, then updates TIM1_CH1.
  *
- *          Does NOT apply a soft-start ramp — use motor_soft_start() for that.
+ *          Does NOT apply a soft-start ramp - use motor_soft_start() for that.
  *          This function sets the speed immediately.
  *
  * @param  speed_pct  Target speed as a percentage (0 = stopped, 100 = full).
@@ -96,7 +96,7 @@ ev_status_t motor_stop(void);
  *
  *          The ramp steps in 1% increments with a delay between each step.
  *          If the motor is already faster than the target, it immediately
- *          sets the speed (no ramp-down — that would feel like coasting).
+ *          sets the speed (no ramp-down - that would feel like coasting).
  *
  * @param  target_pct  Target speed percentage (0–100).
  *
@@ -110,7 +110,7 @@ ev_status_t motor_soft_start(uint8_t target_pct);
  * @brief  Get the current motor PWM duty cycle.
  *
  * @details Returns the last value set by motor_set_speed() or motor_stop().
- *          Does NOT read from the hardware register — it tracks the value
+ *          Does NOT read from the hardware register - it tracks the value
  *          set by this module. This is intentional: it avoids a HAL read
  *          and is always consistent with what we commanded.
  *

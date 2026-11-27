@@ -14,10 +14,10 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes -------------------------------------------------------------- */
 #include "Unity/unity.h"
 #include "sensor_hal.h"
 #include "ev_config.h"
@@ -25,11 +25,11 @@
 #include "mocks/mock_stm32_hal_gpio.h"
 #include "mocks/mock_stm32_hal_tim.h"
 
-/* ─── Test fixtures (HAL handles used by sensor_init) ───────────────────── */
+/* --- Test fixtures (HAL handles used by sensor_init) --------------------- */
 static ADC_HandleTypeDef s_test_hadc;
 static TIM_HandleTypeDef s_test_htim;
 
-/* ─── setUp and tearDown ─────────────────────────────────────────────────── */
+/* --- setUp and tearDown --------------------------------------------------- */
 
 /**
  * @brief Runs before EVERY test function.
@@ -55,16 +55,16 @@ void sensor_setUp(void)
 
 void sensor_tearDown(void)
 {
-    /* Nothing to clean up — mocks are reset in setUp */
+    /* Nothing to clean up - mocks are reset in setUp */
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * BATTERY TEMPERATURE TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_batt_temp_adc_zero_returns_zero_degrees(void)
 {
-    /* Arrange: ADC returns 0 → 0V → 0°C */
+    /* Arrange: ADC returns 0 -> 0V -> 0°C */
     mock_adc_set_channel_value(ADC_CHANNEL_0, 0U);
 
     /* Act */
@@ -77,9 +77,9 @@ void test_sensor_batt_temp_adc_zero_returns_zero_degrees(void)
 void test_sensor_batt_temp_adc_midscale_returns_50_degrees(void)
 {
     /*
-     * Arrange: ADC = 2048 → voltage ≈ 1.65V → temp = 1650mV / 10mV_per_deg = 165°C
+     * Arrange: ADC = 2048 -> voltage ≈ 1.65V -> temp = 1650mV / 10mV_per_deg = 165°C
      *
-     * Wait — let's recalculate with the actual formula in sensor_hal.c:
+     * Wait - let's recalculate with the actual formula in sensor_hal.c:
      * voltage = (2048 / 4095) * 3.3 = 1.6496V
      * temp = (1.6496 * 1000) / 10.0 = 164.96 ≈ 165°C
      *
@@ -93,13 +93,13 @@ void test_sensor_batt_temp_adc_midscale_returns_50_degrees(void)
     /* Act */
     float result = sensor_read_batt_temp();
 
-    /* Assert: ADC=620 → ~50°C (±2°C tolerance for integer math rounding) */
+    /* Assert: ADC=620 -> ~50°C (±2°C tolerance for integer math rounding) */
     TEST_ASSERT_FLOAT_WITHIN(2.0f, 50.0f, result);
 }
 
 void test_sensor_batt_temp_adc_fullscale_returns_max_voltage_temp(void)
 {
-    /* Arrange: ADC = 4095 → 3.3V → 330°C (LM35 at full ADC range) */
+    /* Arrange: ADC = 4095 -> 3.3V -> 330°C (LM35 at full ADC range) */
     mock_adc_set_channel_value(ADC_CHANNEL_0, 4095U);
 
     /* Act */
@@ -109,9 +109,9 @@ void test_sensor_batt_temp_adc_fullscale_returns_max_voltage_temp(void)
     TEST_ASSERT_FLOAT_WITHIN(2.0f, 330.0f, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * MOTOR TEMPERATURE TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_motor_temp_adc_midscale_returns_same_as_batt_at_same_adc(void)
 {
@@ -143,9 +143,9 @@ void test_sensor_motor_temp_reads_different_channel_than_batt_temp(void)
     TEST_ASSERT_FLOAT_WITHIN(2.0f, 50.0f, motor_temp);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * CURRENT SENSOR TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_current_adc_midscale_returns_zero_amps(void)
 {
@@ -191,9 +191,9 @@ void test_sensor_current_below_midscale_returns_negative_current(void)
     TEST_ASSERT_FLOAT_WITHIN(1.0f, -5.0f, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * VOLTAGE SENSOR TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_voltage_adc_zero_returns_zero_volts(void)
 {
@@ -207,9 +207,9 @@ void test_sensor_voltage_adc_zero_returns_zero_volts(void)
 void test_sensor_voltage_adc_fullscale_returns_expected_battery_voltage(void)
 {
     /*
-     * ADC = 4095 → adc_voltage = 3.3V
+     * ADC = 4095 -> adc_voltage = 3.3V
      * battery_V = 3.3V / 0.0909 = 36.3V
-     * (resistor divider: R1=100k, R2=10k → ratio = 10/110 = 0.0909)
+     * (resistor divider: R1=100k, R2=10k -> ratio = 10/110 = 0.0909)
      */
     mock_adc_set_channel_value(ADC_CHANNEL_3, 4095U);
 
@@ -218,9 +218,9 @@ void test_sensor_voltage_adc_fullscale_returns_expected_battery_voltage(void)
     TEST_ASSERT_FLOAT_WITHIN(0.5f, 36.3f, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * THROTTLE TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_throttle_adc_zero_returns_zero_percent(void)
 {
@@ -242,19 +242,19 @@ void test_sensor_throttle_adc_fullscale_returns_100_percent(void)
 
 void test_sensor_throttle_midscale_returns_50_percent(void)
 {
-    /* ADC = 2048 → (2048 * 100) / 4095 = 50% */
+    /* ADC = 2048 -> (2048 * 100) / 4095 = 50% */
     mock_adc_set_channel_value(ADC_CHANNEL_4, 2048U);
 
     uint8_t result = sensor_read_throttle();
 
-    /* Accept 49 or 50 — integer division may round down */
+    /* Accept 49 or 50 - integer division may round down */
     TEST_ASSERT_TRUE((result == 49U) || (result == 50U));
 }
 
 void test_sensor_throttle_never_exceeds_100_percent(void)
 {
     /*
-     * Inject a value slightly above 4095 by mocking 4095 max —
+     * Inject a value slightly above 4095 by mocking 4095 max -
      * the clamp in sensor_read_throttle() must catch any edge case.
      */
     mock_adc_set_channel_value(ADC_CHANNEL_4, 4095U);
@@ -264,9 +264,9 @@ void test_sensor_throttle_never_exceeds_100_percent(void)
     TEST_ASSERT_TRUE(result <= 100U);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * BRAKE AND FAULT SWITCH TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_brake_gpio_low_returns_true_after_debounce(void)
 {
@@ -276,7 +276,7 @@ void test_sensor_brake_gpio_low_returns_true_after_debounce(void)
      */
     mock_gpio_set_pin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);  /* LOW = pressed */
 
-    /* First read — state just changed, debounce not yet passed */
+    /* First read - state just changed, debounce not yet passed */
     mock_hal_set_tick(0U);
     TEST_ASSERT_FALSE(sensor_read_brake());
 
@@ -309,7 +309,7 @@ void test_sensor_fault_switch_gpio_low_returns_true_after_debounce(void)
 {
     mock_gpio_set_pin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
     mock_hal_set_tick(0U);
-    (void)sensor_read_fault_switch();   /* First read — start debounce */
+    (void)sensor_read_fault_switch();   /* First read - start debounce */
     mock_hal_set_tick(EV_GPIO_DEBOUNCE_MS + 5U);
 
     bool result = sensor_read_fault_switch();
@@ -317,9 +317,9 @@ void test_sensor_fault_switch_gpio_low_returns_true_after_debounce(void)
     TEST_ASSERT_TRUE(result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * sensor_init() TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_init_null_adc_handle_returns_invalid(void)
 {
@@ -342,9 +342,9 @@ void test_sensor_init_valid_handles_returns_ok(void)
     TEST_ASSERT_EQUAL(EV_STATUS_OK, result);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===========================================================================
  * sensor_read_all() TESTS
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 void test_sensor_read_all_null_pointer_returns_invalid(void)
 {

@@ -20,7 +20,7 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #ifndef MOCK_STM32_HAL_ADC_H
@@ -33,7 +33,7 @@
 /* Maximum number of ADC channels the mock supports */
 #define MOCK_ADC_MAX_CHANNELS  (18U)
 
-/* ─── Mock control functions (called by test code) ───────────────────────── */
+/* --- Mock control functions (called by test code) ------------------------- */
 
 /**
  * @brief  Reset all mock ADC values to zero.

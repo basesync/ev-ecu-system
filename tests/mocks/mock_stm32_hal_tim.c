@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-/* ─── Mock state ─────────────────────────────────────────────────────────── */
+/* --- Mock state ----------------------------------------------------------- */
 static uint32_t s_encoder_count     = 0U;
 static uint32_t s_compare_value     = 0U;
 static uint32_t s_arr_value         = 3599U;  /* Default for 20kHz at 72MHz */
@@ -17,7 +17,7 @@ static bool     s_pwm_start_error   = false;
 /* Shared TIM_TypeDef instance used by tests */
 static TIM_TypeDef s_mock_tim_instance = { .CCR1 = 0U, .ARR = 3599U, .CNT = 0U };
 
-/* ─── Mock control functions ─────────────────────────────────────────────── */
+/* --- Mock control functions ----------------------------------------------- */
 
 void mock_tim_reset(void)
 {
@@ -66,7 +66,7 @@ TIM_TypeDef *mock_tim_get_instance(void)
     return &s_mock_tim_instance;
 }
 
-/* ─── Mock HAL function implementations ─────────────────────────────────── */
+/* --- Mock HAL function implementations ----------------------------------- */
 
 HAL_StatusTypeDef HAL_TIM_PWM_Init(TIM_HandleTypeDef *htim) {
     (void)htim; return HAL_OK;

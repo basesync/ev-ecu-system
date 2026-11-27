@@ -7,21 +7,21 @@
  *          Sprint 6: Expand with W25Q32 command-level simulation.
  *
  * @author  BaseSync Team
- * @version 1.0 (Sprint 2 — minimal stub for compilation)
+ * @version 1.0 (Sprint 2 - minimal stub for compilation)
  */
 
 #include "mock_stm32_hal_spi.h"
 #include <string.h>
 #include <stdbool.h>
 
-/* ─── Mock state ─────────────────────────────────────────────────────────── */
+/* --- Mock state ----------------------------------------------------------- */
 static bool     s_transmit_error  = false;
 static bool     s_receive_error   = false;
 static uint8_t  s_rx_data[256];
 static uint16_t s_rx_data_len     = 0U;
 static uint32_t s_mock_instance   = 0x40013000U;  /* SPI1 base address stub */
 
-/* ─── Mock control functions ─────────────────────────────────────────────── */
+/* --- Mock control functions ----------------------------------------------- */
 
 void mock_spi_reset(void)
 {
@@ -55,7 +55,7 @@ uint32_t mock_spi_get_instance(void)
     return s_mock_instance;
 }
 
-/* ─── Mock HAL function implementations ─────────────────────────────────── */
+/* --- Mock HAL function implementations ----------------------------------- */
 
 HAL_StatusTypeDef HAL_SPI_Transmit(SPI_HandleTypeDef *hspi,
                                     const uint8_t     *pData,

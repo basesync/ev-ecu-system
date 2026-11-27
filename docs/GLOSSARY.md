@@ -10,7 +10,7 @@ GitBook renders this file as hover-over definitions throughout all pages. Terms 
 A peripheral on the STM32 that converts an analogue voltage signal (e.g. from a temperature sensor or potentiometer) into a digital value the firmware can process. Used to read battery temperature, motor temperature, voltage, current, and throttle position.
 
 **AUTOSAR (AUTomotive Open System ARchitecture)**
-An industry-wide standard for automotive software architecture. This project uses an AUTOSAR-inspired 3-layer design (HAL → Service → Application) without fully implementing the standard.
+An industry-wide standard for automotive software architecture. This project uses an AUTOSAR-inspired 3-layer design (HAL -> Service -> Application) without fully implementing the standard.
 
 ## B
 
@@ -156,7 +156,7 @@ A lightweight C unit testing framework. Used in this project to write and run al
 See *IWDG*.
 
 **Wokwi**
-A free, browser-based electronics simulator supporting STM32 microcontrollers. Used for SIL testing in this project — virtual potentiometers simulate sensors, virtual buttons simulate switches, and virtual LEDs represent PWM output.
+A free, browser-based electronics simulator supporting STM32 microcontrollers. Used for SIL testing in this project - virtual potentiometers simulate sensors, virtual buttons simulate switches, and virtual LEDs represent PWM output.
 
 ---
 

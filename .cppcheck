@@ -1,4 +1,4 @@
-# .cppcheck — Cppcheck Static Analysis Configuration
+# .cppcheck - Cppcheck Static Analysis Configuration
 #
 # This file configures Cppcheck for the EV ECU project.
 # Cppcheck reads this file automatically when run from the project root.
@@ -24,7 +24,7 @@
   <!-- Source directories -->
   <builddir>build/cppcheck-cache</builddir>
 
-  <!-- Include paths — where your .h header files live -->
+  <!-- Include paths - where your .h header files live -->
   <includedir>
     <dir name="core/inc"/>
     <dir name="drivers/STM32_HAL"/>
@@ -47,7 +47,7 @@
   <!-- information = informational messages                                -->
   <check-library>false</check-library>
 
-  <!-- Suppressions — known false positives we deliberately ignore -->
+  <!-- Suppressions - known false positives we deliberately ignore -->
   <suppress>
     <!-- STM32 HAL headers use system includes we don't control -->
     <id>missingIncludeSystem</id>

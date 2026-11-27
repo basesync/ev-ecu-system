@@ -1,6 +1,6 @@
 /**
  * @file    sensor_hal.c
- * @brief   Sensor HAL implementation — reads all EV ECU sensors
+ * @brief   Sensor HAL implementation - reads all EV ECU sensors
  *
  * @details This file implements the functions declared in sensor_hal.h.
  *          It reads 5 ADC channels, 1 encoder timer, and 2 GPIO pins.
@@ -11,26 +11,26 @@
  *            2. Port to a different STM32 (only change the init, not the logic)
  *
  *          Sensor wiring (from ev_config.h and hardware design doc):
- *            PA0 → ADC1 CH0 → Battery temperature (LM35)
- *            PA1 → ADC1 CH1 → Motor temperature (LM35)
- *            PA2 → ADC1 CH2 → Battery current (ACS712-20A)
- *            PA3 → ADC1 CH3 → Battery voltage (resistor divider)
- *            PA4 → ADC1 CH4 → Throttle potentiometer
- *            PA6 → TIM3 CH1 → Encoder channel A
- *            PA7 → TIM3 CH2 → Encoder channel B
- *            PB0 → GPIO IN  → Brake switch (active low)
- *            PB1 → GPIO IN  → Fault trigger switch (active low)
+ *            PA0 -> ADC1 CH0 -> Battery temperature (LM35)
+ *            PA1 -> ADC1 CH1 -> Motor temperature (LM35)
+ *            PA2 -> ADC1 CH2 -> Battery current (ACS712-20A)
+ *            PA3 -> ADC1 CH3 -> Battery voltage (resistor divider)
+ *            PA4 -> ADC1 CH4 -> Throttle potentiometer
+ *            PA6 -> TIM3 CH1 -> Encoder channel A
+ *            PA7 -> TIM3 CH2 -> Encoder channel B
+ *            PB0 -> GPIO IN  -> Brake switch (active low)
+ *            PB1 -> GPIO IN  -> Fault trigger switch (active low)
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
-/* ─── Includes ────────────────────────────────────────────────────────────── */
+/* --- Includes -------------------------------------------------------------- */
 #include "sensor_hal.h"
 #include "ev_config.h"
 
-/* ─── Private Variables ──────────────────────────────────────────────────── */
+/* --- Private Variables ---------------------------------------------------- */
 
 /* HAL handles stored at initialisation, used by all read functions */
 /* 'static' means these are only visible inside this file (good practice) */
@@ -40,7 +40,7 @@ static TIM_HandleTypeDef *s_htim3 = NULL;
 /* Flag to track whether sensor_init() has been called successfully */
 static bool s_initialised = false;
 
-/* I2C handle for TMP102 temperature sensor (Sprint 5) — NULL = ADC simulation */
+/* I2C handle for TMP102 temperature sensor (Sprint 5) - NULL = ADC simulation */
 static I2C_HandleTypeDef *s_hi2c1           = NULL;
 static ev_proto_status_t  s_temp_backend    = EV_PROTO_STATUS_STUB;
 
@@ -52,7 +52,7 @@ static uint32_t      s_fault_sw_debounce_tick = 0U;
 static bool          s_brake_stable          = false;
 static bool          s_fault_sw_stable       = false;
 
-/* ─── Private Function Declarations ─────────────────────────────────────── */
+/* --- Private Function Declarations --------------------------------------- */
 static uint32_t  priv_adc_read_channel(uint32_t channel);
 static float     priv_adc_to_voltage(uint32_t raw_adc);
 static bool      priv_read_gpio_debounced(GPIO_TypeDef   *port,
@@ -61,7 +61,7 @@ static bool      priv_read_gpio_debounced(GPIO_TypeDef   *port,
                                            uint32_t       *debounce_tick,
                                            bool           *stable_state);
 
-/* ─── Public Function Implementations ───────────────────────────────────── */
+/* --- Public Function Implementations ------------------------------------- */
 
 /**
  * @brief Initialise the sensor HAL module.
@@ -89,10 +89,10 @@ ev_status_t sensor_init(ADC_HandleTypeDef *hadc, TIM_HandleTypeDef *htim)
     s_hadc1 = hadc;
     s_htim3 = htim;
 
-    /* Start encoder interface — TIM3 will count encoder pulses from now on */
+    /* Start encoder interface - TIM3 will count encoder pulses from now on */
     if (HAL_TIM_Encoder_Start(s_htim3, TIM_CHANNEL_1) != HAL_OK)
     {
-        /* Encoder start failed — return error but don't block other sensors */
+        /* Encoder start failed - return error but don't block other sensors */
         return EV_STATUS_HAL_ERROR;
     }
 
@@ -141,13 +141,13 @@ ev_status_t sensor_read_all(sensor_data_t *data)
     /*
      * Basic sanity check: if all ADC values came back as exactly 0.0,
      * it is likely the ADC handle was not properly configured.
-     * This is a heuristic — real hardware should never have all zeros simultaneously.
+     * This is a heuristic - real hardware should never have all zeros simultaneously.
      */
     if ((data->batt_temp_c == 0.0f) &&
         (data->motor_temp_c == 0.0f) &&
         (data->voltage_v == 0.0f))
     {
-        /* Possibly an ADC issue — caller should be aware */
+        /* Possibly an ADC issue - caller should be aware */
         status = EV_STATUS_ERROR;
     }
 
@@ -173,7 +173,7 @@ float sensor_read_batt_temp(void)
      * LM35 temperature sensor transfer function:
      *   Output: 10mV per degree Celsius
      *   So: temperature = voltage / 10mV_per_degree
-     *   Example: 350mV → 35.0°C
+     *   Example: 350mV -> 35.0°C
      *
      * EV_TEMP_SENSOR_MV_PER_DEG = 10.0f (from ev_config.h)
      * We convert voltage from V to mV by multiplying by 1000.
@@ -323,7 +323,7 @@ uint8_t sensor_read_throttle(void)
     raw_adc = priv_adc_read_channel(ADC_CHANNEL_4);
 
     /*
-     * Linear mapping: 0 → 0%, 4095 → 100%
+     * Linear mapping: 0 -> 0%, 4095 -> 100%
      * Formula: pct = (raw / 4095) * 100
      *
      * Integer arithmetic version to avoid float:
@@ -364,7 +364,7 @@ bool sensor_read_fault_switch(void)
                                     &s_fault_sw_stable);
 }
 
-/* ─── Private Function Implementations ──────────────────────────────────── */
+/* --- Private Function Implementations ------------------------------------ */
 
 /**
  * @brief  Read one ADC channel by selecting it then triggering a conversion.
@@ -400,7 +400,7 @@ static uint32_t priv_adc_read_channel(uint32_t channel)
 
     if (HAL_ADC_ConfigChannel(s_hadc1, &channel_config) != HAL_OK)
     {
-        /* Channel configuration failed — return 0 (safe default) */
+        /* Channel configuration failed - return 0 (safe default) */
         return 0U;
     }
 
@@ -412,7 +412,7 @@ static uint32_t priv_adc_read_channel(uint32_t channel)
 
     /*
      * Wait for conversion to complete.
-     * HAL_MAX_DELAY means "wait forever" — in practice the ADC is fast.
+     * HAL_MAX_DELAY means "wait forever" - in practice the ADC is fast.
      * Sprint 5: replace with a timeout value and handle timeout gracefully.
      */
     if (HAL_ADC_PollForConversion(s_hadc1, HAL_MAX_DELAY) != HAL_OK)
@@ -486,7 +486,7 @@ static bool priv_read_gpio_debounced(GPIO_TypeDef  *port,
     if (current_state != *prev_state)
     {
         /*
-         * State has changed — start (or restart) the debounce timer.
+         * State has changed - start (or restart) the debounce timer.
          * We record when the change happened.
          */
         *prev_state    = current_state;
@@ -507,8 +507,8 @@ static bool priv_read_gpio_debounced(GPIO_TypeDef  *port,
              * Accept it as the true switch state.
              *
              * Active-low conversion:
-             *   GPIO_PIN_RESET (LOW)  → switch pressed  → return true
-             *   GPIO_PIN_SET   (HIGH) → switch released → return false
+             *   GPIO_PIN_RESET (LOW)  -> switch pressed  -> return true
+             *   GPIO_PIN_SET   (HIGH) -> switch released -> return false
              */
             *stable_state = (current_state == GPIO_PIN_RESET);
         }
@@ -517,10 +517,10 @@ static bool priv_read_gpio_debounced(GPIO_TypeDef  *port,
     return *stable_state;
 }
 
-/* ─── Sprint 5 Stub Implementations ─────────────────────────────────────── */
+/* --- Sprint 5 Stub Implementations --------------------------------------- */
 
 /**
- * @brief Enable I2C battery temperature sensing — STUB (Sprint 2–4).
+ * @brief Enable I2C battery temperature sensing - STUB (Sprint 2–4).
  *
  * @details Sprint 5 TODO: Replace stub body with:
  *   1. Validate hi2c is not NULL
@@ -539,14 +539,14 @@ ev_status_t sensor_enable_i2c_temp(I2C_HandleTypeDef *hi2c)
 
     if (hi2c == NULL)
     {
-        /* NULL explicitly passed — caller wants ADC simulation */
+        /* NULL explicitly passed - caller wants ADC simulation */
         s_temp_backend = EV_PROTO_STATUS_STUB;
     }
     else
     {
         /*
          * Non-NULL handle stored. Sprint 5 will verify the device here.
-         * For now, mark as stub — actual I2C reads not implemented yet.
+         * For now, mark as stub - actual I2C reads not implemented yet.
          *
          * Sprint 5 TODO: ping device and set EV_PROTO_STATUS_ACTIVE.
          */
@@ -562,7 +562,7 @@ ev_status_t sensor_enable_i2c_temp(I2C_HandleTypeDef *hi2c)
 }
 
 /**
- * @brief Return current temperature sensor backend — STUB (Sprint 2–4).
+ * @brief Return current temperature sensor backend - STUB (Sprint 2–4).
  */
 ev_proto_status_t sensor_get_temp_backend(void)
 {

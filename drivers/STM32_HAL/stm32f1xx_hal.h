@@ -13,40 +13,40 @@
  *          Our sensor_hal.c and motor_ctrl.c call functions like
  *          HAL_ADC_Start(), HAL_GPIO_ReadPin(), etc. The compiler needs
  *          to find these declarations. The full HAL is 200+ files from ST
- *          — for now, we stub the minimal types needed.
+ *          - for now, we stub the minimal types needed.
  *
  * @warning Do NOT use in production firmware. Replace with real HAL.
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #ifndef STM32F1XX_HAL_H
 #define STM32F1XX_HAL_H
 
-/* ─── Standard library types ─────────────────────────────────────────────── */
+/* --- Standard library types ----------------------------------------------- */
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 
-/* ─── HAL Status codes ────────────────────────────────────────────────────── */
+/* --- HAL Status codes ------------------------------------------------------ */
 /**
  * @brief HAL function return status.
  * Mirrors the real HAL_StatusTypeDef exactly.
  */
 typedef enum
 {
-    HAL_OK      = 0x00U,  /**< Operation successful */
-    HAL_ERROR   = 0x01U,  /**< Operation failed     */
-    HAL_BUSY    = 0x02U,  /**< Peripheral busy      */
-    HAL_TIMEOUT = 0x03U   /**< Operation timed out  */
+    HAL_OK      = 0x00U,  /* Operation successful */
+    HAL_ERROR   = 0x01U,  /* Operation failed     */
+    HAL_BUSY    = 0x02U,  /* Peripheral busy      */
+    HAL_TIMEOUT = 0x03U   /* Operation timed out  */
 } HAL_StatusTypeDef;
 
-/* ─── Common types ────────────────────────────────────────────────────────── */
+/* --- Common types ---------------------------------------------------------- */
 typedef uint32_t HAL_TickType;
 
-/* ─── Include peripheral-specific stubs ──────────────────────────────────── */
+/* --- Include peripheral-specific stubs ------------------------------------ */
 #include "stm32f1xx_hal_gpio.h"
 #include "stm32f1xx_hal_adc.h"
 #include "stm32f1xx_hal_tim.h"
@@ -58,7 +58,7 @@ typedef uint32_t HAL_TickType;
 /* Sprint 6 preparation: SPI stub */
 #include "stm32f1xx_hal_spi.h"
 
-/* ─── HAL core function stubs ────────────────────────────────────────────── */
+/* --- HAL core function stubs ---------------------------------------------- */
 /* These are declared here and will be provided by either:
  * - Real HAL in Sprint 5+
  * - Mock functions in unit tests (tests/mocks/)

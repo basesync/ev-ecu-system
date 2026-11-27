@@ -10,7 +10,7 @@
 #include "stm32f1xx_hal_gpio.h"
 #include <stdbool.h>
 
-/* ─── Mock control functions ─────────────────────────────────────────────── */
+/* --- Mock control functions ----------------------------------------------- */
 
 /** Reset all GPIO mock pin states to HIGH (released). */
 void mock_gpio_reset(void);

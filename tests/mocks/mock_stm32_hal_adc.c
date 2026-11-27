@@ -4,14 +4,14 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #include "mock_stm32_hal_adc.h"
 #include <stdbool.h>
 #include <string.h>
 
-/* ─── Mock state ─────────────────────────────────────────────────────────── */
+/* --- Mock state ----------------------------------------------------------- */
 
 /* Stores the fake ADC values for each channel */
 static uint32_t s_mock_adc_values[MOCK_ADC_MAX_CHANNELS];
@@ -23,7 +23,7 @@ static uint32_t s_current_channel = 0U;
 static bool s_force_start_error    = false;
 static bool s_force_poll_timeout   = false;
 
-/* ─── Mock control functions ─────────────────────────────────────────────── */
+/* --- Mock control functions ----------------------------------------------- */
 
 void mock_adc_reset(void)
 {
@@ -51,7 +51,7 @@ void mock_adc_set_poll_timeout(bool force_timeout)
     s_force_poll_timeout = force_timeout;
 }
 
-/* ─── Mock HAL function implementations ─────────────────────────────────── */
+/* --- Mock HAL function implementations ----------------------------------- */
 /* These replace the real STM32 HAL functions during unit tests.            */
 
 HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef* hadc) {
@@ -65,7 +65,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc) {
 HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef      *hadc,
                                          ADC_ChannelConfTypeDef *sConfig)
 {
-    (void)hadc;  /* Unused in mock — suppress warning */
+    (void)hadc;  /* Unused in mock - suppress warning */
 
     /* Remember which channel was configured so GetValue() returns the right one */
     if (sConfig != NULL)

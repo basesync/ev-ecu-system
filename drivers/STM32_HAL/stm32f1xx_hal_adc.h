@@ -1,6 +1,6 @@
 /**
  * @file    stm32f1xx_hal_adc.h
- * @brief   STM32 HAL ADC peripheral stub — types and function declarations
+ * @brief   STM32 HAL ADC peripheral stub - types and function declarations
  *
  * @details Stub header providing the minimum ADC types and function
  *          prototypes needed to compile sensor_hal.c.
@@ -8,7 +8,7 @@
  *
  * @author  BaseSync Team
  * @version 1.0
- * @date    2025
+ * @date    2026
  */
 
 #ifndef STM32F1XX_HAL_ADC_H
@@ -17,27 +17,27 @@
 #include <stdint.h>
 #include "stm32f1xx_hal_gpio.h"   /* For HAL_StatusTypeDef if included standalone */
 
-/* ─── ADC handle type ─────────────────────────────────────────────────────── */
+/* --- ADC handle type ------------------------------------------------------- */
 /**
  * @brief Minimal ADC handle type.
  * The real type has many more fields. We only need the pointer to exist.
  */
 typedef struct
 {
-    uint32_t Instance;   /**< ADC peripheral base address (e.g., ADC1) */
-    uint32_t Channel;    /**< Currently selected ADC channel            */
-    uint32_t State;      /**< Current ADC state flags                   */
+    uint32_t Instance;   /* ADC peripheral base address (e.g., ADC1) */
+    uint32_t Channel;    /* Currently selected ADC channel            */
+    uint32_t State;      /* Current ADC state flags                   */
 } ADC_HandleTypeDef;
 
-/* ─── ADC channel configuration type ────────────────────────────────────── */
+/* --- ADC channel configuration type -------------------------------------- */
 typedef struct
 {
-    uint32_t Channel;      /**< ADC channel number (0–17)   */
-    uint32_t Rank;         /**< Conversion rank (1 in single mode) */
-    uint32_t SamplingTime; /**< Sampling time cycles         */
+    uint32_t Channel;      /* ADC channel number (0–17)   */
+    uint32_t Rank;         /* Conversion rank (1 in single mode) */
+    uint32_t SamplingTime; /* Sampling time cycles         */
 } ADC_ChannelConfTypeDef;
 
-/* ─── ADC channel defines ────────────────────────────────────────────────── */
+/* --- ADC channel defines -------------------------------------------------- */
 #define ADC_CHANNEL_0    (0U)
 #define ADC_CHANNEL_1    (1U)
 #define ADC_CHANNEL_2    (2U)
@@ -48,10 +48,10 @@ typedef struct
 #define ADC_RANK_1                  (1U)
 #define ADC_SAMPLETIME_239CYCLES_5  (7U)
 
-/* ─── Timeout constants ──────────────────────────────────────────────────── */
+/* --- Timeout constants ---------------------------------------------------- */
 #define HAL_MAX_DELAY    (0xFFFFFFFFU)
 
-/* ─── ADC function declarations ──────────────────────────────────────────── */
+/* --- ADC function declarations -------------------------------------------- */
 /* These are implemented in:
  *   - Real HAL: stm32f1xx_hal_adc.c (added in Sprint 5)
  *   - Unit tests: tests/mocks/mock_stm32_hal_adc.c

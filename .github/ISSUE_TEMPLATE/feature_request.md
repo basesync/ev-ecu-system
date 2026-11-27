@@ -49,12 +49,12 @@ Depends on: <!-- e.g., #12 (GPIO init must be done first) -->
 
 ## Story Points Estimate
 <!-- Delete all but one -->
-- [ ] 1 point — Trivial (1–2 hours)
-- [ ] 2 points — Small (half a day)
-- [ ] 3 points — Medium (1 day)
-- [ ] 5 points — Large (2–3 days)
-- [ ] 8 points — Very large (needs whole sprint)
-- [ ] 13 points — Too big, must be split
+- [ ] 1 point - Trivial (1–2 hours)
+- [ ] 2 points - Small (half a day)
+- [ ] 3 points - Medium (1 day)
+- [ ] 5 points - Large (2–3 days)
+- [ ] 8 points - Very large (needs whole sprint)
+- [ ] 13 points - Too big, must be split
 
 ## Module
 <!-- Which module does this belong to? -->

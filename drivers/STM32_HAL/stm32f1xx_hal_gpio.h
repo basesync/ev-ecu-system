@@ -12,22 +12,22 @@
 #include <stdint.h>
 #include "stm32f1xx_hal.h"
 
-/* ─── GPIO pin state ─────────────────────────────────────────────────────── */
+/* --- GPIO pin state ------------------------------------------------------- */
 typedef enum
 {
-    GPIO_PIN_RESET = 0U,   /**< Pin is LOW  (0V) */
-    GPIO_PIN_SET   = 1U    /**< Pin is HIGH (3.3V) */
+    GPIO_PIN_RESET = 0U,   /* Pin is LOW  (0V) */
+    GPIO_PIN_SET   = 1U    /* Pin is HIGH (3.3V) */
 } GPIO_PinState;
 
-/* ─── GPIO port type (opaque pointer in stub) ────────────────────────────── */
+/* --- GPIO port type (opaque pointer in stub) ------------------------------ */
 typedef struct { uint32_t dummy; } GPIO_TypeDef;
 
-/* ─── GPIO port defines (match real STM32 HAL) ───────────────────────────── */
+/* --- GPIO port defines (match real STM32 HAL) ----------------------------- */
 #define GPIOA  ((GPIO_TypeDef *)0x40010800U)
 #define GPIOB  ((GPIO_TypeDef *)0x40010C00U)
 #define GPIOC  ((GPIO_TypeDef *)0x40011000U)
 
-/* ─── GPIO pin defines ───────────────────────────────────────────────────── */
+/* --- GPIO pin defines ----------------------------------------------------- */
 #define GPIO_PIN_0   (0x0001U)
 #define GPIO_PIN_1   (0x0002U)
 #define GPIO_PIN_2   (0x0004U)
@@ -35,7 +35,7 @@ typedef struct { uint32_t dummy; } GPIO_TypeDef;
 #define GPIO_PIN_8   (0x0100U)
 #define GPIO_PIN_13  (0x2000U)
 
-/* ─── GPIO function declarations ─────────────────────────────────────────── */
+/* --- GPIO function declarations ------------------------------------------- */
 /**
  * @brief Read the state of a GPIO pin.
  * @param GPIOx  GPIO port (GPIOA, GPIOB, etc.)

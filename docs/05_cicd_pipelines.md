@@ -37,9 +37,9 @@ Every time someone pushes code or opens a PR, a robot automatically:
 3. Runs static analysis (Cppcheck)
 4. Scans for security issues (Snyk)
 
-> ⛔ If any of these fail → **the PR is blocked**. Code cannot merge until it's fixed.
+> ⛔ If any of these fail -> **the PR is blocked**. Code cannot merge until it's fixed.
 
-### CD — Continuous Deployment
+### CD - Continuous Deployment
 
 Automatically deploys/releases when code reaches `main`. For firmware, this means: building a release binary and attaching it to a **GitHub Release**.
 
@@ -136,7 +136,7 @@ flowchart LR
 
 ## GitHub Actions Workflow Files
 
-### Workflow 1 — Firmware Build Check
+### Workflow 1 - Firmware Build Check
 
 **File:** `.github/workflows/build.yml`
 
@@ -177,7 +177,7 @@ jobs:
 
 ***
 
-### Workflow 2 — Unit Tests
+### Workflow 2 - Unit Tests
 
 **File:** `.github/workflows/unit-tests.yml`
 
@@ -222,7 +222,7 @@ jobs:
 
 ***
 
-### Workflow 3 — Static Analysis
+### Workflow 3 - Static Analysis
 
 **File:** `.github/workflows/static-analysis.yml`
 
@@ -267,7 +267,7 @@ jobs:
 
 ***
 
-### Workflow 4 — Security Scan
+### Workflow 4 - Security Scan
 
 **File:** `.github/workflows/security.yml`
 
@@ -307,7 +307,7 @@ jobs:
 
 ***
 
-### Workflow 5 — Release Build
+### Workflow 5 - Release Build
 
 **File:** `.github/workflows/release.yml`
 
@@ -436,7 +436,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -specs=nano.specs" CACHE STRING ""
 
 ### Branch Protection Rules
 
-Configure these in **GitHub → Settings → Branches → Branch protection rules** for `main` and `develop`:
+Configure these in **GitHub -> Settings -> Branches -> Branch protection rules** for `main` and `develop`:
 
 ```
 ☑ Require status checks to pass before merging

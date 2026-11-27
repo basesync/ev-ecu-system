@@ -153,7 +153,7 @@ typedef struct
  * Each fault event written to W25Q32 SPI flash uses this structure.
  * Size: exactly 8 bytes - packs into one SPI flash page efficiently.
  * CRC16 covers fault_code and timestamp_ms for integrity checking.
- * ═══════════════════════════════════════════════════════════════════════════ */
+ * =========================================================================== */
 
 /**
  * @brief One fault log entry written to SPI NOR Flash (Sprint 6).
@@ -167,7 +167,7 @@ typedef struct
 typedef struct
 {
     fault_code_t fault_code;    /* Active fault bitmask at event time   */
-    uint8_t      reserved;      /* Alignment padding — always 0x00      */
+    uint8_t      reserved;      /* Alignment padding - always 0x00      */
     uint16_t     crc16;         /* CRC-16 integrity check               */
     uint32_t     timestamp_ms;  /* System uptime in ms when fault fired */
 } fault_log_entry_t;

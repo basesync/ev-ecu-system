@@ -16,7 +16,7 @@ static GPIO_TypeDef * const s_port_map[MOCK_NUM_PORTS] = { GPIOA, GPIOB, GPIOC }
 static GPIO_PinState s_read_states[MOCK_NUM_PORTS][MOCK_NUM_PINS];
 static GPIO_PinState s_write_states[MOCK_NUM_PORTS][MOCK_NUM_PINS];
 
-/* ─── Private helper ─────────────────────────────────────────────────────── */
+/* --- Private helper ------------------------------------------------------- */
 static int priv_port_index(GPIO_TypeDef *GPIOx)
 {
     int i;
@@ -37,7 +37,7 @@ static int priv_pin_index(uint16_t GPIO_Pin)
     return -1;
 }
 
-/* ─── Mock control functions ─────────────────────────────────────────────── */
+/* --- Mock control functions ----------------------------------------------- */
 
 void mock_gpio_reset(void)
 {
@@ -75,7 +75,7 @@ GPIO_PinState mock_gpio_get_written_pin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
     return GPIO_PIN_RESET;
 }
 
-/* ─── Mock HAL function implementations ─────────────────────────────────── */
+/* --- Mock HAL function implementations ----------------------------------- */
 
 void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, void *GPIO_Init) {
     (void)GPIOx; (void)GPIO_Init;
@@ -120,7 +120,7 @@ void HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
     }
 }
 
-/* ─── HAL_GetTick and HAL_Delay mocks (used for debounce) ────────────────── */
+/* --- HAL_GetTick and HAL_Delay mocks (used for debounce) ------------------ */
 
 static uint32_t s_mock_tick = 0U;
 

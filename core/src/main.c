@@ -1,17 +1,17 @@
 /**
  * @file    main.c
- * @brief   Smart EV ECU — Firmware Entry Point (Sprint 2)
+ * @brief   Smart EV ECU - Firmware Entry Point (Sprint 2)
  *
  * @details Sprint 2 additions over Sprint 1:
  *          - Sensor HAL initialisation and periodic reads
- *          - Motor control initialisation and throttle → PWM mapping
+ *          - Motor control initialisation and throttle -> PWM mapping
  *          - Brake override: brake switch immediately cuts motor PWM
  *          - UART Teleplot-format output of all sensor values
  *          - Basic main superloop structure (foundation for state machine)
  *
  *          Sprint 3 will add:
  *          - Fault detection logic
- *          - EV state machine (INIT → IDLE → RUNNING → FAULT)
+ *          - EV state machine (INIT -> IDLE -> RUNNING -> FAULT)
  *          - CAN bus transmission
  *          - Watchdog timer feed
  *
@@ -20,8 +20,8 @@
  *          In Sprint 5, CubeMX will generate these properly.
  *
  * @author  BaseSync Team
- * @version 0.2.0 (Sprint 2 — Sensor & Motor modules)
- * @date    2025
+ * @version 0.2.0 (Sprint 2 - Sensor & Motor modules)
+ * @date    2026
  */
 
 /* --- Includes ------------------------------------------------------------ */
@@ -47,7 +47,7 @@
 /**
  * STM32 HAL handles.
  * In Sprint 5, CubeMX generates these as extern globals from main.c.
- * For now we declare them here as stubs — replace with real inits in Sprint 5.
+ * For now we declare them here as stubs - replace with real inits in Sprint 5.
  */
 static ADC_HandleTypeDef hadc1;   /* ADC1 handle - all 5 sensor channels  */
 static TIM_HandleTypeDef htim1;   /* TIM1 handle - motor PWM output        */
@@ -215,7 +215,7 @@ static void main_loop_run(void)
     /* --- 1. Read all sensors --- */
     /*
      * sensor_read_all() populates g_sensor_data with current values.
-     * We ignore the return value here — Sprint 3 will check it and
+     * We ignore the return value here - Sprint 3 will check it and
      * pass bad reads to the fault manager.
      * TODO(sprint3): Check return value and feed to fault_manager.
      */

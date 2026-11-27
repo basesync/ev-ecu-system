@@ -1,4 +1,4 @@
-# Testing Strategy — EV ECU System
+# Testing Strategy - EV ECU System
 
 | |  |
 |:---|:---|
@@ -187,7 +187,7 @@ test_can_fault_frame_has_correct_id()
 | TC-MOTOR-002 | `motor_set_speed(100)` | PWM duty = 100% |
 | TC-MOTOR-003 | `motor_set_speed(50)` | PWM duty = 50% ±1% |
 | TC-MOTOR-004 | `motor_stop()` from running | PWM = 0 immediately |
-| TC-MOTOR-005 | `motor_set_speed(150)` — invalid | Returns `EV_STATUS_INVALID` |
+| TC-MOTOR-005 | `motor_set_speed(150)` - invalid | Returns `EV_STATUS_INVALID` |
 | TC-MOTOR-006 | Brake active during `motor_set_speed(80)` | Speed remains 0 |
 
 ---
@@ -239,15 +239,15 @@ test_can_fault_frame_has_correct_id()
 
 ## Mock / Stub Strategy
 
-Unit tests must run on a **PC**, not on STM32 hardware. This means we need stubs — fake versions of the HAL functions.
+Unit tests must run on a **PC**, not on STM32 hardware. This means we need stubs - fake versions of the HAL functions.
 
 ```
 Tests/
-└── mocks/
-    ├── mock_stm32_hal_adc.c    ← Fake ADC that returns test values
-    ├── mock_stm32_hal_gpio.c   ← Fake GPIO
-    ├── mock_stm32_hal_tim.c    ← Fake PWM timer
-    └── mock_stm32_hal_uart.c   ← Fake UART (capture output)
+└-- mocks/
+    ├-- mock_stm32_hal_adc.c    ← Fake ADC that returns test values
+    ├-- mock_stm32_hal_gpio.c   ← Fake GPIO
+    ├-- mock_stm32_hal_tim.c    ← Fake PWM timer
+    └-- mock_stm32_hal_uart.c   ← Fake UART (capture output)
 ```
 
 ### Example Mock
@@ -295,9 +295,9 @@ SIL means running the complete firmware in a **simulator**, not on real hardware
 1. Open Wokwi with `diagram.json`
 2. Start simulation
 3. Check UART terminal shows Teleplot data
-4. Turn virtual potentiometer → verify motor PWM changes
-5. Press virtual brake button → verify motor stops
-6. Press virtual fault button → verify state machine enters `FAULT`
+4. Turn virtual potentiometer -> verify motor PWM changes
+5. Press virtual brake button -> verify motor stops
+6. Press virtual fault button -> verify state machine enters `FAULT`
 7. Check CAN output (via UART-CAN bridge simulation)
 
 ### Wokwi `diagram.json` Skeleton

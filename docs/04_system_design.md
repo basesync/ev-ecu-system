@@ -1,4 +1,4 @@
-# System Design — EV ECU System
+# System Design - EV ECU System
 
 | |  |
 |:---|:---|
@@ -72,14 +72,14 @@ graph TD
 
 ```
 sensor_hal.h / sensor_hal.c
-├── read_battery_temp()     → float °C
-├── read_motor_temp()       → float °C
-├── read_battery_voltage()  → float V
-├── read_battery_current()  → float A
-├── read_throttle()         → float 0–100%
-├── read_speed()            → float RPM
-├── read_brake_switch()     → bool
-└── read_fault_switch()     → bool
+├-- read_battery_temp()     -> float °C
+├-- read_motor_temp()       -> float °C
+├-- read_battery_voltage()  -> float V
+├-- read_battery_current()  -> float A
+├-- read_throttle()         -> float 0–100%
+├-- read_speed()            -> float RPM
+├-- read_brake_switch()     -> bool
+└-- read_fault_switch()     -> bool
 ```
 
 ---
@@ -90,30 +90,30 @@ sensor_hal.h / sensor_hal.c
 
 ```
 motor_control.h / motor_control.c
-├── motor_init()
-├── motor_set_throttle(float pct)
-├── motor_stop()              ← called on fault or brake
-└── motor_soft_start(float target_pct, uint32_t ramp_ms)
+├-- motor_init()
+├-- motor_set_throttle(float pct)
+├-- motor_stop()              ← called on fault or brake
+└-- motor_soft_start(float target_pct, uint32_t ramp_ms)
 ```
 
 ---
 
-### Module 3 -— Fault Manager
+### Module 3 -- Fault Manager
 
 **Responsibility:** Monitor all sensor data against thresholds. Manage fault state.
 
 ```
 fault_manager.h / fault_manager.c
-├── fault_check_all(SensorData_t *data)
-├── fault_get_active()         → FaultCode_t
-├── fault_clear()              ← explicit command only
-├── fault_store_to_flash()
-└── Fault codes:
-    ├── FAULT_NONE             = 0x00
-    ├── FAULT_OVER_TEMP        = 0x01
-    ├── FAULT_OVER_CURRENT     = 0x02
-    ├── FAULT_UNDER_VOLTAGE    = 0x03
-    └── FAULT_OVER_VOLTAGE     = 0x04
+├-- fault_check_all(SensorData_t *data)
+├-- fault_get_active()         -> FaultCode_t
+├-- fault_clear()              ← explicit command only
+├-- fault_store_to_flash()
+└-- Fault codes:
+    ├-- FAULT_NONE             = 0x00
+    ├-- FAULT_OVER_TEMP        = 0x01
+    ├-- FAULT_OVER_CURRENT     = 0x02
+    ├-- FAULT_UNDER_VOLTAGE    = 0x03
+    └-- FAULT_OVER_VOLTAGE     = 0x04
 ```
 
 ---
@@ -124,12 +124,12 @@ fault_manager.h / fault_manager.c
 
 ```
 can_driver.h / can_driver.c
-├── can_init()
-├── can_tx_status_frame(SystemState_t state, FaultCode_t fault)
-├── can_tx_sensor_pack1(float batt_temp, float motor_temp, float speed)
-├── can_tx_sensor_pack2(float voltage, float current, float throttle)
-├── can_tx_fault_frame(FaultCode_t fault, uint32_t timestamp)
-└── can_rx_handler()           ← parses incoming commands
+├-- can_init()
+├-- can_tx_status_frame(SystemState_t state, FaultCode_t fault)
+├-- can_tx_sensor_pack1(float batt_temp, float motor_temp, float speed)
+├-- can_tx_sensor_pack2(float voltage, float current, float throttle)
+├-- can_tx_fault_frame(FaultCode_t fault, uint32_t timestamp)
+└-- can_rx_handler()           ← parses incoming commands
 ```
 
 ---
@@ -140,10 +140,10 @@ can_driver.h / can_driver.c
 
 ```
 logger.h / logger.c
-├── logger_init()
-├── logger_log_sensors(SensorData_t *data)
-├── logger_log_fault(FaultCode_t fault, uint32_t timestamp)
-└── logger_log_state_change(SystemState_t old, SystemState_t new)
+├-- logger_init()
+├-- logger_log_sensors(SensorData_t *data)
+├-- logger_log_fault(FaultCode_t fault, uint32_t timestamp)
+└-- logger_log_state_change(SystemState_t old, SystemState_t new)
 ```
 
 ---
@@ -154,14 +154,14 @@ logger.h / logger.c
 
 ```
 state_machine.h / state_machine.c
-├── sm_init()
-├── sm_run()                   ← called every main loop tick
-├── sm_get_state()             → SystemState_t
-└── States:
-    ├── STATE_INIT
-    ├── STATE_IDLE
-    ├── STATE_RUNNING
-    └── STATE_SAFE
+├-- sm_init()
+├-- sm_run()                   ← called every main loop tick
+├-- sm_get_state()             -> SystemState_t
+└-- States:
+    ├-- STATE_INIT
+    ├-- STATE_IDLE
+    ├-- STATE_RUNNING
+    └-- STATE_SAFE
 ```
 
 ---
@@ -170,33 +170,33 @@ state_machine.h / state_machine.c
 
 ```
 smart-ev-ecu/
-├── core/
-│   ├── Inc/
-│   │   ├── sensor_hal.h
-│   │   ├── motor_control.h
-│   │   ├── fault_manager.h
-│   │   ├── can_driver.h
-│   │   ├── logger.h
-│   │   └── state_machine.h
-│   └── src/
-│       ├── main.c
-│       ├── sensor_hal.c
-│       ├── motor_control.c
-│       ├── fault_manager.c
-│       ├── can_driver.c
-│       ├── logger.c
-│       └── state_machine.c
-├── Drivers/
-│   └── STM32xx_HAL_Driver/    ← STM32 auto-generated HAL
-├── Tests/
-│   ├── test_sensor_hal.c
-│   ├── test_motor_control.c
-│   ├── test_fault_manager.c
-│   └── test_state_machine.c
-├── Docs/
-│   ├── BASESYNC-REQ-001.md
-│   └── BASESYNC-DES-001.md
-└── CMakeLists.txt / Makefile
+├-- core/
+│   ├-- Inc/
+│   │   ├-- sensor_hal.h
+│   │   ├-- motor_control.h
+│   │   ├-- fault_manager.h
+│   │   ├-- can_driver.h
+│   │   ├-- logger.h
+│   │   └-- state_machine.h
+│   └-- src/
+│       ├-- main.c
+│       ├-- sensor_hal.c
+│       ├-- motor_control.c
+│       ├-- fault_manager.c
+│       ├-- can_driver.c
+│       ├-- logger.c
+│       └-- state_machine.c
+├-- Drivers/
+│   └-- STM32xx_HAL_Driver/    ← STM32 auto-generated HAL
+├-- Tests/
+│   ├-- test_sensor_hal.c
+│   ├-- test_motor_control.c
+│   ├-- test_fault_manager.c
+│   └-- test_state_machine.c
+├-- Docs/
+│   ├-- BASESYNC-REQ-001.md
+│   └-- BASESYNC-DES-001.md
+└-- CMakeLists.txt / Makefile
 ```
 
 ---

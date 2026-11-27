@@ -12,7 +12,7 @@
  *          3. Add a call to run_<module>_tests() in test_runner.c
  *
  * @author  BaseSync Team
- * @date    2025
+ * @date    2026
  */
 
 /* --- Includes ---------------------------------------------------------------*/
